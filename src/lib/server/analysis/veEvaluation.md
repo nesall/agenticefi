@@ -182,3 +182,8 @@ There is no optimizer, automatic correction fitting or selection, confidence
 estimation, calibration write, dashboard integration or claim of measured benefit.
 Phase B can consume ready training rows, `a_ij`, and frozen cell-support masks to
 fit a bounded vector, then reuse this unchanged prediction and holdout interface.
+
+Phase B is now available through `fitVeCorrections` and the one-way
+`fitAndEvaluateVeCorrections` wrapper. See [veFitting.md](./veFitting.md) for its
+objective, conditioning checks, stability policy and diagnostics. This document
+continues to describe Phase A preparation and prediction only.
