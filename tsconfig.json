@@ -1,0 +1,9 @@
+{
+	"extends": "$app/tsconfig",
+	"compilerOptions": {
+		"strict": true,
+		"types": ["node", "$app/types"]
+	},
+	"include": ["src", "vite.config.ts", "tests"],
+	"exclude": ["node_modules", "dist"]
+}
