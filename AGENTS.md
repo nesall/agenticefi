@@ -1,9 +1,11 @@
 # AgenticEFI — Coding Agent Instructions
 
 ## Project
+
 AgenticEFI is an AI-powered MegaSquirt (generally, any csv/tsv style data) EFI datalog investigation application. Read `CONTEXT.md` before implementing changes.
 
 ## Technology
+
 - SvelteKit with TypeScript, frontend and backend in one project.
 - Svelte 5, Skeleton UI v5, Tailwind CSS v4.
 - Node.js runtime; npm package manager.
@@ -11,6 +13,7 @@ AgenticEFI is an AI-powered MegaSquirt (generally, any csv/tsv style data) EFI d
 - Meta Model API using `muse-spark-1.3-contributor`.
 
 ## Architecture
+
 - Keep SvelteKit API routes thin.
 - Implement parsing, telemetry analysis, calculations, and agent orchestration in independent server-side modules.
 - Use shared TypeScript types for data contracts.
@@ -19,6 +22,7 @@ AgenticEFI is an AI-powered MegaSquirt (generally, any csv/tsv style data) EFI d
 - Prefer simple, maintainable solutions over unnecessary abstractions.
 
 ## Engineering Rules
+
 - Use strict TypeScript.
 - Follow existing project formatting and linting conventions.
 - Write tests for parsing, numerical calculations, and telemetry classification.
@@ -29,6 +33,7 @@ AgenticEFI is an AI-powered MegaSquirt (generally, any csv/tsv style data) EFI d
 - Label predictions as predictions, not measured outcomes.
 
 ## Workflow
+
 - Implement only the requested scope.
 - Explain significant architectural choices before introducing them.
 - Run relevant checks and tests after modifications.

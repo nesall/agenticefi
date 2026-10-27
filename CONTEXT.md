@@ -1,11 +1,13 @@
 # AgenticEFI — Project Context
 
 ## Vision
+
 Build an autonomous, evidence-driven EFI datalog investigator that helps engine tuners understand fueling problems and evaluate potential VE table improvements.
 
 **Core differentiator:** An AI agent that knows when NOT to trust the data.
 
 ## Hackathon
+
 Meta Global AI Developer Hackathon 2026 — Indie Developer track.
 
 - Development: October 27 – November 4, 2026.
@@ -15,6 +17,7 @@ Meta Global AI Developer Hackathon 2026 — Indie Developer track.
 - The submission must demonstrate genuinely new functionality built during the hackathon.
 
 ## Input Data
+
 - MegaSquirt `.msl` datalogs.
 - Existing VE table.
 - Existing target AFR table.
@@ -34,7 +37,9 @@ Actual telemetry channels, units, table formats, and sample rates must be discov
 8. Produce an evidence-backed report with charts, tool traces, exclusions, confidence indicators, and advisory recommendations.
 
 ## Agent Responsibilities
+
 Muse Spark should:
+
 - Decide which analytical tools to call.
 - Investigate anomalies and formulate testable hypotheses.
 - Request additional evidence when appropriate.
@@ -44,6 +49,7 @@ Muse Spark should:
 Muse Spark must not fabricate sensor values or perform numerical tuning calculations itself when deterministic tools are available.
 
 ## Evaluation
+
 - Use time-separated training and held-out log data.
 - Compare baseline and agent using consistent sample eligibility and coverage reporting.
 - Report sample counts, AFR error metrics, and uncertainty.
@@ -51,7 +57,9 @@ Muse Spark must not fabricate sensor values or perform numerical tuning calculat
 - Do not claim improved engine performance without a subsequent measured test.
 
 ## User Experience
+
 A browser-based engineering dashboard featuring:
+
 - Datalog upload and a built-in demo log.
 - Telemetry timeline and event markers.
 - AFR/VE analysis heatmaps.
@@ -60,6 +68,7 @@ A browser-based engineering dashboard featuring:
 - Advisory report/export.
 
 ## Non-Goals
+
 - Direct ECU communication or writing.
 - Fully automated vehicle tuning.
 - Guaranteed engine safety or performance improvements.
@@ -67,15 +76,18 @@ A browser-based engineering dashboard featuring:
 - Reimplementation of the existing Phenix LogView application.
 
 ## Prior Work
+
 The developer previously created Phenix LogView, an independent C++ MegaSquirt datalog analysis application.
 
 AgenticEFI is a new hackathon project focused on autonomous, tool-driven investigation. Its implementation and new contributions must be clearly distinguished from prior work.
 
 ## Deployment
+
 - Development: Windows MERTUN, MSYS2 UCRT64.
 - Production: Node.js on a VPS.
 - Meta API credentials remain server-side.
 - Provide a reliable demo dataset and a clearly labeled recorded demonstration fallback.
 
 ## MVP Success
+
 A real RX-7 log is loaded; Muse Spark autonomously investigates suspicious behavior using analytical tools, identifies unsuitable evidence, evaluates defensible VE adjustments, and produces an explainable report with measurable predictive evaluation.

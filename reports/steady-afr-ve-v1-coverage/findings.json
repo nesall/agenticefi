@@ -1,0 +1,2140 @@
+{
+	"classifierUnchanged": true,
+	"classifierSha256": "3d8a5b6fbd8595c19a4e2d3e3b8ef3510d0fee3c2a7c8ff0e9dae3e8b90b71eb",
+	"method": {
+		"neighborhoods": "Half-open intervals between adjacent actual VE breakpoints; last interval includes the final breakpoint. Out-of-axis samples are clamped for neighborhood assignment and separately counted.",
+		"regions": "Running finite RPM/MAP/TPS. Boost: MAP > recorded Barometer. Moderate load: 70 kPa <= MAP <= Barometer. Idle-like: RPM < 1500, TPS <= 2%, MAP < 70 kPa, VSS1 <= 1 mph when available. Cruise-like: VSS1 > 1 mph, TPS > 2%, MAP < 70 kPa. Other low-load/closed-throttle samples remain separate. Vehicle Speed is all zero and is not used.",
+		"history": "History-only rows pass all other enabled checks. RPM-only direct exclusion disregards the downstream unassessed steady window, but requires every other check to pass."
+	},
+	"logs": [
+		{
+			"file": "data/logs/block1/2025-04-12_16.16.28.msl",
+			"veFile": "src/lib/server/demo/ve.table",
+			"veAxes": {
+				"rpm": [
+					700, 800, 900, 1000, 1200, 1500, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 7000, 8000,
+					9000
+				],
+				"map": [30, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100, 125, 150, 175, 200, 260]
+			},
+			"config": {
+				"minCoolantC": 70,
+				"maxWarmupCorrectionDeviationPct": 1,
+				"maxAbsTpsRatePctPerSec": 5,
+				"maxAbsMapRateKpaPerSec": 10,
+				"maxAbsRpmRatePerSec": 200,
+				"maxGapSec": 0.5,
+				"steadyWindowSec": 1,
+				"possibleFuelCutMaxPulseWidthMs": 0.1,
+				"possibleFuelCutMinRpm": 1200,
+				"possibleFuelCutMaxTpsPct": 2
+			},
+			"statuses": {
+				"hard-excluded": 0,
+				"heuristic-excluded": 2043,
+				"indeterminate": 1,
+				"eligible": 815
+			},
+			"regions": {
+				"idle-like": {
+					"n": 2172,
+					"accepted": 815,
+					"history": 930,
+					"rpmFail": 313,
+					"rpmOnly": 168,
+					"acceptPct": 37.52
+				},
+				"low-load/motion-unverified": {
+					"n": 515,
+					"accepted": 0,
+					"history": 55,
+					"rpmFail": 408,
+					"rpmOnly": 100,
+					"acceptPct": 0
+				},
+				"moderate-load": {
+					"n": 148,
+					"accepted": 0,
+					"history": 5,
+					"rpmFail": 136,
+					"rpmOnly": 19,
+					"acceptPct": 0
+				},
+				"closed-throttle/non-idle": {
+					"n": 24,
+					"accepted": 0,
+					"history": 0,
+					"rpmFail": 23,
+					"rpmOnly": 13,
+					"acceptPct": 0
+				}
+			},
+			"groups": {
+				"idle": {
+					"n": 2172,
+					"accepted": 815,
+					"history": 930,
+					"rpmFail": 313,
+					"rpmOnly": 168,
+					"warmCore": 2172,
+					"rpmWarm": 313,
+					"acceptPct": 37.52,
+					"historyWithheldPct": 53.3,
+					"rpmFailPct": 14.41,
+					"rpmWarmFailPct": 14.41
+				},
+				"nonIdle": {
+					"n": 687,
+					"accepted": 0,
+					"history": 60,
+					"rpmFail": 567,
+					"rpmOnly": 132,
+					"warmCore": 687,
+					"rpmWarm": 567,
+					"acceptPct": 0,
+					"historyWithheldPct": 100,
+					"rpmFailPct": 82.53,
+					"rpmWarmFailPct": 82.53
+				}
+			},
+			"coverage": {
+				"occupiedNeighborhoods": 5,
+				"totalNeighborhoods": 225,
+				"atLeast15": 5,
+				"atLeast100": 3,
+				"newHistoryOnlyNeighborhoods": 19,
+				"newRpmOnlyNeighborhoods": 34,
+				"clampedAccepted": 0,
+				"underRpm": 0,
+				"underMap": 0,
+				"overRpm": 0,
+				"overMap": 0,
+				"topNeighborhoods": [
+					{
+						"log": "2025-04-12_16.16.28.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 800,
+						"rpm_high": 900,
+						"map_low_kpa": 50,
+						"map_high_kpa": 55,
+						"raw_samples": 844,
+						"accepted_samples": 327,
+						"history_only_excluded": 435,
+						"rpm_only_direct_excluded": 44,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2025-04-12_16.16.28.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 800,
+						"rpm_high": 900,
+						"map_low_kpa": 45,
+						"map_high_kpa": 50,
+						"raw_samples": 472,
+						"accepted_samples": 268,
+						"history_only_excluded": 157,
+						"rpm_only_direct_excluded": 33,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2025-04-12_16.16.28.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 900,
+						"rpm_high": 1000,
+						"map_low_kpa": 45,
+						"map_high_kpa": 50,
+						"raw_samples": 391,
+						"accepted_samples": 167,
+						"history_only_excluded": 187,
+						"rpm_only_direct_excluded": 16,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2025-04-12_16.16.28.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 900,
+						"rpm_high": 1000,
+						"map_low_kpa": 50,
+						"map_high_kpa": 55,
+						"raw_samples": 120,
+						"accepted_samples": 29,
+						"history_only_excluded": 66,
+						"rpm_only_direct_excluded": 8,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2025-04-12_16.16.28.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 1000,
+						"rpm_high": 1200,
+						"map_low_kpa": 45,
+						"map_high_kpa": 50,
+						"raw_samples": 92,
+						"accepted_samples": 24,
+						"history_only_excluded": 44,
+						"rpm_only_direct_excluded": 3,
+						"accepted_clamped": 0
+					}
+				]
+			},
+			"rpmBands": {
+				"[800,900)": {
+					"n": 1347,
+					"accepted": 595,
+					"history": 598,
+					"rpmFail": 109,
+					"rpmOnly": 80
+				},
+				"[900,1000)": {
+					"n": 564,
+					"accepted": 196,
+					"history": 255,
+					"rpmFail": 72,
+					"rpmOnly": 31
+				},
+				"[1000,1200)": {
+					"n": 231,
+					"accepted": 24,
+					"history": 79,
+					"rpmFail": 105,
+					"rpmOnly": 26
+				},
+				"[1200,1500)": {
+					"n": 183,
+					"accepted": 0,
+					"history": 5,
+					"rpmFail": 157,
+					"rpmOnly": 51
+				},
+				"[1500,2000)": {
+					"n": 311,
+					"accepted": 0,
+					"history": 40,
+					"rpmFail": 261,
+					"rpmOnly": 77
+				},
+				"[2000,2500)": {
+					"n": 130,
+					"accepted": 0,
+					"history": 11,
+					"rpmFail": 113,
+					"rpmOnly": 19
+				},
+				"[2500,3000)": {
+					"n": 23,
+					"accepted": 0,
+					"history": 2,
+					"rpmFail": 16,
+					"rpmOnly": 5
+				},
+				"[700,800)": {
+					"n": 20,
+					"accepted": 0,
+					"history": 0,
+					"rpmFail": 19,
+					"rpmOnly": 8
+				},
+				"<700": {
+					"n": 50,
+					"accepted": 0,
+					"history": 0,
+					"rpmFail": 28,
+					"rpmOnly": 3
+				}
+			},
+			"mapBands": {
+				"[50,55)": {
+					"n": 1073,
+					"accepted": 356,
+					"history": 532,
+					"rpmFail": 135,
+					"rpmOnly": 63
+				},
+				"[45,50)": {
+					"n": 998,
+					"accepted": 459,
+					"history": 388,
+					"rpmFail": 105,
+					"rpmOnly": 57
+				},
+				"[55,60)": {
+					"n": 138,
+					"accepted": 0,
+					"history": 16,
+					"rpmFail": 107,
+					"rpmOnly": 30
+				},
+				"[60,65)": {
+					"n": 158,
+					"accepted": 0,
+					"history": 11,
+					"rpmFail": 123,
+					"rpmOnly": 36
+				},
+				"[65,70)": {
+					"n": 96,
+					"accepted": 0,
+					"history": 3,
+					"rpmFail": 84,
+					"rpmOnly": 24
+				},
+				"[70,80)": {
+					"n": 103,
+					"accepted": 0,
+					"history": 4,
+					"rpmFail": 94,
+					"rpmOnly": 13
+				},
+				"[40,45)": {
+					"n": 121,
+					"accepted": 0,
+					"history": 34,
+					"rpmFail": 72,
+					"rpmOnly": 23
+				},
+				"[30,40)": {
+					"n": 104,
+					"accepted": 0,
+					"history": 1,
+					"rpmFail": 95,
+					"rpmOnly": 44
+				},
+				"[80,90)": {
+					"n": 45,
+					"accepted": 0,
+					"history": 1,
+					"rpmFail": 42,
+					"rpmOnly": 6
+				},
+				"<30": {
+					"n": 23,
+					"accepted": 0,
+					"history": 0,
+					"rpmFail": 23,
+					"rpmOnly": 4
+				}
+			},
+			"fuel": {
+				"prerequisitesAvailable": 2859,
+				"unassessed": 0,
+				"lowPw": 0,
+				"highRpm": 647,
+				"closedTps": 2202,
+				"lowPwHighRpm": 0,
+				"lowPwClosedTps": 0,
+				"highRpmClosedTps": 67,
+				"allThree": 0,
+				"pwMin": 1.543,
+				"pwMax": 7.573,
+				"decelPwMin": 1.557,
+				"lowPwRpmMin": null,
+				"lowPwRpmMax": null,
+				"lowPwTpsMin": null,
+				"lowPwTpsMax": null
+			},
+			"nearRpmThreshold": 1,
+			"historyExample": {
+				"rows": [2521, 2522],
+				"n": 2,
+				"time": [167.989, 168.057],
+				"regions": ["moderate-load"],
+				"ranges": {
+					"rpm": {
+						"min": 1844,
+						"max": 1845
+					},
+					"load": {
+						"min": 74.4,
+						"max": 74.9
+					},
+					"tps": {
+						"min": 17.9,
+						"max": 17.9
+					},
+					"afr": {
+						"min": 14.5,
+						"max": 14.5
+					},
+					"clt": {
+						"min": 82.444,
+						"max": 82.444
+					}
+				},
+				"followingStatus": "heuristic-excluded",
+				"followingReasons": ["RPM_TRANSIENT", "STEADY_WINDOW_UNASSESSED"]
+			},
+			"rpmExample": {
+				"rows": [2511, 2511],
+				"n": 1,
+				"time": [167.323, 167.323],
+				"regions": ["moderate-load"],
+				"ranges": {
+					"rpm": {
+						"min": 2026,
+						"max": 2026
+					},
+					"load": {
+						"min": 72.7,
+						"max": 72.7
+					},
+					"tps": {
+						"min": 19.2,
+						"max": 19.2
+					},
+					"afr": {
+						"min": 16.1,
+						"max": 16.1
+					},
+					"clt": {
+						"min": 82.444,
+						"max": 82.444
+					}
+				},
+				"followingStatus": "heuristic-excluded",
+				"followingReasons": ["TPS_TRANSIENT", "RPM_TRANSIENT", "STEADY_WINDOW_UNASSESSED"],
+				"rate": {
+					"rowIndex": 2511,
+					"slot": "rpm",
+					"channelName": "RPM",
+					"value": -223.88059701490107,
+					"unit": "rpm/s",
+					"method": "finite-difference",
+					"sourceValue": 2026,
+					"previousRowIndex": 2510,
+					"previousValue": 2041,
+					"deltaSec": 0.06700000000000728
+				},
+				"loggedTpsRate": 0,
+				"loggedMapRate": -4,
+				"speedMph": null,
+				"otherChecks": {
+					"core": "pass",
+					"timeContinuity": "pass",
+					"timeGap": "pass",
+					"warmupTemperature": "pass",
+					"warmupCorrection": "pass",
+					"tpsTransient": "pass",
+					"mapTransient": "pass",
+					"rpmTransient": "fail",
+					"possibleFuelCut": "pass",
+					"steadyWindow": "unassessed"
+				}
+			},
+			"acceptedNonIdleExample": null,
+			"acceptedBoostExample": null
+		},
+		{
+			"file": "data/logs/block1/2026-07-25_17.56.47.msl",
+			"veFile": "src/lib/server/demo/ve.table",
+			"veAxes": {
+				"rpm": [
+					700, 800, 900, 1000, 1200, 1500, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 7000, 8000,
+					9000
+				],
+				"map": [30, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100, 125, 150, 175, 200, 260]
+			},
+			"config": {
+				"minCoolantC": 70,
+				"maxWarmupCorrectionDeviationPct": 1,
+				"maxAbsTpsRatePctPerSec": 5,
+				"maxAbsMapRateKpaPerSec": 10,
+				"maxAbsRpmRatePerSec": 200,
+				"maxGapSec": 0.5,
+				"steadyWindowSec": 1,
+				"possibleFuelCutMaxPulseWidthMs": 0.1,
+				"possibleFuelCutMinRpm": 1200,
+				"possibleFuelCutMaxTpsPct": 2
+			},
+			"statuses": {
+				"hard-excluded": 2,
+				"heuristic-excluded": 12944,
+				"indeterminate": 2,
+				"eligible": 6042
+			},
+			"regions": {
+				"idle-like": {
+					"n": 3727,
+					"accepted": 2453,
+					"history": 1092,
+					"rpmFail": 147,
+					"rpmOnly": 120,
+					"acceptPct": 65.82
+				},
+				"low-load/motion-unverified": {
+					"n": 219,
+					"accepted": 0,
+					"history": 5,
+					"rpmFail": 178,
+					"rpmOnly": 21,
+					"acceptPct": 0
+				},
+				"moderate-load": {
+					"n": 2991,
+					"accepted": 141,
+					"history": 774,
+					"rpmFail": 1471,
+					"rpmOnly": 540,
+					"acceptPct": 4.71
+				},
+				"closed-throttle/non-idle": {
+					"n": 6186,
+					"accepted": 2813,
+					"history": 2043,
+					"rpmFail": 1219,
+					"rpmOnly": 640,
+					"acceptPct": 45.47
+				},
+				"cruise-like": {
+					"n": 4190,
+					"accepted": 628,
+					"history": 1521,
+					"rpmFail": 1376,
+					"rpmOnly": 435,
+					"acceptPct": 14.99
+				},
+				"boost": {
+					"n": 1677,
+					"accepted": 7,
+					"history": 276,
+					"rpmFail": 607,
+					"rpmOnly": 275,
+					"acceptPct": 0.42
+				}
+			},
+			"groups": {
+				"idle": {
+					"n": 3727,
+					"accepted": 2453,
+					"history": 1092,
+					"rpmFail": 147,
+					"rpmOnly": 120,
+					"warmCore": 3727,
+					"rpmWarm": 147,
+					"acceptPct": 65.82,
+					"historyWithheldPct": 30.8,
+					"rpmFailPct": 3.94,
+					"rpmWarmFailPct": 3.94
+				},
+				"nonIdle": {
+					"n": 15263,
+					"accepted": 3589,
+					"history": 4619,
+					"rpmFail": 4851,
+					"rpmOnly": 1911,
+					"warmCore": 15261,
+					"rpmWarm": 4851,
+					"acceptPct": 23.51,
+					"historyWithheldPct": 56.27,
+					"rpmFailPct": 31.78,
+					"rpmWarmFailPct": 31.79
+				}
+			},
+			"coverage": {
+				"occupiedNeighborhoods": 29,
+				"totalNeighborhoods": 225,
+				"atLeast15": 18,
+				"atLeast100": 3,
+				"newHistoryOnlyNeighborhoods": 52,
+				"newRpmOnlyNeighborhoods": 59,
+				"clampedAccepted": 0,
+				"underRpm": 0,
+				"underMap": 0,
+				"overRpm": 0,
+				"overMap": 0,
+				"topNeighborhoods": [
+					{
+						"log": "2026-07-25_17.56.47.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 1000,
+						"rpm_high": 1200,
+						"map_low_kpa": 45,
+						"map_high_kpa": 50,
+						"raw_samples": 6579,
+						"accepted_samples": 4219,
+						"history_only_excluded": 2049,
+						"rpm_only_direct_excluded": 202,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-07-25_17.56.47.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 1200,
+						"rpm_high": 1500,
+						"map_low_kpa": 40,
+						"map_high_kpa": 45,
+						"raw_samples": 1195,
+						"accepted_samples": 539,
+						"history_only_excluded": 436,
+						"rpm_only_direct_excluded": 151,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-07-25_17.56.47.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 1000,
+						"rpm_high": 1200,
+						"map_low_kpa": 50,
+						"map_high_kpa": 55,
+						"raw_samples": 755,
+						"accepted_samples": 289,
+						"history_only_excluded": 330,
+						"rpm_only_direct_excluded": 61,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-07-25_17.56.47.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 1200,
+						"rpm_high": 1500,
+						"map_low_kpa": 45,
+						"map_high_kpa": 50,
+						"raw_samples": 180,
+						"accepted_samples": 92,
+						"history_only_excluded": 62,
+						"rpm_only_direct_excluded": 4,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-07-25_17.56.47.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 3500,
+						"rpm_high": 4000,
+						"map_low_kpa": 60,
+						"map_high_kpa": 65,
+						"raw_samples": 297,
+						"accepted_samples": 91,
+						"history_only_excluded": 123,
+						"rpm_only_direct_excluded": 14,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-07-25_17.56.47.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 4000,
+						"rpm_high": 5000,
+						"map_low_kpa": 55,
+						"map_high_kpa": 60,
+						"raw_samples": 170,
+						"accepted_samples": 86,
+						"history_only_excluded": 35,
+						"rpm_only_direct_excluded": 11,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-07-25_17.56.47.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 900,
+						"rpm_high": 1000,
+						"map_low_kpa": 50,
+						"map_high_kpa": 55,
+						"raw_samples": 299,
+						"accepted_samples": 85,
+						"history_only_excluded": 175,
+						"rpm_only_direct_excluded": 17,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-07-25_17.56.47.msl",
+						"ve_export": "src/lib/server/demo/ve.table",
+						"rpm_low": 3500,
+						"rpm_high": 4000,
+						"map_low_kpa": 70,
+						"map_high_kpa": 80,
+						"raw_samples": 321,
+						"accepted_samples": 80,
+						"history_only_excluded": 114,
+						"rpm_only_direct_excluded": 10,
+						"accepted_clamped": 0
+					}
+				]
+			},
+			"rpmBands": {
+				"[900,1000)": {
+					"n": 349,
+					"accepted": 90,
+					"history": 196,
+					"rpmFail": 48,
+					"rpmOnly": 31
+				},
+				"[1000,1200)": {
+					"n": 7510,
+					"accepted": 4545,
+					"history": 2438,
+					"rpmFail": 400,
+					"rpmOnly": 292
+				},
+				"[1200,1500)": {
+					"n": 1699,
+					"accepted": 631,
+					"history": 517,
+					"rpmFail": 469,
+					"rpmOnly": 260
+				},
+				"[1500,2000)": {
+					"n": 1005,
+					"accepted": 0,
+					"history": 82,
+					"rpmFail": 877,
+					"rpmOnly": 251
+				},
+				"[800,900)": {
+					"n": 17,
+					"accepted": 0,
+					"history": 0,
+					"rpmFail": 14,
+					"rpmOnly": 2
+				},
+				"[2000,2500)": {
+					"n": 1119,
+					"accepted": 0,
+					"history": 148,
+					"rpmFail": 876,
+					"rpmOnly": 329
+				},
+				"[2500,3000)": {
+					"n": 1441,
+					"accepted": 105,
+					"history": 293,
+					"rpmFail": 755,
+					"rpmOnly": 288
+				},
+				"<700": {
+					"n": 10,
+					"accepted": 0,
+					"history": 0,
+					"rpmFail": 9,
+					"rpmOnly": 1
+				},
+				"[700,800)": {
+					"n": 8,
+					"accepted": 0,
+					"history": 0,
+					"rpmFail": 7,
+					"rpmOnly": 1
+				},
+				"[3000,3500)": {
+					"n": 1514,
+					"accepted": 28,
+					"history": 541,
+					"rpmFail": 578,
+					"rpmOnly": 218
+				},
+				"[3500,4000)": {
+					"n": 2843,
+					"accepted": 480,
+					"history": 988,
+					"rpmFail": 584,
+					"rpmOnly": 214
+				},
+				"[4000,5000)": {
+					"n": 1428,
+					"accepted": 149,
+					"history": 495,
+					"rpmFail": 367,
+					"rpmOnly": 138
+				},
+				"[5000,6000)": {
+					"n": 47,
+					"accepted": 14,
+					"history": 13,
+					"rpmFail": 14,
+					"rpmOnly": 6
+				}
+			},
+			"mapBands": {
+				"[50,55)": {
+					"n": 1580,
+					"accepted": 440,
+					"history": 727,
+					"rpmFail": 266,
+					"rpmOnly": 140
+				},
+				"[45,50)": {
+					"n": 7508,
+					"accepted": 4445,
+					"history": 2537,
+					"rpmFail": 375,
+					"rpmOnly": 266
+				},
+				"[55,60)": {
+					"n": 663,
+					"accepted": 186,
+					"history": 162,
+					"rpmFail": 186,
+					"rpmOnly": 63
+				},
+				"[65,70)": {
+					"n": 605,
+					"accepted": 58,
+					"history": 206,
+					"rpmFail": 206,
+					"rpmOnly": 63
+				},
+				"[70,80)": {
+					"n": 1052,
+					"accepted": 94,
+					"history": 273,
+					"rpmFail": 433,
+					"rpmOnly": 114
+				},
+				"[60,65)": {
+					"n": 678,
+					"accepted": 112,
+					"history": 253,
+					"rpmFail": 184,
+					"rpmOnly": 65
+				},
+				"[40,45)": {
+					"n": 1667,
+					"accepted": 653,
+					"history": 636,
+					"rpmFail": 309,
+					"rpmOnly": 215
+				},
+				"[30,40)": {
+					"n": 911,
+					"accepted": 0,
+					"history": 121,
+					"rpmFail": 709,
+					"rpmOnly": 222
+				},
+				"[80,90)": {
+					"n": 1167,
+					"accepted": 45,
+					"history": 355,
+					"rpmFail": 564,
+					"rpmOnly": 222
+				},
+				"<30": {
+					"n": 710,
+					"accepted": 0,
+					"history": 19,
+					"rpmFail": 685,
+					"rpmOnly": 182
+				},
+				"[90,100)": {
+					"n": 845,
+					"accepted": 2,
+					"history": 147,
+					"rpmFail": 528,
+					"rpmOnly": 240
+				},
+				"[100,125)": {
+					"n": 867,
+					"accepted": 0,
+					"history": 100,
+					"rpmFail": 321,
+					"rpmOnly": 134
+				},
+				"[125,150)": {
+					"n": 656,
+					"accepted": 7,
+					"history": 145,
+					"rpmFail": 197,
+					"rpmOnly": 78
+				},
+				"[150,175)": {
+					"n": 81,
+					"accepted": 0,
+					"history": 30,
+					"rpmFail": 35,
+					"rpmOnly": 27
+				}
+			},
+			"fuel": {
+				"prerequisitesAvailable": 18990,
+				"unassessed": 0,
+				"lowPw": 0,
+				"highRpm": 11096,
+				"closedTps": 9921,
+				"lowPwHighRpm": 0,
+				"lowPwClosedTps": 0,
+				"highRpmClosedTps": 2117,
+				"allThree": 0,
+				"pwMin": 1.472,
+				"pwMax": 12.44,
+				"decelPwMin": 1.521,
+				"lowPwRpmMin": null,
+				"lowPwRpmMax": null,
+				"lowPwTpsMin": null,
+				"lowPwTpsMax": null
+			},
+			"nearRpmThreshold": 21,
+			"historyExample": {
+				"rows": [11174, 11188],
+				"n": 15,
+				"time": [-127.086, -126.151],
+				"regions": ["boost"],
+				"ranges": {
+					"rpm": {
+						"min": 2593,
+						"max": 2652
+					},
+					"load": {
+						"min": 136.8,
+						"max": 140.9
+					},
+					"tps": {
+						"min": 39.6,
+						"max": 40.7
+					},
+					"afr": {
+						"min": 10.4,
+						"max": 10.8
+					},
+					"clt": {
+						"min": 82.833,
+						"max": 83.167
+					}
+				},
+				"followingStatus": "eligible",
+				"followingReasons": []
+			},
+			"rpmExample": {
+				"rows": [6510, 6510],
+				"n": 1,
+				"time": [-438.092, -438.092],
+				"regions": ["boost"],
+				"ranges": {
+					"rpm": {
+						"min": 3550,
+						"max": 3550
+					},
+					"load": {
+						"min": 146.7,
+						"max": 146.7
+					},
+					"tps": {
+						"min": 36.8,
+						"max": 36.8
+					},
+					"afr": {
+						"min": 10.8,
+						"max": 10.8
+					},
+					"clt": {
+						"min": 84.333,
+						"max": 84.333
+					}
+				},
+				"followingStatus": "heuristic-excluded",
+				"followingReasons": ["INSUFFICIENT_STEADY_HISTORY"],
+				"rate": {
+					"rowIndex": 6510,
+					"slot": "rpm",
+					"channelName": "RPM",
+					"value": 205.88235294105394,
+					"unit": "rpm/s",
+					"method": "finite-difference",
+					"sourceValue": 3550,
+					"previousRowIndex": 6509,
+					"previousValue": 3536,
+					"deltaSec": 0.06800000000004047
+				},
+				"loggedTpsRate": -1.4,
+				"loggedMapRate": -6,
+				"speedMph": 64.4,
+				"otherChecks": {
+					"core": "pass",
+					"timeContinuity": "pass",
+					"timeGap": "pass",
+					"warmupTemperature": "pass",
+					"warmupCorrection": "pass",
+					"tpsTransient": "pass",
+					"mapTransient": "pass",
+					"rpmTransient": "fail",
+					"possibleFuelCut": "pass",
+					"steadyWindow": "unassessed"
+				}
+			},
+			"acceptedNonIdleExample": {
+				"rows": [15501, 15655],
+				"n": 155,
+				"time": [161.458, 171.727],
+				"regions": ["closed-throttle/non-idle"],
+				"ranges": {
+					"rpm": {
+						"min": 1136,
+						"max": 1182
+					},
+					"load": {
+						"min": 45.8,
+						"max": 47.1
+					},
+					"tps": {
+						"min": 1.3,
+						"max": 1.3
+					},
+					"afr": {
+						"min": 13.4,
+						"max": 13.5
+					},
+					"clt": {
+						"min": 86.778,
+						"max": 86.778
+					}
+				},
+				"followingStatus": "eligible",
+				"followingReasons": []
+			},
+			"acceptedBoostExample": {
+				"rows": [11189, 11195],
+				"time": [-126.082, -125.688],
+				"n": 7,
+				"ranges": {
+					"rpm": [2661, 2681],
+					"load": [141.1, 141.4],
+					"tps": [38, 39.4],
+					"afr": [10.3, 10.5]
+				}
+			}
+		},
+		{
+			"file": "data/logs/block3/2026-08-01_09.45.13.msl",
+			"veFile": "data/logs/block3/veTable1Tbl_2026-08-02_00.24.28.table",
+			"veAxes": {
+				"rpm": [
+					700, 800, 900, 1000, 1200, 1500, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 7000, 8000,
+					9000
+				],
+				"map": [30, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100, 125, 150, 175, 200, 260]
+			},
+			"config": {
+				"minCoolantC": 70,
+				"maxWarmupCorrectionDeviationPct": 1,
+				"maxAbsTpsRatePctPerSec": 5,
+				"maxAbsMapRateKpaPerSec": 10,
+				"maxAbsRpmRatePerSec": 200,
+				"maxGapSec": 0.5,
+				"steadyWindowSec": 1,
+				"possibleFuelCutMaxPulseWidthMs": 0.1,
+				"possibleFuelCutMinRpm": 1200,
+				"possibleFuelCutMaxTpsPct": 2
+			},
+			"statuses": {
+				"hard-excluded": 345,
+				"heuristic-excluded": 22494,
+				"indeterminate": 6,
+				"eligible": 6805
+			},
+			"regions": {
+				"engine-off/unusable": {
+					"n": 338,
+					"accepted": 0,
+					"history": 0,
+					"rpmFail": 0,
+					"rpmOnly": 0,
+					"acceptPct": 0
+				},
+				"moderate-load": {
+					"n": 5153,
+					"accepted": 561,
+					"history": 1535,
+					"rpmFail": 1320,
+					"rpmOnly": 295,
+					"acceptPct": 10.89
+				},
+				"idle-like": {
+					"n": 4657,
+					"accepted": 2221,
+					"history": 1472,
+					"rpmFail": 617,
+					"rpmOnly": 236,
+					"acceptPct": 47.69
+				},
+				"low-load/motion-unverified": {
+					"n": 219,
+					"accepted": 0,
+					"history": 4,
+					"rpmFail": 169,
+					"rpmOnly": 13,
+					"acceptPct": 0
+				},
+				"closed-throttle/non-idle": {
+					"n": 7566,
+					"accepted": 2640,
+					"history": 2547,
+					"rpmFail": 2124,
+					"rpmOnly": 1122,
+					"acceptPct": 34.89
+				},
+				"cruise-like": {
+					"n": 8908,
+					"accepted": 1252,
+					"history": 3559,
+					"rpmFail": 2361,
+					"rpmOnly": 888,
+					"acceptPct": 14.05
+				},
+				"boost": {
+					"n": 2809,
+					"accepted": 131,
+					"history": 713,
+					"rpmFail": 689,
+					"rpmOnly": 257,
+					"acceptPct": 4.66
+				}
+			},
+			"groups": {
+				"idle": {
+					"n": 4657,
+					"accepted": 2221,
+					"history": 1472,
+					"rpmFail": 617,
+					"rpmOnly": 236,
+					"warmCore": 4024,
+					"rpmWarm": 270,
+					"acceptPct": 47.69,
+					"historyWithheldPct": 39.86,
+					"rpmFailPct": 13.25,
+					"rpmWarmFailPct": 6.71
+				},
+				"nonIdle": {
+					"n": 24655,
+					"accepted": 4584,
+					"history": 8358,
+					"rpmFail": 6663,
+					"rpmOnly": 2575,
+					"warmCore": 24520,
+					"rpmWarm": 6549,
+					"acceptPct": 18.59,
+					"historyWithheldPct": 64.58,
+					"rpmFailPct": 27.02,
+					"rpmWarmFailPct": 26.71
+				}
+			},
+			"coverage": {
+				"occupiedNeighborhoods": 40,
+				"totalNeighborhoods": 225,
+				"atLeast15": 32,
+				"atLeast100": 7,
+				"newHistoryOnlyNeighborhoods": 56,
+				"newRpmOnlyNeighborhoods": 57,
+				"clampedAccepted": 11,
+				"underRpm": 0,
+				"underMap": 11,
+				"overRpm": 0,
+				"overMap": 0,
+				"topNeighborhoods": [
+					{
+						"log": "2026-08-01_09.45.13.msl",
+						"ve_export": "data/logs/block3/veTable1Tbl_2026-08-02_00.24.28.table",
+						"rpm_low": 1000,
+						"rpm_high": 1200,
+						"map_low_kpa": 45,
+						"map_high_kpa": 50,
+						"raw_samples": 7571,
+						"accepted_samples": 4282,
+						"history_only_excluded": 2615,
+						"rpm_only_direct_excluded": 324,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-01_09.45.13.msl",
+						"ve_export": "data/logs/block3/veTable1Tbl_2026-08-02_00.24.28.table",
+						"rpm_low": 1000,
+						"rpm_high": 1200,
+						"map_low_kpa": 50,
+						"map_high_kpa": 55,
+						"raw_samples": 1240,
+						"accepted_samples": 376,
+						"history_only_excluded": 581,
+						"rpm_only_direct_excluded": 93,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-01_09.45.13.msl",
+						"ve_export": "data/logs/block3/veTable1Tbl_2026-08-02_00.24.28.table",
+						"rpm_low": 4000,
+						"rpm_high": 5000,
+						"map_low_kpa": 40,
+						"map_high_kpa": 45,
+						"raw_samples": 627,
+						"accepted_samples": 252,
+						"history_only_excluded": 274,
+						"rpm_only_direct_excluded": 40,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-01_09.45.13.msl",
+						"ve_export": "data/logs/block3/veTable1Tbl_2026-08-02_00.24.28.table",
+						"rpm_low": 3500,
+						"rpm_high": 4000,
+						"map_low_kpa": 45,
+						"map_high_kpa": 50,
+						"raw_samples": 656,
+						"accepted_samples": 194,
+						"history_only_excluded": 348,
+						"rpm_only_direct_excluded": 51,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-01_09.45.13.msl",
+						"ve_export": "data/logs/block3/veTable1Tbl_2026-08-02_00.24.28.table",
+						"rpm_low": 4000,
+						"rpm_high": 5000,
+						"map_low_kpa": 70,
+						"map_high_kpa": 80,
+						"raw_samples": 756,
+						"accepted_samples": 174,
+						"history_only_excluded": 247,
+						"rpm_only_direct_excluded": 22,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-01_09.45.13.msl",
+						"ve_export": "data/logs/block3/veTable1Tbl_2026-08-02_00.24.28.table",
+						"rpm_low": 4000,
+						"rpm_high": 5000,
+						"map_low_kpa": 90,
+						"map_high_kpa": 100,
+						"raw_samples": 606,
+						"accepted_samples": 157,
+						"history_only_excluded": 192,
+						"rpm_only_direct_excluded": 4,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-01_09.45.13.msl",
+						"ve_export": "data/logs/block3/veTable1Tbl_2026-08-02_00.24.28.table",
+						"rpm_low": 1200,
+						"rpm_high": 1500,
+						"map_low_kpa": 40,
+						"map_high_kpa": 45,
+						"raw_samples": 887,
+						"accepted_samples": 118,
+						"history_only_excluded": 444,
+						"rpm_only_direct_excluded": 231,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-01_09.45.13.msl",
+						"ve_export": "data/logs/block3/veTable1Tbl_2026-08-02_00.24.28.table",
+						"rpm_low": 3500,
+						"rpm_high": 4000,
+						"map_low_kpa": 50,
+						"map_high_kpa": 55,
+						"raw_samples": 444,
+						"accepted_samples": 97,
+						"history_only_excluded": 225,
+						"rpm_only_direct_excluded": 26,
+						"accepted_clamped": 0
+					}
+				]
+			},
+			"rpmBands": {
+				"<700": {
+					"n": 32,
+					"accepted": 0,
+					"history": 7,
+					"rpmFail": 16,
+					"rpmOnly": 0
+				},
+				"[700,800)": {
+					"n": 59,
+					"accepted": 0,
+					"history": 0,
+					"rpmFail": 31,
+					"rpmOnly": 0
+				},
+				"[800,900)": {
+					"n": 257,
+					"accepted": 0,
+					"history": 8,
+					"rpmFail": 169,
+					"rpmOnly": 10
+				},
+				"[900,1000)": {
+					"n": 466,
+					"accepted": 18,
+					"history": 85,
+					"rpmFail": 275,
+					"rpmOnly": 64
+				},
+				"[1000,1200)": {
+					"n": 9184,
+					"accepted": 4684,
+					"history": 3288,
+					"rpmFail": 858,
+					"rpmOnly": 521
+				},
+				"[1200,1500)": {
+					"n": 1646,
+					"accepted": 159,
+					"history": 650,
+					"rpmFail": 705,
+					"rpmOnly": 412
+				},
+				"[1500,2000)": {
+					"n": 1005,
+					"accepted": 0,
+					"history": 38,
+					"rpmFail": 902,
+					"rpmOnly": 210
+				},
+				"[2000,2500)": {
+					"n": 1020,
+					"accepted": 7,
+					"history": 124,
+					"rpmFail": 814,
+					"rpmOnly": 190
+				},
+				"[2500,3000)": {
+					"n": 1491,
+					"accepted": 87,
+					"history": 274,
+					"rpmFail": 779,
+					"rpmOnly": 316
+				},
+				"[3000,3500)": {
+					"n": 2868,
+					"accepted": 151,
+					"history": 1089,
+					"rpmFail": 814,
+					"rpmOnly": 316
+				},
+				"[3500,4000)": {
+					"n": 4998,
+					"accepted": 581,
+					"history": 2096,
+					"rpmFail": 890,
+					"rpmOnly": 423
+				},
+				"[4000,5000)": {
+					"n": 5872,
+					"accepted": 1118,
+					"history": 2089,
+					"rpmFail": 865,
+					"rpmOnly": 305
+				},
+				"[5000,6000)": {
+					"n": 314,
+					"accepted": 0,
+					"history": 73,
+					"rpmFail": 108,
+					"rpmOnly": 27
+				},
+				"[6000,7000)": {
+					"n": 100,
+					"accepted": 0,
+					"history": 9,
+					"rpmFail": 54,
+					"rpmOnly": 17
+				}
+			},
+			"mapBands": {
+				"[90,100)": {
+					"n": 1580,
+					"accepted": 179,
+					"history": 408,
+					"rpmFail": 431,
+					"rpmOnly": 68
+				},
+				"[80,90)": {
+					"n": 1633,
+					"accepted": 140,
+					"history": 469,
+					"rpmFail": 424,
+					"rpmOnly": 90
+				},
+				"[70,80)": {
+					"n": 2079,
+					"accepted": 257,
+					"history": 689,
+					"rpmFail": 494,
+					"rpmOnly": 141
+				},
+				"[65,70)": {
+					"n": 1193,
+					"accepted": 132,
+					"history": 391,
+					"rpmFail": 271,
+					"rpmOnly": 76
+				},
+				"[60,65)": {
+					"n": 1347,
+					"accepted": 182,
+					"history": 501,
+					"rpmFail": 312,
+					"rpmOnly": 93
+				},
+				"[55,60)": {
+					"n": 1533,
+					"accepted": 105,
+					"history": 514,
+					"rpmFail": 507,
+					"rpmOnly": 143
+				},
+				"[50,55)": {
+					"n": 2706,
+					"accepted": 550,
+					"history": 1146,
+					"rpmFail": 615,
+					"rpmOnly": 219
+				},
+				"[45,50)": {
+					"n": 9424,
+					"accepted": 4664,
+					"history": 3533,
+					"rpmFail": 768,
+					"rpmOnly": 463
+				},
+				"[40,45)": {
+					"n": 2201,
+					"accepted": 445,
+					"history": 1021,
+					"rpmFail": 549,
+					"rpmOnly": 407
+				},
+				"[30,40)": {
+					"n": 1705,
+					"accepted": 24,
+					"history": 394,
+					"rpmFail": 1112,
+					"rpmOnly": 527
+				},
+				"<30": {
+					"n": 1241,
+					"accepted": 11,
+					"history": 82,
+					"rpmFail": 1137,
+					"rpmOnly": 331
+				},
+				"[100,125)": {
+					"n": 1894,
+					"accepted": 116,
+					"history": 452,
+					"rpmFail": 380,
+					"rpmOnly": 116
+				},
+				"[125,150)": {
+					"n": 642,
+					"accepted": 0,
+					"history": 184,
+					"rpmFail": 202,
+					"rpmOnly": 85
+				},
+				"[150,175)": {
+					"n": 134,
+					"accepted": 0,
+					"history": 46,
+					"rpmFail": 78,
+					"rpmOnly": 52
+				}
+			},
+			"fuel": {
+				"prerequisitesAvailable": 29650,
+				"unassessed": 0,
+				"lowPw": 341,
+				"highRpm": 19314,
+				"closedTps": 12579,
+				"lowPwHighRpm": 0,
+				"lowPwClosedTps": 341,
+				"highRpmClosedTps": 2389,
+				"allThree": 0,
+				"pwMin": 0,
+				"pwMax": 14.449,
+				"decelPwMin": 1.32,
+				"lowPwRpmMin": 0,
+				"lowPwRpmMax": 221,
+				"lowPwTpsMin": 0.8,
+				"lowPwTpsMax": 0.9
+			},
+			"nearRpmThreshold": 19,
+			"historyExample": {
+				"rows": [16918, 16933],
+				"n": 16,
+				"time": [1127.941, 1128.94],
+				"regions": ["boost"],
+				"ranges": {
+					"rpm": {
+						"min": 4204,
+						"max": 4234
+					},
+					"load": {
+						"min": 104.4,
+						"max": 107.8
+					},
+					"tps": {
+						"min": 30.1,
+						"max": 30.1
+					},
+					"afr": {
+						"min": 12.7,
+						"max": 13.4
+					},
+					"clt": {
+						"min": 89.222,
+						"max": 89.611
+					}
+				},
+				"followingStatus": "eligible",
+				"followingReasons": []
+			},
+			"rpmExample": {
+				"rows": [4465, 4465],
+				"n": 1,
+				"time": [297.615, 297.615],
+				"regions": ["boost"],
+				"ranges": {
+					"rpm": {
+						"min": 2541,
+						"max": 2541
+					},
+					"load": {
+						"min": 108,
+						"max": 108
+					},
+					"tps": {
+						"min": 28.3,
+						"max": 28.3
+					},
+					"afr": {
+						"min": 12.5,
+						"max": 12.5
+					},
+					"clt": {
+						"min": 84.778,
+						"max": 84.778
+					}
+				},
+				"followingStatus": "heuristic-excluded",
+				"followingReasons": ["RPM_TRANSIENT", "STEADY_WINDOW_UNASSESSED"],
+				"rate": {
+					"rowIndex": 4465,
+					"slot": "rpm",
+					"channelName": "RPM",
+					"value": 205.88235294122603,
+					"unit": "rpm/s",
+					"method": "finite-difference",
+					"sourceValue": 2541,
+					"previousRowIndex": 4464,
+					"previousValue": 2527,
+					"deltaSec": 0.06799999999998363
+				},
+				"loggedTpsRate": 0,
+				"loggedMapRate": -1,
+				"speedMph": 32.9,
+				"otherChecks": {
+					"core": "pass",
+					"timeContinuity": "pass",
+					"timeGap": "pass",
+					"warmupTemperature": "pass",
+					"warmupCorrection": "pass",
+					"tpsTransient": "pass",
+					"mapTransient": "pass",
+					"rpmTransient": "fail",
+					"possibleFuelCut": "pass",
+					"steadyWindow": "unassessed"
+				}
+			},
+			"acceptedNonIdleExample": {
+				"rows": [13126, 13309],
+				"n": 184,
+				"time": [875.1, 887.301],
+				"regions": ["closed-throttle/non-idle"],
+				"ranges": {
+					"rpm": {
+						"min": 1042,
+						"max": 1110
+					},
+					"load": {
+						"min": 46.8,
+						"max": 48.9
+					},
+					"tps": {
+						"min": 0.9,
+						"max": 0.9
+					},
+					"afr": {
+						"min": 13.3,
+						"max": 13.8
+					},
+					"clt": {
+						"min": 85.111,
+						"max": 85.667
+					}
+				},
+				"followingStatus": "heuristic-excluded",
+				"followingReasons": ["RPM_TRANSIENT", "STEADY_WINDOW_UNASSESSED"]
+			},
+			"acceptedBoostExample": {
+				"rows": [16934, 17018],
+				"time": [1129.005, 1134.608],
+				"n": 85,
+				"ranges": {
+					"rpm": [4235, 4366],
+					"load": [98.9, 108.1],
+					"tps": [29.3, 30.1],
+					"afr": [12.1, 12.7]
+				}
+			}
+		},
+		{
+			"file": "data/logs/block2/2026-08-08_11.19.56.msl",
+			"veFile": "data/logs/block2/veTable1_2026-08-08_23.57.53.table",
+			"veAxes": {
+				"rpm": [
+					700, 800, 900, 1000, 1200, 1500, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 7000, 8000,
+					9000
+				],
+				"map": [30, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100, 125, 150, 175, 200, 260]
+			},
+			"config": {
+				"minCoolantC": 70,
+				"maxWarmupCorrectionDeviationPct": 1,
+				"maxAbsTpsRatePctPerSec": 5,
+				"maxAbsMapRateKpaPerSec": 10,
+				"maxAbsRpmRatePerSec": 200,
+				"maxGapSec": 0.5,
+				"steadyWindowSec": 1,
+				"possibleFuelCutMaxPulseWidthMs": 0.1,
+				"possibleFuelCutMinRpm": 1200,
+				"possibleFuelCutMaxTpsPct": 2
+			},
+			"statuses": {
+				"hard-excluded": 8,
+				"heuristic-excluded": 38528,
+				"indeterminate": 3,
+				"eligible": 17745
+			},
+			"regions": {
+				"low-load/motion-unverified": {
+					"n": 2952,
+					"accepted": 0,
+					"history": 28,
+					"rpmFail": 851,
+					"rpmOnly": 63,
+					"acceptPct": 0
+				},
+				"cruise-like": {
+					"n": 13014,
+					"accepted": 1279,
+					"history": 4893,
+					"rpmFail": 4853,
+					"rpmOnly": 1803,
+					"acceptPct": 9.83
+				},
+				"moderate-load": {
+					"n": 6934,
+					"accepted": 292,
+					"history": 1464,
+					"rpmFail": 3848,
+					"rpmOnly": 1074,
+					"acceptPct": 4.21
+				},
+				"closed-throttle/non-idle": {
+					"n": 19770,
+					"accepted": 7941,
+					"history": 6887,
+					"rpmFail": 4030,
+					"rpmOnly": 2454,
+					"acceptPct": 40.17
+				},
+				"idle-like": {
+					"n": 11157,
+					"accepted": 8218,
+					"history": 2579,
+					"rpmFail": 226,
+					"rpmOnly": 216,
+					"acceptPct": 73.66
+				},
+				"boost": {
+					"n": 2457,
+					"accepted": 15,
+					"history": 465,
+					"rpmFail": 1069,
+					"rpmOnly": 432,
+					"acceptPct": 0.61
+				}
+			},
+			"groups": {
+				"idle": {
+					"n": 11157,
+					"accepted": 8218,
+					"history": 2579,
+					"rpmFail": 226,
+					"rpmOnly": 216,
+					"warmCore": 11043,
+					"rpmWarm": 223,
+					"acceptPct": 73.66,
+					"historyWithheldPct": 23.89,
+					"rpmFailPct": 2.03,
+					"rpmWarmFailPct": 2.02
+				},
+				"nonIdle": {
+					"n": 45127,
+					"accepted": 9527,
+					"history": 13737,
+					"rpmFail": 14651,
+					"rpmOnly": 5826,
+					"warmCore": 41827,
+					"rpmWarm": 13933,
+					"acceptPct": 21.11,
+					"historyWithheldPct": 59.05,
+					"rpmFailPct": 32.47,
+					"rpmWarmFailPct": 33.31
+				}
+			},
+			"coverage": {
+				"occupiedNeighborhoods": 48,
+				"totalNeighborhoods": 225,
+				"atLeast15": 26,
+				"atLeast100": 8,
+				"newHistoryOnlyNeighborhoods": 65,
+				"newRpmOnlyNeighborhoods": 67,
+				"clampedAccepted": 0,
+				"underRpm": 0,
+				"underMap": 0,
+				"overRpm": 0,
+				"overMap": 0,
+				"topNeighborhoods": [
+					{
+						"log": "2026-08-08_11.19.56.msl",
+						"ve_export": "data/logs/block2/veTable1_2026-08-08_23.57.53.table",
+						"rpm_low": 1000,
+						"rpm_high": 1200,
+						"map_low_kpa": 45,
+						"map_high_kpa": 50,
+						"raw_samples": 22610,
+						"accepted_samples": 14550,
+						"history_only_excluded": 6659,
+						"rpm_only_direct_excluded": 674,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-08_11.19.56.msl",
+						"ve_export": "data/logs/block2/veTable1_2026-08-08_23.57.53.table",
+						"rpm_low": 1200,
+						"rpm_high": 1500,
+						"map_low_kpa": 40,
+						"map_high_kpa": 45,
+						"raw_samples": 3692,
+						"accepted_samples": 706,
+						"history_only_excluded": 1766,
+						"rpm_only_direct_excluded": 514,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-08_11.19.56.msl",
+						"ve_export": "data/logs/block2/veTable1_2026-08-08_23.57.53.table",
+						"rpm_low": 1200,
+						"rpm_high": 1500,
+						"map_low_kpa": 45,
+						"map_high_kpa": 50,
+						"raw_samples": 2285,
+						"accepted_samples": 451,
+						"history_only_excluded": 259,
+						"rpm_only_direct_excluded": 28,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-08_11.19.56.msl",
+						"ve_export": "data/logs/block2/veTable1_2026-08-08_23.57.53.table",
+						"rpm_low": 1000,
+						"rpm_high": 1200,
+						"map_low_kpa": 50,
+						"map_high_kpa": 55,
+						"raw_samples": 1207,
+						"accepted_samples": 368,
+						"history_only_excluded": 544,
+						"rpm_only_direct_excluded": 127,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-08_11.19.56.msl",
+						"ve_export": "data/logs/block2/veTable1_2026-08-08_23.57.53.table",
+						"rpm_low": 3000,
+						"rpm_high": 3500,
+						"map_low_kpa": 45,
+						"map_high_kpa": 50,
+						"raw_samples": 529,
+						"accepted_samples": 265,
+						"history_only_excluded": 164,
+						"rpm_only_direct_excluded": 43,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-08_11.19.56.msl",
+						"ve_export": "data/logs/block2/veTable1_2026-08-08_23.57.53.table",
+						"rpm_low": 3000,
+						"rpm_high": 3500,
+						"map_low_kpa": 50,
+						"map_high_kpa": 55,
+						"raw_samples": 680,
+						"accepted_samples": 220,
+						"history_only_excluded": 302,
+						"rpm_only_direct_excluded": 89,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-08_11.19.56.msl",
+						"ve_export": "data/logs/block2/veTable1_2026-08-08_23.57.53.table",
+						"rpm_low": 3500,
+						"rpm_high": 4000,
+						"map_low_kpa": 50,
+						"map_high_kpa": 55,
+						"raw_samples": 716,
+						"accepted_samples": 158,
+						"history_only_excluded": 415,
+						"rpm_only_direct_excluded": 42,
+						"accepted_clamped": 0
+					},
+					{
+						"log": "2026-08-08_11.19.56.msl",
+						"ve_export": "data/logs/block2/veTable1_2026-08-08_23.57.53.table",
+						"rpm_low": 3500,
+						"rpm_high": 4000,
+						"map_low_kpa": 45,
+						"map_high_kpa": 50,
+						"raw_samples": 427,
+						"accepted_samples": 135,
+						"history_only_excluded": 202,
+						"rpm_only_direct_excluded": 40,
+						"accepted_clamped": 0
+					}
+				]
+			},
+			"rpmBands": {
+				"[1200,1500)": {
+					"n": 7138,
+					"accepted": 1157,
+					"history": 2125,
+					"rpmFail": 1768,
+					"rpmOnly": 874
+				},
+				"[1500,2000)": {
+					"n": 3887,
+					"accepted": 49,
+					"history": 339,
+					"rpmFail": 2984,
+					"rpmOnly": 836
+				},
+				"[2000,2500)": {
+					"n": 3502,
+					"accepted": 146,
+					"history": 614,
+					"rpmFail": 2421,
+					"rpmOnly": 668
+				},
+				"[1000,1200)": {
+					"n": 24424,
+					"accepted": 14986,
+					"history": 7318,
+					"rpmFail": 1242,
+					"rpmOnly": 911
+				},
+				"[2500,3000)": {
+					"n": 3047,
+					"accepted": 113,
+					"history": 754,
+					"rpmFail": 1826,
+					"rpmOnly": 737
+				},
+				"[900,1000)": {
+					"n": 252,
+					"accepted": 14,
+					"history": 68,
+					"rpmFail": 103,
+					"rpmOnly": 39
+				},
+				"[3000,3500)": {
+					"n": 4387,
+					"accepted": 629,
+					"history": 1534,
+					"rpmFail": 1666,
+					"rpmOnly": 786
+				},
+				"[3500,4000)": {
+					"n": 4380,
+					"accepted": 416,
+					"history": 1581,
+					"rpmFail": 1290,
+					"rpmOnly": 508
+				},
+				"[4000,5000)": {
+					"n": 4471,
+					"accepted": 220,
+					"history": 1743,
+					"rpmFail": 1210,
+					"rpmOnly": 518
+				},
+				"[5000,6000)": {
+					"n": 423,
+					"accepted": 13,
+					"history": 138,
+					"rpmFail": 174,
+					"rpmOnly": 64
+				},
+				"[6000,7000)": {
+					"n": 225,
+					"accepted": 0,
+					"history": 66,
+					"rpmFail": 113,
+					"rpmOnly": 59
+				},
+				"[800,900)": {
+					"n": 102,
+					"accepted": 2,
+					"history": 24,
+					"rpmFail": 59,
+					"rpmOnly": 35
+				},
+				"[700,800)": {
+					"n": 46,
+					"accepted": 0,
+					"history": 12,
+					"rpmFail": 21,
+					"rpmOnly": 7
+				}
+			},
+			"mapBands": {
+				"[45,50)": {
+					"n": 27316,
+					"accepted": 15420,
+					"history": 7882,
+					"rpmFail": 1525,
+					"rpmOnly": 962
+				},
+				"[40,45)": {
+					"n": 5477,
+					"accepted": 951,
+					"history": 2506,
+					"rpmFail": 1125,
+					"rpmOnly": 777
+				},
+				"[50,55)": {
+					"n": 3661,
+					"accepted": 779,
+					"history": 1598,
+					"rpmFail": 860,
+					"rpmOnly": 419
+				},
+				"[55,60)": {
+					"n": 2207,
+					"accepted": 137,
+					"history": 887,
+					"rpmFail": 798,
+					"rpmOnly": 315
+				},
+				"[30,40)": {
+					"n": 2821,
+					"accepted": 1,
+					"history": 320,
+					"rpmFail": 2254,
+					"rpmOnly": 971
+				},
+				"[65,70)": {
+					"n": 1705,
+					"accepted": 46,
+					"history": 507,
+					"rpmFail": 822,
+					"rpmOnly": 293
+				},
+				"[60,65)": {
+					"n": 1833,
+					"accepted": 104,
+					"history": 672,
+					"rpmFail": 732,
+					"rpmOnly": 255
+				},
+				"[70,80)": {
+					"n": 2912,
+					"accepted": 124,
+					"history": 701,
+					"rpmFail": 1517,
+					"rpmOnly": 377
+				},
+				"[80,90)": {
+					"n": 2410,
+					"accepted": 140,
+					"history": 500,
+					"rpmFail": 1304,
+					"rpmOnly": 386
+				},
+				"<30": {
+					"n": 1873,
+					"accepted": 0,
+					"history": 15,
+					"rpmFail": 1844,
+					"rpmOnly": 544
+				},
+				"[90,100)": {
+					"n": 1736,
+					"accepted": 31,
+					"history": 294,
+					"rpmFail": 1088,
+					"rpmOnly": 338
+				},
+				"[100,125)": {
+					"n": 1387,
+					"accepted": 11,
+					"history": 191,
+					"rpmFail": 621,
+					"rpmOnly": 227
+				},
+				"[125,150)": {
+					"n": 765,
+					"accepted": 1,
+					"history": 180,
+					"rpmFail": 287,
+					"rpmOnly": 103
+				},
+				"[150,175)": {
+					"n": 181,
+					"accepted": 0,
+					"history": 63,
+					"rpmFail": 100,
+					"rpmOnly": 75
+				}
+			},
+			"fuel": {
+				"prerequisitesAvailable": 56284,
+				"unassessed": 0,
+				"lowPw": 0,
+				"highRpm": 31460,
+				"closedTps": 30939,
+				"lowPwHighRpm": 0,
+				"lowPwClosedTps": 0,
+				"highRpmClosedTps": 6517,
+				"allThree": 0,
+				"pwMin": 1.325,
+				"pwMax": 12.337,
+				"decelPwMin": 1.347,
+				"lowPwRpmMin": null,
+				"lowPwRpmMax": null,
+				"lowPwTpsMin": null,
+				"lowPwTpsMax": null
+			},
+			"nearRpmThreshold": 72,
+			"historyExample": {
+				"rows": [49079, 49094],
+				"n": 16,
+				"time": [3272.518, 3273.515],
+				"regions": ["boost"],
+				"ranges": {
+					"rpm": {
+						"min": 3714,
+						"max": 3824
+					},
+					"load": {
+						"min": 133.5,
+						"max": 134.7
+					},
+					"tps": {
+						"min": 31.6,
+						"max": 31.8
+					},
+					"afr": {
+						"min": 11.6,
+						"max": 11.8
+					},
+					"clt": {
+						"min": 83.667,
+						"max": 83.667
+					}
+				},
+				"followingStatus": "eligible",
+				"followingReasons": []
+			},
+			"rpmExample": {
+				"rows": [12337, 12337],
+				"n": 1,
+				"time": [822.521, 822.521],
+				"regions": ["boost"],
+				"ranges": {
+					"rpm": {
+						"min": 4323,
+						"max": 4323
+					},
+					"load": {
+						"min": 142.2,
+						"max": 142.2
+					},
+					"tps": {
+						"min": 37.3,
+						"max": 37.3
+					},
+					"afr": {
+						"min": 12.1,
+						"max": 12.1
+					},
+					"clt": {
+						"min": 81.944,
+						"max": 81.944
+					}
+				},
+				"followingStatus": "heuristic-excluded",
+				"followingReasons": ["MAP_TRANSIENT", "STEADY_WINDOW_UNASSESSED"],
+				"rate": {
+					"rowIndex": 12337,
+					"slot": "rpm",
+					"channelName": "RPM",
+					"value": 202.89855072475535,
+					"unit": "rpm/s",
+					"method": "finite-difference",
+					"sourceValue": 4323,
+					"previousRowIndex": 12336,
+					"previousValue": 4309,
+					"deltaSec": 0.06899999999995998
+				},
+				"loggedTpsRate": -2,
+				"loggedMapRate": -2,
+				"speedMph": 78.5,
+				"otherChecks": {
+					"core": "pass",
+					"timeContinuity": "pass",
+					"timeGap": "pass",
+					"warmupTemperature": "pass",
+					"warmupCorrection": "pass",
+					"tpsTransient": "pass",
+					"mapTransient": "pass",
+					"rpmTransient": "fail",
+					"possibleFuelCut": "pass",
+					"steadyWindow": "unassessed"
+				}
+			},
+			"acceptedNonIdleExample": {
+				"rows": [32122, 32371],
+				"n": 250,
+				"time": [2141.74, 2158.349],
+				"regions": ["closed-throttle/non-idle"],
+				"ranges": {
+					"rpm": {
+						"min": 1054,
+						"max": 1104
+					},
+					"load": {
+						"min": 48.1,
+						"max": 49.7
+					},
+					"tps": {
+						"min": 1,
+						"max": 1
+					},
+					"afr": {
+						"min": 13.5,
+						"max": 13.7
+					},
+					"clt": {
+						"min": 84.111,
+						"max": 84.444
+					}
+				},
+				"followingStatus": "heuristic-excluded",
+				"followingReasons": ["RPM_TRANSIENT", "STEADY_WINDOW_UNASSESSED"]
+			},
+			"acceptedBoostExample": {
+				"rows": [46553, 46566],
+				"time": [3104.057, 3104.913],
+				"n": 14,
+				"ranges": {
+					"rpm": [3352, 3429],
+					"load": [99.2, 102.5],
+					"tps": [27, 27.3],
+					"afr": [12.4, 12.7]
+				}
+			}
+		}
+	]
+}

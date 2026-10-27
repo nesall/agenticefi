@@ -40,6 +40,6 @@ describe('real MSL fixtures', () => {
 				expect(channel.values, channel.name).toHaveLength(session!.rowCount);
 			}
 			expect(parser.parse(content, path).session).toEqual(session);
-		});
+		}, 30000); // Large fixture parsing plus deep equality is not a 5-second performance test.
 	}
 });
