@@ -1,7 +1,8 @@
 export type JsonValue =
 	null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
 
-export type ToolName = 'describe_log' | 'summarize_window' | 'assess_data_quality';
+export type ToolName =
+	'describe_log' | 'summarize_window' | 'assess_data_quality' | 'assess_sample_eligibility';
 export type ToolDefinition = { name: ToolName; description: string; inputSchema: JsonValue };
 export type ToolResult = { ok: true; data: JsonValue } | { ok: false; error: string };
 export type ToolTraceEntry = {

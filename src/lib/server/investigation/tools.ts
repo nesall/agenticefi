@@ -1,6 +1,7 @@
 import type { ChannelSlot } from '../../shared/types/channelMapping';
 import type { JsonValue, ToolDefinition, ToolResult } from '../../shared/types/investigation';
 import type { InvestigationContext } from './context';
+import { classifySampleEligibility, summarizeEligibility } from '../analysis/sampleEligibility';
 
 const objectSchema = { type: 'object', properties: {}, additionalProperties: false };
 export const investigationTools: readonly ToolDefinition[] = [
@@ -58,6 +59,21 @@ export const investigationTools: readonly ToolDefinition[] = [
 				}
 			}
 		}
+	},
+	{
+		name: 'assess_sample_eligibility',
+		description:
+			'Screen samples using the caller-configured steady-state AFR/VE profile. Reports hard/heuristic exclusions and unassessed checks, with thresholds and bounded row evidence. Does not prove tuning safety or calculate corrections.',
+		inputSchema: {
+			type: 'object',
+			additionalProperties: false,
+			required: ['startSec', 'endSec'],
+			properties: {
+				startSec: { type: 'number' },
+				endSec: { type: 'number' },
+				maxSamples: { type: 'integer', minimum: 0, maximum: 20 }
+			}
+		}
 	}
 ];
 
@@ -109,6 +125,64 @@ export function executeInvestigationTool(
 		const mapping = session.channelMapping;
 		const slots = Object.keys(mapping.toJSON()) as ChannelSlot[];
 		const time = timeInfo(context);
+		if (name === 'assess_sample_eligibility') {
+			if (Object.keys(input).some((key) => !['startSec', 'endSec', 'maxSamples'].includes(key)))
+				throw new Error(
+					'Unknown eligibility argument; thresholds are controlled by the caller profile.'
+				);
+			const { startSec, endSec, maxSamples = 10 } = input;
+			if (
+				typeof startSec !== 'number' ||
+				typeof endSec !== 'number' ||
+				!Number.isFinite(startSec) ||
+				!Number.isFinite(endSec) ||
+				startSec > endSec
+			)
+				throw new Error('Finite ordered window bounds are required.');
+			if (
+				typeof maxSamples !== 'number' ||
+				!Number.isInteger(maxSamples) ||
+				maxSamples < 0 ||
+				maxSamples > 20
+			)
+				throw new Error('maxSamples must be an integer from 0 to 20.');
+			if (!time.values) throw new Error(time.reason!);
+			const classified = classifySampleEligibility(session, context.eligibilityProfile);
+			const selected = classified.samples.filter(
+				(sample) =>
+					sample.timeSec !== null && sample.timeSec >= startSec && sample.timeSec <= endSec
+			);
+			const details: typeof selected = [];
+			let detailBytes = 0;
+			for (const sample of selected.slice(0, maxSamples)) {
+				const bytes = Buffer.byteLength(JSON.stringify(sample));
+				if (detailBytes + bytes > 32000) break;
+				details.push(sample);
+				detailBytes += bytes;
+			}
+			return {
+				ok: true,
+				data: {
+					contextId: context.id,
+					startSec,
+					endSec,
+					classifierVersion: classified.classifierVersion,
+					config: classified.config,
+					resolutions: classified.resolutions as JsonValue[],
+					summary: summarizeEligibility(selected) as unknown as JsonValue,
+					fullLogSummary: classified.summary as unknown as JsonValue,
+					unlocatableTimeCount: classified.samples.filter((sample) => sample.timeSec === null)
+						.length,
+					samples: details as unknown as JsonValue,
+					omittedSampleDetails: selected.length - details.length,
+					limitations: [
+						...context.limitations,
+						...classified.limitations,
+						'All preceding parsed samples are classified before selecting the inclusive window; omitted sample details remain included in counts.'
+					]
+				}
+			};
+		}
 		if (name === 'describe_log' || name === 'assess_data_quality') {
 			if (Object.keys(input).length) throw new Error('This tool takes no arguments.');
 			const resolutions = slots.map((slot) => mapping.resolve(slot, session));

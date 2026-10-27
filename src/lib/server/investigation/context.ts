@@ -5,6 +5,8 @@ import { importTunerStudioXml } from '../msl/importTunerStudioXml';
 import { decodeMsl, type MslEncoding } from '../msl/decodeMsl';
 import type { LogSession } from '../core/LogSession';
 import type { TunerStudioTableMetadata } from '../msl/importTunerStudioXml';
+import type { EligibilityConfig } from '../../shared/types/sampleEligibility';
+import { eligibilityConfig } from '../analysis/sampleEligibility';
 
 export type InvestigationContext = {
 	id: string;
@@ -15,6 +17,7 @@ export type InvestigationContext = {
 	ve: TunerStudioTableMetadata;
 	afr: TunerStudioTableMetadata;
 	limitations: string[];
+	eligibilityProfile: EligibilityConfig;
 };
 
 /** Association is explicitly supplied by the caller, never inferred from dates. */
@@ -26,6 +29,7 @@ export function createInvestigationContext(input: {
 	calibrationId: string;
 	veXml: string;
 	afrXml: string;
+	eligibilityProfile?: Partial<EligibilityConfig>;
 }): InvestigationContext {
 	if (!input.id.trim() || !input.calibrationId.trim())
 		throw new Error('Context and calibration IDs are required.');
@@ -39,6 +43,7 @@ export function createInvestigationContext(input: {
 		logEncoding: input.logEncoding ?? 'provided-string',
 		calibrationId: input.calibrationId,
 		session,
+		eligibilityProfile: eligibilityConfig(input.eligibilityProfile),
 		ve: importTunerStudioXml(input.veXml),
 		afr: importTunerStudioXml(input.afrXml),
 		limitations: [
@@ -47,7 +52,7 @@ export function createInvestigationContext(input: {
 				: []),
 			'Calibration association is supplied by the caller.',
 			'The log parser can skip malformed rows and correct the first timestamp; original-row diagnostics are not yet available.',
-			'These tools assess data quality, not steady-state eligibility, fueling causation, or VE corrections.'
+			'Summary statistics do not establish steady-state eligibility. The eligibility tool applies a configurable screening profile, not a validated tuning guarantee or VE correction.'
 		]
 	};
 }
@@ -58,6 +63,7 @@ export async function loadInvestigationFiles(input: {
 	logPath: string;
 	vePath: string;
 	afrPath: string;
+	eligibilityProfile?: Partial<EligibilityConfig>;
 }): Promise<InvestigationContext> {
 	const [logBytes, veXml, afrXml] = await Promise.all([
 		readFile(input.logPath),

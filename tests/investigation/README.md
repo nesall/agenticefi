@@ -13,8 +13,11 @@ The tools expose original channel units and validated mappings. Window bounds ar
 inclusive parsed seconds; row references are zero-based parsed sample indices.
 Missing/unresolved samples contribute to unavailable counts, never to zero-valued
 statistics. Empty-window statistics are null. Invalid times cannot be assigned to
-a time window and are reported as a log-wide excluded count. Neither calibration
-lookups nor eligibility classification are performed by this initial harness.
+a time window and are reported as a log-wide excluded count. Calibration lookups
+are not performed by these tools. `assess_sample_eligibility` screens an inclusive
+window under the caller's configured profile and reports hard/heuristic exclusions,
+unassessed checks, and bounded sample evidence. See
+[classifier defaults and limitations](../../src/lib/server/analysis/README.md).
 
 The runner validates tool arguments and report citations, caps calls/iterations,
 limits response sizes, and supports cancellation and a model-wait timeout. A
