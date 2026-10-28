@@ -1,10 +1,20 @@
 <script lang="ts">
-	import { onDestroy, onMount } from 'svelte';
-	import { SvelteURLSearchParams } from 'svelte/reactivity';
+	import { onDestroy, onMount, tick } from 'svelte';
+	import { Tabs } from '@skeletonlabs/skeleton-svelte';
+	import {
+		DashboardRequestError,
+		initialTelemetryWindow,
+		loadWindowPair,
+		permanentLoss,
+		sampleQuery
+	} from '#lib/components/dashboard/dashboardLoading.ts';
 	import { resolve } from '$app/paths';
 	import DemoLoader from '#lib/components/dashboard/DemoLoader.svelte';
 	import TelemetryPanel from '#lib/components/dashboard/TelemetryPanel.svelte';
-	import EligibilityPanel from '#lib/components/dashboard/EligibilityPanel.svelte';
+	import ScreeningSummary from '#lib/components/dashboard/ScreeningSummary.svelte';
+	import InspectionDrawer from '#lib/components/dashboard/InspectionDrawer.svelte';
+	import RunProgress from '#lib/components/dashboard/RunProgress.svelte';
+	import { shouldRevealResults, type GridCoordinate } from '#lib/components/dashboard/workspace.ts';
 	import InvestigationPanel from '#lib/components/dashboard/InvestigationPanel.svelte';
 	import AnalyticalResults from '#lib/components/dashboard/AnalyticalResults.svelte';
 	import type {
@@ -21,7 +31,6 @@
 	import type { ChannelSlot } from '#lib/shared/types/channelMapping.ts';
 	import type { SampleEligibility } from '#lib/shared/types/sampleEligibility.ts';
 	import { number } from '#lib/components/dashboard/presentation.ts';
-	import './dashboard.css';
 
 	let session = $state<SessionSummary | null>(null),
 		telemetry = $state<TelemetryResponse | null>(null),
@@ -44,9 +53,17 @@
 		sampleVersion = 0,
 		pollTimer: ReturnType<typeof setTimeout> | undefined;
 	let destroyed = false;
-	let selectedDemo = $state<DemoId>('april');
+	let activeTab = $state('telemetry'),
+		drawerOpen = $state(false),
+		drawerSection = $state('proofs');
+	let selectedCell = $state<GridCoordinate | null>(null),
+		selectedEvidenceId = $state<string | null>(null);
+	let workspaceNavigationVersion = 0,
+		runNavigationVersion = 0;
+	let selectedDemo = $state<DemoId>('august8');
 	const pendingDemo = $derived(!!session && session.demoId !== selectedDemo);
 	let datasets = $state<{ id: DemoId; label: string; available: boolean }[]>([
+		{ id: 'august8', label: 'August 8 | extended RX-7 drive', available: false },
 		{ id: 'april', label: 'April 12 · 3-minute drive', available: true }
 	]);
 	onMount(() => {
@@ -63,32 +80,59 @@
 			headers: body === undefined ? {} : { 'Content-Type': 'application/json' },
 			body: body === undefined ? undefined : JSON.stringify(body)
 		});
-		const data = await response.json();
-		if (!response.ok) throw new Error(data.error ?? 'The request failed.');
+		const data = await response.json().catch(() => null);
+		if (!response.ok)
+			throw new DashboardRequestError(
+				response.status,
+				data?.error ?? `The request failed (HTTP ${response.status}).`
+			);
+		if (data === null) throw new Error('The server returned an invalid response.');
 		return data as T;
 	}
 	const message = (cause: unknown) =>
 		cause instanceof Error ? cause.message : 'The request could not be completed.';
+	const currentFilters = () => ({ status, reason, includeInvalidTime, focusRow });
+	function handlePermanentLoss(cause: unknown, scope: 'job' | 'session') {
+		const loss = permanentLoss(cause, scope);
+		if (!loss) return false;
+		if (pollTimer) clearTimeout(pollTimer);
+		job = null;
+		starting = false;
+		pollError = false;
+		drawerOpen = false;
+		selectedCell = null;
+		selectedEvidenceId = null;
+		if (loss.clearSession) {
+			telemetryVersion++;
+			sampleVersion++;
+			session = null;
+			telemetry = null;
+			eligibility = null;
+			telemetryLoading = false;
+			samplesLoading = false;
+			focusRow = null;
+		}
+		error = loss.message;
+		return true;
+	}
 	async function loadSamples(offset = 0) {
-		if (!session) return;
+		if (!session || telemetryLoading) return;
 		const id = session.id,
 			version = ++sampleVersion;
-		const params = new SvelteURLSearchParams({
-			startSec: String(startSec),
-			endSec: String(endSec),
-			offset: String(offset),
-			limit: '12',
-			status,
-			reason,
-			includeInvalidTime: String(includeInvalidTime)
-		});
-		if (focusRow !== null) params.set('focusRow', String(focusRow));
+		const params = sampleQuery(startSec, endSec, currentFilters(), offset);
 		samplesLoading = true;
 		try {
 			const page = await request<EligibilityPage>(`/api/sessions/${id}/eligibility?${params}`);
-			if (version === sampleVersion && session?.id === id) eligibility = page;
+			if (!destroyed && version === sampleVersion && session?.id === id && !telemetryLoading)
+				eligibility = page;
 		} catch (cause) {
-			if (version === sampleVersion) error = message(cause);
+			if (
+				!destroyed &&
+				version === sampleVersion &&
+				session?.id === id &&
+				!handlePermanentLoss(cause, 'session')
+			)
+				error = message(cause);
 		} finally {
 			if (version === sampleVersion) samplesLoading = false;
 		}
@@ -99,54 +143,90 @@
 			error = 'Choose a valid, ordered time window.';
 			return;
 		}
-		startSec = Math.max(session.startSec, start);
-		endSec = Math.min(session.endSec, end);
-		if (startSec > endSec) {
+		const requestedStart = Math.max(session.startSec, start),
+			requestedEnd = Math.min(session.endSec, end);
+		if (requestedStart > requestedEnd) {
 			error = 'The selected window is outside this log.';
 			return;
 		}
-		selected = channels;
 		error = '';
 		const id = session.id,
 			version = ++telemetryVersion;
 		telemetryLoading = true;
-		void loadSamples();
-		const params = new SvelteURLSearchParams({
-			startSec: String(startSec),
-			endSec: String(endSec),
-			slots: channels.join(',')
-		});
+		sampleVersion++;
+		samplesLoading = true;
+		const filters = currentFilters();
 		try {
-			const data = await request<TelemetryResponse>(`/api/sessions/${id}/telemetry?${params}`);
-			if (version === telemetryVersion && session?.id === id) telemetry = data;
+			await loadWindowPair(
+				request,
+				{
+					sessionId: id,
+					startSec: requestedStart,
+					endSec: requestedEnd,
+					slots: [...channels],
+					filters
+				},
+				() => !destroyed && version === telemetryVersion && session?.id === id,
+				(pair) => {
+					sampleVersion++;
+					telemetry = pair.telemetry;
+					eligibility = pair.eligibility;
+					startSec = pair.telemetry.startSec;
+					endSec = pair.telemetry.endSec;
+					selected = [...pair.telemetry.slots];
+				}
+			);
 		} catch (cause) {
-			if (version === telemetryVersion) error = message(cause);
+			if (
+				!destroyed &&
+				version === telemetryVersion &&
+				session?.id === id &&
+				!handlePermanentLoss(cause, 'session')
+			)
+				error = `${message(cause)} The last successfully loaded chart and screening window is retained.`;
 		} finally {
-			if (version === telemetryVersion) telemetryLoading = false;
+			if (version === telemetryVersion) {
+				telemetryLoading = false;
+				samplesLoading = false;
+				if (
+					!destroyed &&
+					session?.id === id &&
+					JSON.stringify(filters) !== JSON.stringify(currentFilters())
+				)
+					void loadSamples();
+			}
 		}
 	}
-	async function loadDemo(datasetId: DemoId = 'april') {
+	async function loadDemo(datasetId: DemoId = selectedDemo) {
 		if (demoLoading || destroyed) return;
 		if (running) {
 			error = 'Wait for this investigation to finish before reloading the demo.';
 			return;
 		}
 		demoLoading = true;
+		telemetryVersion++;
+		sampleVersion++;
+		telemetryLoading = false;
+		samplesLoading = false;
 		selectedDemo = datasetId;
 		error = '';
 		try {
-			session = await request<SessionSummary>('/api/demo', { datasetId });
+			const loaded = await request<SessionSummary>('/api/demo', { datasetId });
+			if (destroyed) return;
+			session = loaded;
 			telemetry = null;
 			eligibility = null;
 			job = null;
+			activeTab = 'telemetry';
+			drawerOpen = false;
+			selectedCell = null;
+			selectedEvidenceId = null;
 			focusRow = null;
 			status = '';
 			reason = '';
 			includeInvalidTime = false;
-			await windowSelection(
-				session.startSec,
-				session.rowCount > 8000 ? Math.min(session.endSec, session.startSec + 60) : session.endSec
-			);
+			const range = initialTelemetryWindow(session);
+			await windowSelection(range.startSec, range.endSec);
 		} catch (cause) {
 			error = message(cause);
 		} finally {
@@ -160,11 +240,17 @@
 		void loadSamples();
 	}
 	function selectRow(row: number) {
+		drawerOpen = true;
+		drawerSection = 'proofs';
+		selectedCell = null;
+		selectedEvidenceId = null;
 		focusRow = row;
 		void loadSamples(eligibility?.offset ?? 0);
 	}
 	function locate(sample: SampleEligibility) {
 		if (sample.timeSec === null || !session) return;
+		switchWorkspace('telemetry');
+		drawerOpen = false;
 		void windowSelection(
 			Math.max(session.startSec, sample.timeSec - 5),
 			Math.min(session.endSec, sample.timeSec + 5)
@@ -176,10 +262,18 @@
 		try {
 			const update = await request<InvestigationJob>(`/api/investigations/${id}`);
 			if (destroyed || job?.id !== id) return;
+			const reveal = shouldRevealResults(
+				update,
+				job.state === 'running',
+				runNavigationVersion,
+				workspaceNavigationVersion
+			);
 			job = update;
+			if (reveal) activeTab = 'results';
 			if (update.state === 'running') pollTimer = setTimeout(() => void poll(id), 1500);
 		} catch (cause) {
 			if (job?.id === id) {
+				if (handlePermanentLoss(cause, 'job')) return;
 				error = message(cause);
 				pollError = true;
 			}
@@ -196,35 +290,49 @@
 	) {
 		if (!session || running || pendingDemo || demoLoading) return;
 		starting = true;
+		const sessionId = session.id;
+		runNavigationVersion = workspaceNavigationVersion;
 		error = '';
 		pollError = false;
 		try {
-			job = await request<InvestigationJob>('/api/investigations', {
-				sessionId: session.id,
+			const update = await request<InvestigationJob>('/api/investigations', {
+				sessionId,
 				goal,
 				startSec,
 				endSec,
 				...options,
 				resilient: options.mode === 'analytical' && options.resilient
 			});
+			if (destroyed || session?.id !== sessionId) return;
+			job = update;
+			if (shouldRevealResults(job, true, runNavigationVersion, workspaceNavigationVersion))
+				activeTab = 'results';
 			if (!destroyed) void poll(job.id);
 		} catch (cause) {
-			error = message(cause);
+			if (!destroyed && session?.id === sessionId && !handlePermanentLoss(cause, 'session'))
+				error = message(cause);
 		} finally {
-			starting = false;
+			if (!session || session.id === sessionId) starting = false;
 		}
 	}
 	async function cancelInvestigation() {
 		if (!job || !running) return;
+		const id = job.id;
 		if (pollTimer) clearTimeout(pollTimer);
 		try {
-			await request(`/api/investigations/${job.id}/cancel`, {});
-			void poll(job.id);
+			await request(`/api/investigations/${id}/cancel`, {});
+			if (!destroyed && job?.id === id) void poll(id);
 		} catch (cause) {
-			error = message(cause);
+			if (destroyed || job?.id !== id) return;
+			if (!handlePermanentLoss(cause, 'job')) {
+				error = message(cause);
+				pollError = true;
+			}
 		}
 	}
 	function focusEvidence(sample: SupportingSample) {
+		switchWorkspace('telemetry');
+		drawerOpen = false;
 		focusRow = sample.rowIndex;
 		if (sample.timeSec !== null && session)
 			void windowSelection(
@@ -232,7 +340,31 @@
 				Math.min(session.endSec, sample.timeSec + 4)
 			);
 		else selectRow(sample.rowIndex);
-		document.getElementById('telemetry')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		void tick().then(() =>
+			document.getElementById('telemetry')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+		);
+	}
+	function switchWorkspace(value: string) {
+		if ((value === 'telemetry' || value === 'results') && value !== activeTab) {
+			workspaceNavigationVersion++;
+			activeTab = value;
+		}
+	}
+	function openTrace(id?: string) {
+		selectedEvidenceId = id ?? null;
+		drawerSection = 'trace';
+		drawerOpen = true;
+	}
+	function openCell(cell: GridCoordinate) {
+		selectedCell = cell;
+		drawerSection = 'proofs';
+		selectedEvidenceId = null;
+		drawerOpen = true;
+	}
+	function openSamples() {
+		selectedCell = null;
+		drawerSection = 'proofs';
+		drawerOpen = true;
 	}
 	onDestroy(() => {
 		destroyed = true;
@@ -243,36 +375,23 @@
 </script>
 
 <svelte:head
-	><title>AgenticEFI · Telemetry investigation</title><meta
+	><title>AgenticEFI · Investigation workspace</title><meta
 		name="description"
-		content="Inspect EFI telemetry, deterministic sample eligibility, and evidence-linked Muse Spark investigations."
+		content="Inspect RX-7 telemetry, screening evidence and conditional advisory VE predictions."
 	/></svelte:head
 >
-
-<div class="dashboard">
-	<header class="app-header">
-		<a class="brand" href={resolve('/')} aria-label="AgenticEFI home"
-			><svg viewBox="0 0 32 32" aria-hidden="true"
-				><path
-					d="M2 18h6l4-11 7 20 4-13h7"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2.3"
-					stroke-linejoin="round"
-				/></svg
-			><strong>Agentic<span>EFI</span></strong></a
+<div class="min-h-dvh bg-surface-50-950 text-surface-950-50">
+	<header
+		class="sticky top-0 z-30 border-b border-surface-200-800 bg-surface-50-950/95 backdrop-blur"
+	>
+		<div
+			class="mx-auto flex max-w-[1920px] flex-wrap items-center justify-between gap-3 px-4 py-3 lg:px-6"
 		>
-		<div class="header-divider"></div>
-		<span class="workspace-label">INVESTIGATION WORKSPACE</span>
-		<div class="header-right">
-			<span class="desktop-only">Evidence before adjustment</span><span class="header-badge"
-				><i></i>{session?.museAvailable ? 'Muse Spark configured' : 'Demo workspace'}</span
+			<a
+				class="shrink-0 text-lg font-bold tracking-tight"
+				href={resolve('/')}
+				aria-label="AgenticEFI home">Agentic<span class="text-primary-600-400">EFI</span></a
 			>
-		</div>
-	</header>
-	<div class="workspace-grid">
-		<aside class="sidebar">
-			<div class="sidebar-title">WORKSPACE <span>01</span></div>
 			<DemoLoader
 				{session}
 				{datasets}
@@ -282,162 +401,192 @@
 				loading={demoLoading}
 				onload={(id) => void loadDemo(id)}
 			/>
-			<nav class="workspace-nav" aria-label="Workspace sections">
-				<a href="#telemetry"><span>01</span> Telemetry <span>↗</span></a><a href="#eligibility"
-					><span>02</span> Sample eligibility <span>↗</span></a
-				><a href="#investigation"><span>03</span> Agent investigation <span>↗</span></a>
-			</nav>
-			<div class="sidebar-note">
-				<div class="eyebrow">BUILT TO QUESTION THE DATA</div>
-				<p>A clean-looking trace is not proof of reliable evidence.</p>
-				<div class="sidebar-tags">
-					<span>Measured telemetry</span><span>Deterministic screening</span><span
-						>Traceable findings</span
-					>
-				</div>
-			</div>
-			<footer class="sidebar-footer">AgenticEFI <span>ENGINEERING PREVIEW</span></footer>
-		</aside>
-		<main class="main-workspace">
-			<div class="workspace-heading">
-				<div>
-					<div class="eyebrow">DATALOG INVESTIGATION / DEMO</div>
-					<h1>Look closer.<br class="mobile-only" /> Trust the evidence.</h1>
-					<p>Inspect the telemetry. Understand the exclusions. Follow the investigation.</p>
-				</div>
-				<span class="read-only-badge">ADVISORY ONLY</span>
-			</div>
-			{#if error}<div class="error-banner" role="alert">
-					<span>{error}</span>{#if pollError && job}<button
-							class="text-button"
+			{#if session}<dl class="hidden items-center gap-5 text-xs xl:flex">
+					<div>
+						<dt class="text-surface-500">Duration</dt>
+						<dd class="font-mono font-semibold">
+							{number(session.endSec - session.startSec, 1)} s
+						</dd>
+					</div>
+					<div>
+						<dt class="text-surface-500">Samples</dt>
+						<dd class="font-mono font-semibold">{number(session.rowCount, 0)}</dd>
+					</div>
+					<div>
+						<dt class="text-surface-500">Channels</dt>
+						<dd class="font-mono font-semibold">{session.channelCount}</dd>
+					</div>
+					<div>
+						<dt class="text-surface-500">Passes screening</dt>
+						<dd class="font-mono font-semibold">
+							{number(session.eligibility.statuses.eligible, 0)}
+						</dd>
+					</div>
+				</dl>
+				<InvestigationPanel
+					available={session.museAvailable}
+					{job}
+					{starting}
+					{startSec}
+					{endSec}
+					onRun={(goal, options) => void investigate(goal, options)}
+					onCancel={() => void cancelInvestigation()}
+					recordings={session.recordings ?? []}
+					pendingDemo={pendingDemo || demoLoading}
+					loadedLogName={session.logName}
+					onWindow={(start, end) => void windowSelection(start, end)}
+					onSelect={selectRow}
+				/>
+			{:else}<button
+					class="btn preset-filled-primary-500"
+					disabled
+					title="Load a dataset to enable investigation">Run investigation</button
+				>{/if}
+		</div>
+	</header>
+	<main class="mx-auto w-full max-w-[1920px] space-y-4 p-4 lg:p-6">
+		{#if error}<div
+				class="flex flex-wrap items-center justify-between gap-3 rounded-base border border-error-500/40 bg-error-500/10 p-3 text-sm"
+				role="alert"
+			>
+				<span>{error}</span>
+				<div class="flex gap-2">
+					{#if pollError && job}<button
+							class="btn preset-tonal-error text-xs"
 							onclick={() => job && void poll(job.id)}>Reconnect</button
 						>{/if}<button
-						class="text-button"
+						class="btn preset-tonal-surface text-xs"
 						onclick={() => (error = '')}
-						aria-label="Dismiss error">×</button
+						aria-label="Dismiss error">Dismiss</button
 					>
-				</div>{/if}
-			{#if session}<div class="session-overview">
-					<div>
-						<span class="eyebrow">DURATION</span><strong
-							>{number(session.endSec - session.startSec, 1)} <small>s</small></strong
-						>
-					</div>
-					<div>
-						<span class="eyebrow">RECORDED SAMPLES</span><strong
-							>{session.rowCount.toLocaleString()}</strong
-						>
-					</div>
-					<div>
-						<span class="eyebrow">RECORDED CHANNELS</span><strong>{session.channelCount}</strong>
-					</div>
-					<div>
-						<span class="eyebrow">PASSES SCREENING</span><strong class="accent"
-							>{session.eligibility.statuses.eligible.toLocaleString()}
-							<small>/ {session.rowCount.toLocaleString()}</small></strong
-						>
-					</div>
 				</div>
-				<div class="analysis-grid">
-					<div class="analysis-main">
-						<div id="telemetry">
-							<TelemetryPanel
-								{session}
-								data={telemetry}
-								{selected}
-								loading={telemetryLoading}
-								onChannels={(channels) => void windowSelection(startSec, endSec, channels)}
-								onWindow={(start, end) => void windowSelection(start, end)}
-								onSelect={selectRow}
-							/>
-						</div>
-						<div id="eligibility">
-							<EligibilityPanel
-								{session}
-								page={eligibility}
-								loading={samplesLoading}
-								{status}
-								{reason}
-								{includeInvalidTime}
-								onFilter={filter}
-								onPage={(offset) => void loadSamples(offset)}
-								onSelect={selectRow}
-								onLocate={locate}
-							/>
-						</div>
-					</div>
-					<div id="investigation">
-						<InvestigationPanel
-							available={session.museAvailable}
-							{job}
-							{starting}
-							{startSec}
-							{endSec}
-							onRun={(goal, options) => void investigate(goal, options)}
-							onCancel={() => void cancelInvestigation()}
-							recordings={session.recordings ?? []}
-							pendingDemo={pendingDemo || demoLoading}
-							loadedLogName={session.logName}
+			</div>{/if}
+		{#if session}<p class="flex flex-wrap justify-between gap-2 text-xs text-surface-500">
+				<span
+					>Loaded: <strong class="text-surface-950-50">{session.logName}</strong> · {session.calibrationId}</span
+				><span class="xl:hidden"
+					>{number(session.rowCount, 0)} samples · {session.channelCount} channels · {number(
+						session.endSec - session.startSec,
+						1
+					)} s</span
+				>
+			</p>{/if}
+		{#if job}<RunProgress {job} onTrace={openTrace} />{/if}
+		<Tabs value={activeTab} onValueChange={(details) => switchWorkspace(details.value)}>
+			<Tabs.List
+				class="mb-5 flex gap-2 border-b border-surface-200-800 pb-3"
+				aria-label="Investigation workspaces"
+				><Tabs.Trigger
+					value="telemetry"
+					class="btn preset-tonal-surface text-xs data-selected:preset-tonal sm:text-sm"
+					>1. Telemetry & Screening</Tabs.Trigger
+				><Tabs.Trigger
+					value="results"
+					class="btn preset-tonal-surface text-xs data-selected:preset-tonal sm:text-sm"
+					>2. Advisory VE Results</Tabs.Trigger
+				>
+				<Tabs.Indicator />
+			</Tabs.List>
+			<Tabs.Content value="telemetry" class="min-w-0 space-y-4">
+				{#if session}<div id="telemetry">
+						<TelemetryPanel
+							{session}
+							data={telemetry}
+							{selected}
+							loading={telemetryLoading}
+							onChannels={(channels) => void windowSelection(startSec, endSec, channels)}
 							onWindow={(start, end) => void windowSelection(start, end)}
 							onSelect={selectRow}
 						/>
 					</div>
-				</div>
-				{#if job?.mode === 'analytical'}<AnalyticalResults {job} onSample={focusEvidence} />{/if}
-			{:else}<section class="welcome-panel">
-					<div class="welcome-grid" aria-hidden="true"></div>
-					<div class="welcome-content">
-						<div class="eyebrow">
-							<span class="live-dot"></span> A REAL DRIVE. A BETTER QUESTION.
-						</div>
-						<h2>Good analysis starts<br />with knowing what<br /><em>not</em> to trust.</h2>
-						<p>
-							Open the RX-7 demo to explore measured telemetry, inspect sample exclusions, and give
-							Muse Spark evidence to investigate.
+					<ScreeningSummary {session} page={eligibility} onInspect={openSamples} />
+				{:else}<section
+						class="mx-auto max-w-3xl space-y-5 rounded-container border border-surface-200-800 bg-surface-100-900 p-8 md:my-12 md:p-12"
+					>
+						<span class="badge preset-tonal-primary">RX-7 investigation workspace</span>
+						<h1 class="text-3xl font-semibold tracking-tight">
+							Observe the drive.<br />Qualify the evidence.
+						</h1>
+						<p class="max-w-xl text-sm leading-relaxed text-surface-600-400">
+							August 8 is selected by default. Load it when ready; the full log is not fetched or
+							analyzed automatically. April remains available as the compact demo.
 						</p>
 						<button
 							class="btn preset-filled-primary-500"
+							disabled={demoLoading || !datasets.some((d) => d.id === selectedDemo && d.available)}
 							onclick={() => void loadDemo()}
-							disabled={demoLoading}
-							>{demoLoading ? 'Preparing demo…' : 'Explore the demo'}
-							<span aria-hidden="true">↗</span></button
-						><span class="welcome-footnote"
-							>Real MegaSquirt data · matched VE & AFR calibration</span
+							>{demoLoading ? 'Loading telemetry...' : 'Load selected demo'}</button
 						>
-					</div>
-					<div class="welcome-trace" aria-hidden="true">
-						<svg viewBox="0 0 500 300"
-							><path
-								d="M0 180H70L80 160L100 170L120 150H170L180 120L210 130L240 90L260 160L280 150H330L350 190L370 180L390 210H500"
-							/><path
-								d="M0 210H80L100 200H150L170 220L200 170H240L270 190H310L340 140L370 160H430L450 120H500"
-							/></svg
+						<p class="text-xs text-surface-500">
+							V1 screening · server-side Muse Spark tools · advisory calibration candidates
+						</p>
+					</section>{/if}
+			</Tabs.Content>
+			<Tabs.Content value="results" class="min-w-0 space-y-4">
+				{#if job?.mode === 'analytical'}<AnalyticalResults
+						{job}
+						onSample={focusEvidence}
+						onCell={openCell}
+						onEvidence={openTrace}
+					/>
+				{:else if job}<section
+						class="space-y-4 rounded-container border border-surface-200-800 bg-surface-100-900 p-6"
+					>
+						<h1 class="text-xl font-semibold">Legacy telemetry investigation</h1>
+						<p class="text-sm text-surface-500">
+							The legacy report has no VE candidate. Findings and actual tool evidence remain
+							available in the inspection drawer.
+						</p>
+						<button
+							class="btn preset-tonal-primary"
+							onclick={() => {
+								drawerSection = 'facts';
+								drawerOpen = true;
+							}}>Inspect findings</button
+						><button class="btn preset-outlined-surface-500" onclick={() => openTrace()}
+							>Inspect trace</button
 						>
-						<div class="trace-caption">ANALYSIS BEGINS WITH OBSERVATION</div>
-					</div>
-				</section>
-				<div class="empty-steps">
-					<div>
-						<span>01</span>
-						<h3>Observe the drive</h3>
-						<p>Normalized channels, explicit units, and visible time breaks.</p>
-					</div>
-					<div>
-						<span>02</span>
-						<h3>Qualify the evidence</h3>
-						<p>Inspect the thresholds and reasons behind every exclusion.</p>
-					</div>
-					<div>
-						<span>03</span>
-						<h3>Follow the reasoning</h3>
-						<p>Tool calls and findings you can trace back to the data.</p>
-					</div>
-				</div>{/if}
-			<footer class="workspace-footer">
-				<span>Measured data. Explicit assumptions.</span><span
-					>Screening results are not validated tuning recommendations.</span
-				>
-			</footer>
-		</main>
-	</div>
+					</section>
+				{:else}<section
+						class="space-y-3 rounded-container border border-surface-200-800 bg-surface-100-900 p-8"
+					>
+						<h1 class="text-xl font-semibold">Advisory results will appear here</h1>
+						<p class="text-sm text-surface-500">
+							Load a curated dataset and run an analytical investigation. No candidate or prediction
+							is generated by this view.
+						</p>
+					</section>{/if}
+			</Tabs.Content>
+		</Tabs>
+		<footer class="border-t border-surface-200-800 py-4 text-xs text-surface-500">
+			Advisory analysis only · No ECU writes · Whole-log fitting is independent of the chart
+			inspection window
+		</footer>
+	</main>
+	{#if session}<InspectionDrawer
+			open={drawerOpen}
+			section={drawerSection}
+			{session}
+			page={eligibility}
+			loading={samplesLoading}
+			{status}
+			{reason}
+			{includeInvalidTime}
+			{job}
+			{selectedCell}
+			{selectedEvidenceId}
+			onClose={() => (drawerOpen = false)}
+			onSection={(value) => (drawerSection = value)}
+			onEvidence={openTrace}
+			onFilter={filter}
+			onPage={(offset) => void loadSamples(offset)}
+			onSelect={selectRow}
+			onLocate={locate}
+			onSample={focusEvidence}
+			onWindow={(start, end) => {
+				switchWorkspace('telemetry');
+				drawerOpen = false;
+				void windowSelection(start, end);
+			}}
+		/>{/if}
 </div>

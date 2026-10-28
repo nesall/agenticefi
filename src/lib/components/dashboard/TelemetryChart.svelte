@@ -107,21 +107,28 @@
 	}
 </script>
 
-<div class="telemetry-chart">
-	<div class="chart-heading">
+<div class="min-w-0 overflow-hidden rounded-base border border-surface-200-800 bg-surface-50-950">
+	<div
+		class="flex items-center justify-between gap-2 px-3 pt-2 text-xs [&_i]:size-2 [&_i]:rounded-full [&_small]:text-surface-500 [&_span]:flex [&_span]:items-center [&_span]:gap-2"
+	>
 		<span
-			><i style:background={channelColors[slot] ?? '#81a9f5'}></i>{channelLabels[slot] ?? slot}
+			><i style:background={channelColors[slot] ?? 'var(--color-primary-500)'}></i>{channelLabels[
+				slot
+			] ?? slot}
 			<small>{resolution.status === 'resolved' ? resolution.unit : 'unresolved'}</small></span
 		><strong style:color={channelColors[slot]}>{number(active?.values[index])}</strong>
 	</div>
-	<div class="chart-frame">
-		<div class="chart-axis" aria-hidden="true">
+	<div class="flex gap-2 p-2">
+		<div
+			class="flex w-14 shrink-0 flex-col justify-between py-1 text-right font-mono text-[10px] text-surface-500"
+			aria-hidden="true"
+		>
 			<span>{number(range[1], 1)}</span><span>{number((range[0] + range[1]) / 2, 1)}</span><span
 				>{number(range[0], 1)}</span
 			>
 		</div>
 		<button
-			class="chart-surface"
+			class="chart-surface block h-28 min-w-0 flex-1 rounded-sm focus-visible:outline-2 focus-visible:outline-primary-500 [&_svg]:h-full [&_svg]:w-full"
 			aria-label={`${channelLabels[slot] ?? slot}. Click a sample, drag to select a time window, or use arrow keys.`}
 			onpointermove={move}
 			onpointerdown={down}
@@ -146,7 +153,8 @@
 						x2="1000"
 						y1={tick}
 						y2={tick}
-						stroke="#ffffff0b"
+						stroke="var(--color-surface-400)"
+						stroke-opacity="0.2"
 						vector-effect="non-scaling-stroke"
 					/>{/each}
 				{#each data.segments as segment (segment[0].rowIndex)}<path
@@ -166,14 +174,15 @@
 						y="0"
 						width={Math.abs(x(drag) - x(anchor))}
 						height="120"
-						fill="#a3d9ca22"
+						fill="var(--color-primary-500)"
+						fill-opacity="0.15"
 					/>{/if}
 				{#if cursor !== null}<line
 						x1={x(cursor)}
 						x2={x(cursor)}
 						y1="0"
 						y2="120"
-						stroke="#e8efeb88"
+						stroke="var(--color-surface-500)"
 						stroke-dasharray="3 4"
 						vector-effect="non-scaling-stroke"
 					/>{#if active?.values[index] != null}<circle
@@ -185,5 +194,14 @@
 			</svg>
 		</button>
 	</div>
-	{#if !finite.length}<p class="chart-empty">No resolved measurements in this window.</p>{/if}
+	{#if !finite.length}<p class="p-3 text-sm text-surface-500">
+			No resolved measurements in this window.
+		</p>{/if}
 </div>
+
+<style>
+	.chart-surface {
+		touch-action: pan-y;
+		cursor: crosshair;
+	}
+</style>

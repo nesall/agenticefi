@@ -4,6 +4,10 @@ import { curatedDemo, demoCatalog, demoId } from '../src/lib/server/demo/catalog
 import { projectRecording } from '../src/lib/server/recordedInvestigation';
 import type { InvestigationModel, JsonValue } from '../src/lib/shared/types/investigation';
 import { context } from './investigation/helpers';
+import {
+	InvestigationDiagnostics,
+	InvestigationFailure
+} from '../src/lib/server/investigation/diagnostics';
 
 const obj = (v: JsonValue) => v as Record<string, JsonValue>;
 function analyticalModel(): InvestigationModel {
@@ -78,6 +82,12 @@ describe('analytical dashboard orchestration (scripted model, no API)', () => {
 		expect(result.error).toBeNull();
 		expect(result.result?.status).toBe('completed');
 		expect(result.presentation?.cells).toHaveLength(256);
+		expect(result.presentation?.veAxes?.rpm).toHaveLength(16);
+		expect(result.presentation?.veAxes?.mapKpa).toHaveLength(16);
+		for (const cell of result.presentation!.cells) {
+			expect(result.presentation!.veAxes!.rpm[cell.rpmIndex]).toBe(cell.rpm);
+			expect(result.presentation!.veAxes!.mapKpa[cell.mapIndex]).toBe(cell.mapKpa);
+		}
 		expect(
 			result.presentation?.cells.every(
 				(c) =>
@@ -164,7 +174,86 @@ describe('analytical dashboard orchestration (scripted model, no API)', () => {
 			timeout: 5000
 		});
 		expect(store.job('o', job.id).error).toContain('without completing');
+		expect(store.job('o', job.id).termination?.code).toBe('incomplete-workflow');
 		expect(store.job('o', job.id).presentation?.cells).toHaveLength(0);
+	});
+	it('retains partial fit results on deadline and never masks timeout with an adapter cancellation', async () => {
+		vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+		const store = new DashboardStore(),
+			demo = await curatedDemo('april'),
+			session = store.create('owner', demo.context, 'april');
+		const diagnostics = new InvestigationDiagnostics({ persist: false });
+		let ready!: () => void;
+		const waiting = new Promise<void>((resolve) => (ready = resolve));
+		const model: InvestigationModel = {
+			next: async ({ trace }, signal) => {
+				if (!trace.length) return { kind: 'tool', name: 'fit_ve_candidate', arguments: {} };
+				ready();
+				return new Promise((_, reject) =>
+					signal.addEventListener('abort', () =>
+						reject(
+							new InvestigationFailure(
+								'cancelled',
+								'Meta request failed (network or cancellation).'
+							)
+						)
+					)
+				);
+			}
+		};
+		const job = store.start(
+			'owner',
+			session.id,
+			{ mode: 'analytical', goal: 'inspect', startSec: session.startSec, endSec: session.endSec },
+			model,
+			() => 'Meta request failed (network or cancellation).',
+			diagnostics
+		);
+		try {
+			await waiting;
+			await vi.advanceTimersByTimeAsync(120001);
+			vi.useRealTimers();
+			await vi.waitFor(() => expect(store.job('owner', job.id).state).toBe('finished'));
+			const result = store.job('owner', job.id);
+			expect(result.termination).toMatchObject({ code: 'deadline', phase: 'model', modelTurn: 2 });
+			expect(result.error).toContain('deadline exceeded');
+			expect(result.error).not.toContain('network');
+			expect(result.presentation?.cells).toHaveLength(256);
+			expect(result.result?.trace[0].result.ok).toBe(true);
+			expect(diagnostics.events.at(-1)).toMatchObject({
+				event: 'job-end',
+				category: 'deadline',
+				runnerStatus: 'timeout'
+			});
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+	it('records session expiry separately from user cancellation without exposing owner identity', async () => {
+		let now = 1000;
+		const store = new DashboardStore({
+			ttlMs: 100,
+			maxSessions: 8,
+			maxRuns: 16,
+			maxActiveRuns: 2,
+			now: () => now
+		});
+		const demo = await curatedDemo('april'),
+			session = store.create('private-owner', demo.context, 'april');
+		const diagnostics = new InvestigationDiagnostics({ persist: false });
+		const job = store.start(
+			'private-owner',
+			session.id,
+			{ mode: 'analytical', goal: 'inspect', startSec: session.startSec, endSec: session.endSec },
+			{ next: async () => new Promise(() => {}) },
+			() => null,
+			diagnostics
+		);
+		now += 101;
+		expect(() => store.job('private-owner', job.id)).toThrow('unavailable or expired');
+		await vi.waitFor(() => expect(diagnostics.events.at(-1)?.event).toBe('job-end'));
+		expect(diagnostics.events.at(-1)?.category).toBe('session-expired');
+		expect(JSON.stringify(diagnostics.events)).not.toContain('private-owner');
 	});
 });
 

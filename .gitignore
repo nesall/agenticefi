@@ -27,3 +27,4 @@ data
 .npm-cache
 /.analytical-worker
 /.demo-assets
+/.investigation-diagnostics

@@ -61,6 +61,7 @@ export type EligibilityPage = {
 	unlocatableTimeCount: number;
 };
 export type InvestigationJob = {
+	termination?: import('./investigationDiagnostics').InvestigationTermination;
 	logName?: string;
 	calibrationId?: string;
 	demoId?: DemoId;

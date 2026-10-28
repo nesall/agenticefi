@@ -8,10 +8,10 @@ export const statusLabels: Record<EligibilityStatus, string> = {
 	indeterminate: 'Indeterminate'
 };
 export const statusColors: Record<EligibilityStatus, string> = {
-	eligible: '#55cbb0',
-	'hard-excluded': '#ef8295',
-	'heuristic-excluded': '#edb56a',
-	indeterminate: '#9d9dbb'
+	eligible: 'var(--color-success-500)',
+	'hard-excluded': 'var(--color-error-500)',
+	'heuristic-excluded': 'var(--color-warning-500)',
+	indeterminate: 'var(--color-tertiary-500)'
 };
 export const channelLabels: Partial<Record<ChannelSlot, string>> = {
 	rpm: 'Engine speed',
@@ -24,16 +24,16 @@ export const channelLabels: Partial<Record<ChannelSlot, string>> = {
 	pw: 'Pulse width'
 };
 export const channelColors: Partial<Record<ChannelSlot, string>> = {
-	rpm: '#81a9f5',
-	load: '#c2a0ef',
-	afr: '#66d3b6',
-	tps: '#edb56a',
-	clt: '#ed8d9e',
-	tpsDot: '#d9b4e9',
-	mapDot: '#8dc6da',
-	pw: '#b9cf8a'
+	rpm: 'var(--color-primary-500)',
+	load: 'var(--color-secondary-500)',
+	afr: 'var(--color-success-500)',
+	tps: 'var(--color-warning-500)',
+	clt: 'var(--color-error-500)',
+	tpsDot: 'var(--color-tertiary-500)',
+	mapDot: 'var(--color-secondary-500)',
+	pw: 'var(--color-warning-500)'
 };
 export const number = (value: number | null | undefined, digits = 2) =>
 	value == null || !Number.isFinite(value)
 		? '—'
-		: new Intl.NumberFormat('en-US', { maximumFractionDigits: digits }).format(value);
+		: new Intl.NumberFormat('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value);

@@ -3,6 +3,9 @@
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
+	"engines": {
+		"node": ">=22.17.0"
+	},
 	"scripts": {
 		"build:analytical-worker": "node scripts/build-analytical-worker.mjs",
 		"pretest": "npm run build:analytical-worker",
@@ -18,6 +21,8 @@
 		"test:agent:analytical:live": "node scripts/run-analytical-smoke.mjs",
 		"dev": "vite dev",
 		"build": "vite build",
+		"start": "node build",
+		"start:env": "node --env-file=.env build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -29,7 +34,7 @@
 		"@eslint/js": "^10.0.1",
 		"@skeletonlabs/skeleton": "^5.0.1",
 		"@skeletonlabs/skeleton-svelte": "^5.0.1",
-		"@sveltejs/adapter-auto": "^8.0.0",
+		"@sveltejs/adapter-node": "^6.0.0",
 		"@sveltejs/kit": "^3.0.0",
 		"@sveltejs/vite-plugin-svelte": "^7.2.0",
 		"@tailwindcss/forms": "^0.5.11",

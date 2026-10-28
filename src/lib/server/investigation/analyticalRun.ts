@@ -16,6 +16,8 @@ import {
 } from './analyticalSettings';
 import { analyticalArguments, analyticalTools } from './analyticalProtocol';
 import { freezeVeArtifact, veContentHash } from '../analysis/veArtifacts';
+import type { InvestigationDiagnostics } from './diagnostics';
+import type { TerminationCode } from '../../shared/types/investigationDiagnostics';
 
 let liveWorkers = 0;
 const MAX_LIVE_WORKERS = 2;
@@ -41,8 +43,18 @@ export class AnalyticalRun {
 	#facts = new Map<string, AnalyticalFact>();
 	#timings: { tool: string; elapsedMs: number }[] = [];
 	#claimed = false;
+	#presentation: AnalyticalPresentation | null = null;
+	#disposed = false;
+	#failure: TerminationCode | null = null;
+	#presentationFailed = false;
 
-	constructor(input: AnalyticalInput) {
+	constructor(
+		input: AnalyticalInput,
+		private options: {
+			diagnostics?: InvestigationDiagnostics;
+			checkpointPresentation?: boolean;
+		} = {}
+	) {
 		this.#snapshot = analyticalSnapshot(input);
 		this.contextId = input.contextId;
 		this.settings = this.#snapshot.settings;
@@ -65,9 +77,19 @@ export class AnalyticalRun {
 	get facts(): readonly AnalyticalFact[] {
 		return structuredClone([...this.#facts.values()]);
 	}
+	get presentationCheckpoint(): AnalyticalPresentation | null {
+		return structuredClone(this.#presentation);
+	}
+	get failureCategory() {
+		return this.#failure;
+	}
+	get presentationCheckpointIncomplete() {
+		return this.#presentationFailed;
+	}
 	#expire() {
 		clearTimeout(this.#idle);
 		this.#idle = setTimeout(() => {
+			this.options.diagnostics?.event('evidence-expired');
 			void this.dispose();
 		}, this.settings.limits.retentionMs);
 		this.#idle.unref();
@@ -88,13 +110,33 @@ export class AnalyticalRun {
 			}
 		});
 		this.#worker = worker;
+		this.options.diagnostics?.event('worker-start');
 		liveWorkers++;
 		worker.unref();
 		worker.on(
 			'message',
-			(message: { id: number; ok: boolean; value?: unknown; error?: string }) => {
+			(message: {
+				id: number;
+				ok: boolean;
+				value?: unknown;
+				error?: string;
+				presentation?: AnalyticalPresentation;
+				presentationFailed?: boolean;
+			}) => {
 				const pending = this.#pending;
 				if (!pending || pending.id !== message.id) return;
+				if (
+					message.presentation &&
+					Buffer.byteLength(JSON.stringify(message.presentation)) <= 512 * 1024
+				)
+					this.#presentation = message.presentation;
+				if (message.presentation) this.#presentationFailed = false;
+				if (message.presentationFailed) {
+					this.#presentationFailed = true;
+					this.options.diagnostics?.event('presentation-failure', {
+						category: 'presentation-failure'
+					});
+				}
 				if (message.ok) pending.resolve(message.value);
 				else {
 					pending.reject(new Error(message.error ?? 'Analytical worker failed.'));
@@ -103,12 +145,20 @@ export class AnalyticalRun {
 			}
 		);
 		worker.on('error', (error) => {
+			this.#failure = 'worker-failure';
+			this.options.diagnostics?.event('worker-error', { category: 'worker-failure' });
 			this.#closed = true;
 			this.#pending?.reject(
 				new Error(`Analytical worker unavailable: ${error.message.slice(0, 400)}`)
 			);
 		});
-		worker.once('exit', () => {
+		worker.once('exit', (exitCode) => {
+			if (!this.#disposed) this.#failure = 'worker-failure';
+			this.options.diagnostics?.event('worker-exit', {
+				exitCode,
+				outcome: this.#disposed ? 'disposed' : 'unexpected',
+				...(!this.#disposed ? { category: 'worker-failure' as const } : {})
+			});
 			liveWorkers--;
 			this.#worker = undefined;
 			this.#closed = true;
@@ -135,11 +185,18 @@ export class AnalyticalRun {
 				const id = ++this.#request;
 				this.#pending = { id, resolve: resolveResult, reject };
 				timer = setTimeout(() => {
+					this.#failure = 'worker-timeout';
+					this.options.diagnostics?.event('worker-timeout', { category: 'worker-timeout' });
 					reject(new Error('Analytical job time budget exceeded.'));
 					void this.dispose();
 				}, this.settings.limits.jobTimeoutMs);
 				signal?.addEventListener('abort', abort, { once: true });
-				this.#worker!.postMessage({ id, action, ...data });
+				this.#worker!.postMessage({
+					id,
+					action,
+					capturePresentation: this.options.checkpointPresentation === true,
+					...data
+				});
 			});
 		} finally {
 			clearTimeout(timer);
@@ -246,6 +303,7 @@ export class AnalyticalRun {
 		}
 	}
 	async dispose(): Promise<void> {
+		this.#disposed = true;
 		this.#closed = true;
 		clearTimeout(this.#idle);
 		const worker = this.#worker;

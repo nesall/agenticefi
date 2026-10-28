@@ -172,6 +172,7 @@ export function projectRecording(
 			};
 		});
 	const presentation: AnalyticalPresentation = {
+		veAxes: { rpm: [...table.xBreakpoints], mapKpa: [...table.yBreakpoints] },
 		datasetId: null,
 		profile,
 		coverage: (analysis.coverage ?? null) as AnalyticalPresentation['coverage'],

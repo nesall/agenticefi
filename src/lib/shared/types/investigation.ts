@@ -34,6 +34,7 @@ export type InvestigationReport = {
 	}[];
 };
 export type InvestigationResult = {
+	termination?: import('./investigationDiagnostics').InvestigationTermination;
 	status:
 		'completed' | 'limit_reached' | 'invalid_response' | 'model_error' | 'timeout' | 'cancelled';
 	trace: ToolTraceEntry[];

@@ -5,7 +5,7 @@
 		session,
 		loading,
 		onload,
-		selectedId = 'april',
+		selectedId = 'august8',
 		onSelect = () => {},
 		disabled = false,
 		datasets = [{ id: 'april', label: 'April 12', available: true }]
@@ -20,54 +20,31 @@
 	} = $props();
 </script>
 
-<section class="source-card">
-	<div class="eyebrow">DATA SOURCE <span class="tiny-label">DEMO</span></div>
-	<h2>RX-7 drive log</h2>
-	<p class="muted">A real drive. Matched calibration. Traceable evidence.</p>
-	<label class="goal-label" for="demo-dataset">Curated dataset</label>
+<div class="flex min-w-0 flex-wrap items-center gap-2" aria-busy={loading}>
+	<label class="sr-only" for="demo-dataset">Curated dataset</label>
 	<select
 		id="demo-dataset"
-		class="select w-full"
+		class="select max-w-64 min-w-0 flex-1 bg-surface-100-900 text-sm"
 		value={selectedId}
 		onchange={(event) => onSelect(event.currentTarget.value as DemoId)}
 		disabled={loading || disabled}
 	>
 		{#each datasets as dataset (dataset.id)}<option value={dataset.id} disabled={!dataset.available}
-				>{dataset.label}{dataset.available ? '' : ' · unavailable'}</option
+				>{dataset.label}{dataset.available ? '' : ' | unavailable'}</option
 			>{/each}
 	</select>
 	<button
-		class="btn w-full preset-filled-primary-500"
+		class="btn preset-tonal-primary text-sm"
 		onclick={() => onload(selectedId)}
-		disabled={loading || disabled}
-	>
-		{loading
-			? 'Loading telemetry…'
+		disabled={loading || disabled || !datasets.some((d) => d.id === selectedId && d.available)}
+		>{loading
+			? 'Loading...'
 			: session?.demoId === selectedId
-				? 'Reload loaded demo'
-				: 'Load selected demo'}
-		<span aria-hidden="true">↗</span>
-	</button>
-	{#if session && session.demoId !== selectedId}<p class="configuration-note" role="status">
-			Selection not loaded. {session.logName} is still active. Click Load selected demo before investigating.
-		</p>{/if}
-	{#if session}
-		<div class="source-meta">
-			<span class="live-dot"></span> Loaded · {session.rowCount.toLocaleString()} samples
-		</div>
-		<dl class="compact-meta">
-			<div>
-				<dt>Log file</dt>
-				<dd class="file-name">{session.logName}</dd>
-			</div>
-			<div>
-				<dt>Calibration</dt>
-				<dd>{session.calibrationId}</dd>
-			</div>
-			{#each session.calibrations as calibration (calibration.kind)}<div>
-					<dt>{calibration.kind} table</dt>
-					<dd>{calibration.rows} × {calibration.columns}</dd>
-				</div>{/each}
-		</dl>
-	{:else}<div class="source-meta">3m 10s · 243 recorded channels</div>{/if}
-</section>
+				? 'Reload'
+				: 'Load selected demo'}</button
+	>
+	{#if session && session.demoId !== selectedId}<span
+			class="w-full text-xs text-warning-700-300"
+			role="status">Selection not loaded. {session.logName} is still active.</span
+		>{/if}
+</div>

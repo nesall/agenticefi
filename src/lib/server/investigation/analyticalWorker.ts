@@ -428,6 +428,7 @@ parentPort!.on(
 		name?: string;
 		args?: Record<string, unknown>;
 		artifactId?: string;
+		capturePresentation?: boolean;
 	}) => {
 		try {
 			if (message.action === 'presentation') {
@@ -444,12 +445,30 @@ parentPort!.on(
 				);
 				if (!artifact) throw new Error('Unknown evidence reference.');
 				parentPort!.postMessage({ id: message.id, ok: true, value: artifact.value });
-			} else
+			} else {
+				const value = tool(message.name!, message.args!);
+				let presentation,
+					presentationFailed = false;
+				if (message.capturePresentation) {
+					try {
+						presentation = analyticalPresentation(
+							snapshot.settings.profile.version,
+							dataset,
+							fit,
+							evaluation
+						);
+					} catch {
+						presentationFailed = true;
+					}
+				}
 				parentPort!.postMessage({
 					id: message.id,
 					ok: true,
-					value: tool(message.name!, message.args!)
+					value,
+					presentation,
+					presentationFailed
 				});
+			}
 		} catch (error) {
 			parentPort!.postMessage({
 				id: message.id,

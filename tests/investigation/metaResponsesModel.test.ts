@@ -8,6 +8,7 @@ import { analyticalTools } from '../../src/lib/server/investigation/analyticalPr
 import { runInvestigation } from '../../src/lib/server/investigation/runner';
 import type { InvestigationModel, ToolTraceEntry } from '../../src/lib/shared/types/investigation';
 import { context, final } from './helpers';
+import { InvestigationDiagnostics } from '../../src/lib/server/investigation/diagnostics';
 
 const signal = () => new AbortController().signal;
 const input = (trace: ToolTraceEntry[] = []): Parameters<InvestigationModel['next']>[0] => ({
@@ -107,10 +108,23 @@ describe('Meta Responses protocol adapter', () => {
 		const fetch = transport()
 			.mockResolvedValueOnce(response([call()]))
 			.mockResolvedValueOnce(response([message()], { id: 'resp-2' }));
-		const model = new MetaResponsesModel({ apiKey: 'test', transport: fetch });
+		const diagnostics = new InvestigationDiagnostics({ persist: false });
+		diagnostics.bind('11111111-1111-4111-8111-111111111111');
+		const model = new MetaResponsesModel({ apiKey: 'test', transport: fetch, diagnostics });
 		await model.next(input(), signal());
 		expect(await model.next(input([traceEntry()]), signal())).toEqual(final());
 		const body = JSON.parse(String(fetch.mock.calls[1][1]!.body));
+		expect(diagnostics.events.filter((e) => e.event === 'model-request')).toMatchObject([
+			{
+				continuation: false,
+				payloadBytes: Buffer.byteLength(String(fetch.mock.calls[0][1]!.body))
+			},
+			{
+				continuation: true,
+				tool: 'describe_log',
+				payloadBytes: Buffer.byteLength(String(fetch.mock.calls[1][1]!.body))
+			}
+		]);
 		expect(body.previous_response_id).toBe('resp-1');
 		expect(body.input).toEqual([
 			{

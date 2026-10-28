@@ -4,6 +4,10 @@ import { dashboardApi, requestObject } from '#lib/server/dashboardHttp.ts';
 import { DashboardError, dashboardStore } from '#lib/server/sessionStore.ts';
 import { MetaResponsesModel } from '#lib/server/investigation/metaResponsesModel.ts';
 import { retryingTransport } from '#lib/server/investigation/retryTransport.ts';
+import {
+	InvestigationDiagnostics,
+	diagnosticTransport
+} from '#lib/server/investigation/diagnostics.ts';
 
 export const POST: RequestHandler = (event) =>
 	dashboardApi(event, async (owner) => {
@@ -49,21 +53,33 @@ export const POST: RequestHandler = (event) =>
 				503,
 				'Muse Spark is not configured on this server. Demo analysis is still available.'
 			);
+		const diagnostics =
+			mode === 'analytical' && source === 'live' ? new InvestigationDiagnostics() : undefined;
+		const observedFetch = diagnostics ? diagnosticTransport(fetch, diagnostics) : fetch;
 		const model =
 			source === 'recorded'
 				? null
 				: new MetaResponsesModel({
 						apiKey,
+						diagnostics,
 						transport:
-							mode === 'analytical' && body.resilient
-								? retryingTransport(fetch, { maxRetries: 2 })
-								: fetch
+							mode === 'analytical'
+								? retryingTransport(observedFetch, {
+										maxRetries: body.resilient ? 2 : 0,
+										onDecision: (event) =>
+											diagnostics?.event('retry', {
+												...event,
+												retryCount: event.decision === 'retry' ? event.attempt : event.attempt - 1
+											})
+									})
+								: observedFetch
 					});
 		return dashboardStore.start(
 			owner,
 			body.sessionId,
 			{ goal: body.goal, startSec: body.startSec, endSec: body.endSec, mode, profile, source },
 			model,
-			() => model?.lastError ?? null
+			() => model?.lastError ?? null,
+			diagnostics
 		);
 	});

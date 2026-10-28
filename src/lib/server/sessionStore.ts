@@ -4,6 +4,8 @@ import { curatedDemo } from './demo/catalog';
 import { recordedInvestigation, recordedProfiles } from './recordedInvestigation';
 import type { DemoId, AnalyticalProfile } from '../shared/types/analyticalDashboard';
 import { metaApiKey } from './investigation/metaApiKey';
+import type { InvestigationDiagnostics } from './investigation/diagnostics';
+import { assessAnalyticalWorkflow } from './investigation/analyticalRecovery';
 import { classifySampleEligibility, summarizeEligibility } from './analysis/sampleEligibility';
 import { runInvestigation } from './investigation/runner';
 import type { InvestigationContext } from './investigation/context';
@@ -35,6 +37,7 @@ type StoredSession = {
 	expiresAt: number;
 };
 type StoredRun = {
+	diagnostics?: InvestigationDiagnostics;
 	owner: string;
 	job: InvestigationJob;
 	abort: AbortController;
@@ -68,6 +71,13 @@ export class DashboardStore {
 			if (session.expiresAt <= now) this.#sessions.delete(id);
 		for (const [id, run] of this.#runs)
 			if (run.expiresAt <= now || !this.#sessions.has(run.job.sessionId)) {
+				run.diagnostics?.event('session-expired', { category: 'session-expired' });
+				run.job.termination = {
+					code: 'session-expired',
+					phase: 'finished',
+					modelTurn: run.job.result?.termination?.modelTurn ?? 0,
+					tool: null
+				};
 				run.abort.abort();
 				this.#runs.delete(id);
 			}
@@ -293,7 +303,8 @@ export class DashboardStore {
 			source?: 'live' | 'recorded';
 		},
 		model: InvestigationModel | null,
-		diagnostic: () => string | null = () => null
+		diagnostic: () => string | null = () => null,
+		diagnostics?: InvestigationDiagnostics
 	): InvestigationJob {
 		this.bounds(input.startSec, input.endSec);
 		const session = this.get(owner, id);
@@ -355,12 +366,14 @@ export class DashboardStore {
 			error: null
 		};
 		const run: StoredRun = {
+			diagnostics,
 			owner,
 			job,
 			abort: new AbortController(),
 			expiresAt: session.expiresAt
 		};
 		this.#runs.set(job.id, run);
+		diagnostics?.bind(job.id);
 		if (input.mode === 'analytical') {
 			void this.investigateAnalytically(run, session, input, model, diagnostic);
 			return structuredClone(job);
@@ -409,46 +422,92 @@ export class DashboardStore {
 				const demo = await curatedDemo(session.demoId!);
 				if (!model) throw new Error('Muse Spark is not configured.');
 				if (run.abort.signal.aborted) throw new Error('Cancelled.');
-				const state = new AnalyticalRun({
-					...demo.input,
-					contextId: session.id,
-					profile: {
-						version:
-							input.profile === 'v2-experimental'
-								? 'steady-afr-ve-v2-experimental'
-								: 'steady-afr-ve-v1'
-					}
-				});
+				const state = new AnalyticalRun(
+					{
+						...demo.input,
+						contextId: session.id,
+						profile: {
+							version:
+								input.profile === 'v2-experimental'
+									? 'steady-afr-ve-v2-experimental'
+									: 'steady-afr-ve-v1'
+						}
+					},
+					{ diagnostics: run.diagnostics, checkpointPresentation: true }
+				);
 				run.analytical = state;
 				job.result = await runInvestigation(state, model, {
 					goal: `${input.goal}\nInvestigate the whole canonical log using analyze_afr_error, fit_ve_candidate, and evaluate_ve_candidate when supported. Do not change frozen settings or treat chart selection as a fitting mask. Report missing evidence, legitimate no-correction outcomes and worsened holdout predictions.`,
 					maxIterations: 7,
 					maxToolCalls: 6,
 					timeoutMs: 120000,
+					diagnostics: run.diagnostics,
 					signal: run.abort.signal,
 					onProgress: (progress) => {
 						job.progress = progress;
 					}
 				});
-				if (!run.abort.signal.aborted && state.manifest.evidenceRefs.length) {
+				if (job.termination?.code !== 'session-expired') job.termination = job.result.termination;
+				job.presentation = state.presentationCheckpoint;
+				if (
+					(!job.presentation || state.presentationCheckpointIncomplete) &&
+					!run.abort.signal.aborted &&
+					state.manifest.evidenceRefs.length
+				) {
 					try {
 						job.presentation = await state.getPresentation(run.abort.signal);
 					} catch {
+						run.diagnostics?.event('presentation-failure', { category: 'presentation-failure' });
+						if (job.result.status === 'completed')
+							job.termination = {
+								code: 'presentation-failure',
+								phase: 'presentation',
+								modelTurn: job.result.termination?.modelTurn ?? 0,
+								tool: null
+							};
 						job.error =
 							'Some analytical details are unavailable after a worker failure or resource limit.';
 					}
 				}
-				if (job.result.status !== 'completed') job.error = diagnostic() ?? job.result.reason;
-				if (
-					job.result.status === 'completed' &&
-					['analyze_afr_error', 'fit_ve_candidate', 'evaluate_ve_candidate'].some(
-						(name) => !job.result!.trace.some((entry) => entry.tool === name && entry.result.ok)
-					)
-				)
+				if (job.result.status !== 'completed')
+					job.error =
+						job.result.status === 'model_error'
+							? (job.result.reason ?? diagnostic())
+							: job.result.reason;
+				const workflow =
+					job.result.status === 'completed'
+						? assessAnalyticalWorkflow(state, job.result.trace)
+						: null;
+				if (workflow && !workflow.complete && !workflow.verifiedBlocker) {
+					job.termination = {
+						code: 'incomplete-workflow',
+						phase: 'report',
+						modelTurn: job.result.termination?.modelTurn ?? 0,
+						tool: null
+					};
 					job.error =
 						'The agent finished without completing all analytical stages. Available evidence is shown; missing sections remain unavailable.';
+				}
+				if (state.failureCategory && job.result.status === 'completed') {
+					job.termination = {
+						code: state.failureCategory,
+						phase: 'tool',
+						modelTurn: job.result.termination?.modelTurn ?? 0,
+						tool: job.result.termination?.tool ?? null
+					};
+					job.error =
+						state.failureCategory === 'worker-timeout'
+							? 'Analytical worker time budget exceeded. Completed evidence is retained.'
+							: 'Analytical worker failed. Completed evidence is retained; unfinished stages are unavailable.';
+				}
 			}
 		} catch {
+			job.termination ??= {
+				code: run.abort.signal.aborted ? 'cancelled' : 'setup-failure',
+				phase: 'preparing',
+				modelTurn: 0,
+				tool: null
+			};
 			job.error = run.abort.signal.aborted
 				? 'Investigation cancelled.'
 				: 'The investigation or recording is unavailable. No replacement results were generated.';
@@ -464,6 +523,15 @@ export class DashboardStore {
 						? 'completed'
 						: 'failed';
 			job.finishedAt = this.options.now();
+			run.diagnostics?.finish(
+				job.termination ?? {
+					code: job.error ? 'setup-failure' : 'completed',
+					phase: 'finished',
+					modelTurn: 0,
+					tool: null
+				},
+				job.result?.status
+			);
 			job.progress = {
 				phase: 'finished',
 				tool: null,
@@ -477,6 +545,7 @@ export class DashboardStore {
 		if (!run || run.owner !== owner)
 			throw new DashboardError(404, 'Investigation is unavailable or expired.');
 		run.abort.abort();
+		run.diagnostics?.event('cancel-requested', { category: 'cancelled' });
 		void run.analytical?.dispose();
 		return structuredClone(run.job);
 	}

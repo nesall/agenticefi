@@ -3,10 +3,19 @@ import { describe, it, expect } from 'vitest';
 import AnalyticalResults from '../src/lib/components/dashboard/AnalyticalResults.svelte';
 import InvestigationPanel from '../src/lib/components/dashboard/InvestigationPanel.svelte';
 import DemoLoader from '../src/lib/components/dashboard/DemoLoader.svelte';
+import VeCandidateGrid from '../src/lib/components/dashboard/VeCandidateGrid.svelte';
+import RunProgress from '../src/lib/components/dashboard/RunProgress.svelte';
+import InspectionDrawer from '../src/lib/components/dashboard/InspectionDrawer.svelte';
+import { DashboardStore } from '../src/lib/server/sessionStore';
 import type { InvestigationJob } from '../src/lib/shared/types/dashboard';
 import { projectRecording } from '../src/lib/server/recordedInvestigation';
 import { context } from './investigation/helpers';
 import august from './fixtures/analytical/august-v1-support.json';
+import CombinedTelemetryChart from '../src/lib/components/dashboard/CombinedTelemetryChart.svelte';
+import TelemetryChart from '../src/lib/components/dashboard/TelemetryChart.svelte';
+import TelemetryPanel from '../src/lib/components/dashboard/TelemetryPanel.svelte';
+import { telemetryFixture } from './telemetryFixtures';
+import { number as displayNumber } from '../src/lib/components/dashboard/presentation';
 
 function job(): InvestigationJob {
 	return {
@@ -66,6 +75,208 @@ function job(): InvestigationJob {
 	};
 }
 describe('dashboard server rendering (no browser or API)', () => {
+	it('renders a deadline and run identity rather than an ambiguous generic failure', () => {
+		const value = job();
+		value.error =
+			'Investigation deadline exceeded (120 seconds) while awaiting model turn 4. Completed evidence is retained.';
+		value.termination = { code: 'deadline', phase: 'model', modelTurn: 4, tool: null };
+		value.outcome = 'failed';
+		value.result!.status = 'timeout';
+		const html = render(RunProgress, { props: { job: value, onTrace: () => {} } }).body;
+		expect(html).toContain('Deadline exceeded / partial');
+		expect(html).toContain('model turn 4');
+		expect(html).toContain('Job ID: j');
+		expect(html).toContain('Completed evidence is retained');
+		expect(html).not.toContain('Provider error');
+	});
+	it('defaults telemetry to Combined and keeps the Stacked mode control available', () => {
+		const data = telemetryFixture(),
+			session = new DashboardStore().create('owner', context(), 'april');
+		const html = render(TelemetryPanel, {
+			props: {
+				session,
+				data,
+				selected: data.slots,
+				loading: false,
+				onChannels: () => {},
+				onWindow: () => {},
+				onSelect: () => {}
+			}
+		}).body;
+		expect(html).toContain('Telemetry visualization mode');
+		expect(html).toContain('Combined');
+		expect(html).toContain('Stacked');
+		expect(html).toContain('data-testid="combined-telemetry"');
+		expect(html).toMatch(/Physical\s+magnitudes\s+are\s+not\s+comparable/);
+	});
+	it('renders physical cursor values, original row references, accessible legend toggles and actual gaps', () => {
+		const data = telemetryFixture();
+		data.segments[0][1].values[2] = null;
+		const html = render(CombinedTelemetryChart, {
+			props: {
+				data,
+				cursor: 1,
+				hidden: ['load'],
+				onCursor: () => {},
+				onToggle: () => {},
+				onWindow: () => {},
+				onSelect: () => {}
+			}
+		}).body;
+		expect(html).toContain(`Nearest row 11 at ${displayNumber(1, 3)} s`);
+		expect(html.replace(/\s+/g, ' ')).toContain(`${displayNumber(1800)} rpm`);
+		expect(html.replace(/\s+/g, ' ')).toContain(`${displayNumber(60)} kPa`);
+		expect(html.replace(/\s+/g, ' ')).toContain(`${displayNumber(15)} %`);
+		expect(html).toContain('Manifold pressure curve visibility');
+		expect(html).toContain('aria-pressed="false"');
+		expect(html).toContain('Click a sample');
+		expect(html).not.toContain('NaN');
+		expect(html).not.toContain('Infinity');
+		// AFR has two isolated finite points, represented as dots rather than a connecting path.
+		expect(html.match(/r="2"/g)).toHaveLength(2);
+	});
+	it('preserves the existing stacked physical scaling and interaction affordances', () => {
+		const data = telemetryFixture();
+		const html = render(TelemetryChart, {
+			props: {
+				data,
+				index: 0,
+				cursor: 1,
+				onCursor: () => {},
+				onWindow: () => {},
+				onSelect: () => {}
+			}
+		}).body;
+		expect(html).toContain('rpm');
+		expect(html).toContain('1,800');
+		expect(html).toContain('3,040');
+		expect(html).toContain('560');
+		expect(html).toContain('M0.00,100.32 L500.00,60.00 L1000.00,19.68');
+		expect(html).toContain('drag to select a time window, or use arrow keys');
+	});
+	it('renders a complete actual-axis grid without fabricating partial recording decisions', () => {
+		const value = projectRecording(august, 'august8', 'v1', {
+			...context(),
+			logName: '2026-08-08_11.19.56.msl',
+			calibrationId: 'block2-calibration'
+		}).presentation;
+		const html = render(VeCandidateGrid, {
+			props: {
+				cells: value.cells,
+				axes: value.veAxes,
+				omittedCells: value.omittedCells,
+				onCell: () => {}
+			}
+		}).body;
+		expect(value.veAxes?.rpm).toHaveLength(16);
+		expect(value.veAxes?.mapKpa).toHaveLength(16);
+		expect(html.match(/aria-label="RPM /g)).toHaveLength(256);
+		// This compact support-count fixture retains no individual decisions.
+		expect(value.cells).toHaveLength(0);
+		expect(html.match(/kPa: unavailable/g)).toHaveLength(256);
+		expect(html).toContain('not unsupported');
+		expect(html).not.toContain('clamped');
+	});
+	it('distinguishes retained accepted, suppressed and unsupported decisions from unavailable cells', () => {
+		const base = {
+			rpmIndex: 0,
+			mapIndex: 0,
+			rpm: 800,
+			mapKpa: 20,
+			status: 'accepted' as const,
+			reasons: [],
+			finalCorrectionPct: 3,
+			atBound: true,
+			materialTrainingSamples: 100,
+			originalVe: 100,
+			proposedVe: 103
+		};
+		const html = render(VeCandidateGrid, {
+			props: {
+				axes: { rpm: [800, 1300], mapKpa: [20, 45] },
+				cells: [
+					base,
+					{
+						...base,
+						rpmIndex: 1,
+						rpm: 1300,
+						status: 'suppressed',
+						reasons: ['DIRECTION_UNSTABLE'],
+						finalCorrectionPct: 0,
+						atBound: false,
+						proposedVe: 100
+					},
+					{
+						...base,
+						mapIndex: 1,
+						mapKpa: 45,
+						status: 'unsupported',
+						finalCorrectionPct: 0,
+						atBound: false,
+						proposedVe: 100
+					}
+				],
+				onCell: () => {}
+			}
+		}).body;
+		expect(html).toContain(`kPa: accepted, ${displayNumber(3, 3)} percent, at bound`);
+		expect(html).toContain('kPa: suppressed');
+		expect(html).toContain('kPa: unsupported');
+		expect(html.match(/kPa: unavailable/g)).toHaveLength(1);
+		expect(html).not.toContain('clamped');
+	});
+	it('shows genuine polled progress and retained calls without claiming completion', () => {
+		const value = job();
+		value.state = 'running';
+		value.result = null;
+		value.progress = { phase: 'executing-tool', tool: 'fit_ve_candidate', completed: [] };
+		const html = render(RunProgress, { props: { job: value, onTrace: () => {} } }).body;
+		expect(html).toContain('executing tool');
+		expect(html).toContain('fit ve candidate');
+		expect(html).toContain('0 completed calls');
+		expect(html).toContain('aria-busy="true"');
+		expect(html).not.toContain('evaluate ve candidate');
+	});
+	it('opens the exact trace evidence and preserves legacy row/window navigation in the drawer', () => {
+		const value = job();
+		value.result!.trace = [
+			{
+				evidenceId: 'evidence-actual',
+				tool: 'summarize_window',
+				arguments: { startSec: 1, endSec: 2 },
+				result: { ok: true, data: { samples: [{ rowIndex: 7 }] } }
+			}
+		];
+		const session = new DashboardStore().create('owner', context(), 'april');
+		const html = render(InspectionDrawer, {
+			props: {
+				open: true,
+				section: 'trace',
+				session,
+				page: null,
+				loading: false,
+				status: '',
+				reason: '',
+				includeInvalidTime: false,
+				job: value,
+				selectedEvidenceId: 'evidence-actual',
+				onClose: () => {},
+				onSection: () => {},
+				onEvidence: () => {},
+				onFilter: () => {},
+				onPage: () => {},
+				onSelect: () => {},
+				onLocate: () => {},
+				onSample: () => {},
+				onWindow: () => {}
+			}
+		}).body;
+		expect(html).toContain('evidence-actual');
+		expect(html).toMatch(/<details[^>]*open/);
+		expect(html).toContain(`View ${displayNumber(1)}-${displayNumber(2)} s on timeline`);
+		expect(html).toContain('Row 7');
+		expect(html).toContain('not hidden model reasoning');
+	});
 	it('renders the recorded August support count and explicit log identity even without cell detail rows', () => {
 		const value = job();
 		value.logName = '2026-08-08_11.19.56.msl';

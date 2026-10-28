@@ -9,14 +9,21 @@ assets leave April available. No database or new dependencies are required.
 
 ## Three-minute demonstration
 
-1. Choose August 8 and load it. The initial chart shows 60 seconds, within the
+1. August 8 is selected by default; click Load to parse it explicitly. Initial
+   page load fetches only the small dataset catalogue. The initial chart shows 60 seconds, within the
    existing 8,000-point limit. Full-log data remain available for analysis.
-2. Select **Analytical Investigation**, V1 defaults and **Live Muse Spark**.
+2. **Analytical Investigation**, V1 and **Live Muse Spark** are the initial options.
+   The Options disclosure retains legacy mode, V2 experimental, recorded source and goal editing.
    The API uses server environment credentials only. Optional bounded retries
    share the same deadline. Click Run; completed tools appear during polling.
-3. Inspect findings, AFR neighborhoods, the accepted/suppressed/unsupported VE
-   cell table, paired holdout MAE/RMSE, limitations and the trace. Evidence links
-   open cited calls; supporting row/time buttons focus the synchronized charts.
+3. Telemetry & Screening contains synchronized charts, channel selection, quick
+   windows and a compact V1 screening summary. Advisory VE Results contains the
+   actual-axis VE delta grid, paired holdout predictions, findings and AFR regions.
+   Completion reveals Results only if the user has not switched workspaces during
+   the run. A global inspection drawer holds sample pagination, cell details,
+   verified facts and the completed tool trace. Supporting row/time buttons return
+   to the charts. Adjacent-region samples are representative, not proof of exact
+   material influence on a selected cell.
 
 Selecting a dataset and loading it are separate actions. A changed selection is
 explicitly marked **not loaded**, and new investigations are blocked until Load
@@ -36,6 +43,13 @@ reverification of measurements. Missing details (notably most unsupported cells,
 proposed VE values, and supporting rows) are explicitly unavailable; they are
 never synthesized to fill out a recording. A missing/invalid recording fails
 without making a replacement model call.
+
+The optional read-only `presentation.veAxes` copies original imported VE RPM/MAP
+axes, allowing all calibration coordinates to be displayed even for partial
+recordings. Missing cell decisions remain unavailable rather than unsupported.
+Older projections without axes show retained coordinates only. No interpolation
+or numerical fitting is performed in the browser. All values are rounded only
+for display. At-bound solutions are labeled "at bound".
 
 ## Contracts and scope
 
@@ -64,7 +78,77 @@ Server numerical facts and unverified model commentary have distinct badges;
 recorded facts additionally carry their historical source label. Predictions are
 never presented as measured improvement, and no ECU-write functionality exists.
 
+### Telemetry visualization modes
+
+Combined is the initial view: native SVG curves independently normalized from
+finite samples inside the visible window. The normalized Y-axis is not a physical
+comparison between channels. Cursor legends report the nearest actual row/time
+and its original canonical values/units, including unavailable values rather
+than substituting zeros. Server segment boundaries and per-channel missing or
+nonfinite values break the curves; isolated valid points remain dots.
+
+A display-only near-flat guard uses `span <= max(0.000001, 0.001 * peak magnitude)`.
+Constant/near-flat channels are drawn at 50%, labeled accordingly; physical
+readouts retain their original variation. This guard is not a sensor-resolution
+claim or an eligibility threshold. Legend buttons temporarily hide curves without
+altering the selected channels, fetched data or analysis. Hidden choices survive
+view switches; Stacked always shows all selected channels with its existing
+independent physical scales. Modes retain the last cursor, selected window and
+sample navigation. Changing the fetched window resets the cursor as before and
+recomputes visible extrema. No chart dependency or API change is involved.
+
 ## Resources and lifecycle
+
+### Failure diagnostics
+
+Live analytical dashboard jobs write a private, best-effort record at
+`.investigation-diagnostics/<dashboard-job-id>.json`. The progress band displays
+that job ID and a specific termination label. This directory is git-ignored,
+excluded from formatting, and has no public download API. It must be writable
+on the Node deployment; filesystem failure does not interrupt analysis. Existing
+failed runs cannot be reconstructed retroactively from these new records.
+
+Records retain at most 160 metadata events each and 32 recent job files. They
+include the dashboard/analytical run IDs, model turn, tool name/outcome/duration,
+HTTP attempt/status/duration, retry decision/count/delay, remaining runner
+deadline, worker lifecycle, and final runner/job category. They exclude goals,
+prompts, provider bodies, tool arguments/results, headers, credentials, model
+reasoning and telemetry. The UI receives only a small typed termination summary.
+
+The 120-second runner deadline remains primary over provider cancellation errors.
+
+Analytical early final reports are validated against actual analysis, fitting and
+same-candidate evaluation evidence before being considered workflow-complete.
+If a candidate is finalized but evaluation is missing, the runner may offer one
+structured feedback continuation from the final Meta response ID. No completed
+tool output is replayed. The same run, settings, candidate, AbortSignal, deadline,
+turn limit and tool-call budget remain in force. Recovery fitting is neither
+advertised nor executed, and a different candidate reference is rejected locally.
+The model retains the choice of analytical tools or an honest partial conclusion.
+
+Recovery is skipped without a finalized candidate, with insufficient budget for
+the missing stages plus a final report, or if the adapter cannot continue. A
+second incomplete final never receives another feedback opportunity. An unverified
+model explanation cannot establish a blocker; private worker availability evidence
+is required. Failed recovery retains the original validated partial report and
+completed trace. `recovery-offered`, `recovery-skipped`, `recovery-guard` and
+`recovery-end` events record bounded metadata without model text. For compatibility,
+the existing `completed` runner status still denotes a validated report; its
+`incomplete-workflow` termination category means the analytical workflow is partial.
+Legacy investigations and all public request/report schemas are unchanged.
+
+Provider HTTP/network/protocol/incomplete-response failures, invalid reports,
+worker failures, incomplete model-selected workflows, cancellation and expiry
+are distinguishable. A failed poll remains a connection error, not a replacement
+backend termination. No tool is forced and no complete investigation is retried.
+
+Dashboard workers attach the existing bounded presentation to successful tool
+replies. The latest checkpoint survives a later timeout or worker failure along
+with the completed trace. It represents only the completed stages: missing
+evaluation metrics remain unavailable. Checkpoint extraction failures preserve
+the previous checkpoint and are recorded separately. Full private worker artifacts
+still expire and are disposed normally. Recordings and numerical calculations are
+unchanged; no additional provider requests are made for diagnostics.
 
 Curated source/context caches hold at most the two demo datasets; parsed contexts
 and V1 classifications are shared read-only across independently owned sessions.

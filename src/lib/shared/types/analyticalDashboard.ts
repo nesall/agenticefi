@@ -37,6 +37,7 @@ export type DashboardVeCell = Pick<
 	| 'materialTrainingSamples'
 > & { rpm: number; mapKpa: number; originalVe: number | null; proposedVe: number | null };
 export type AnalyticalPresentation = {
+	veAxes?: { rpm: number[]; mapKpa: number[] };
 	datasetId: string | null;
 	profile: string;
 	coverage: VeDatasetContent['coverage'] | null;

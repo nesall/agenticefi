@@ -77,6 +77,9 @@ export function analyticalPresentation(
 		proposedVe: fit!.candidate.values[cell.mapIndex][cell.rpmIndex]
 	}));
 	const result: AnalyticalPresentation = {
+		veAxes: table
+			? { rpm: [...table.provenance.rpmAxis], mapKpa: [...table.provenance.mapAxisKpa] }
+			: undefined,
 		datasetId: dataset?.datasetId ?? null,
 		profile,
 		coverage: dataset ? structuredClone(dataset.coverage) : null,
