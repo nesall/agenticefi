@@ -1,0 +1,1056 @@
+{
+	"source": "OFFLINE deterministic real August V1 audit; no model and no API requests",
+	"baseline": {
+		"workerHeapMb": 512,
+		"describe": "passed",
+		"fit": "worker heap exhausted",
+		"elapsedMs": 13092,
+		"parentHeapAfterLoadMb": 75.94
+	},
+	"workerHeapMb": 1024,
+	"elapsedMs": 38179.198599999996,
+	"observations": [
+		{
+			"phase": "before load",
+			"elapsedMs": 0.047499999999899956,
+			"heapMb": 12.390846252441406,
+			"rssMb": 56.4140625,
+			"heapLimitMb": 4144
+		},
+		{
+			"phase": "after load",
+			"elapsedMs": 425.70679999999993,
+			"heapMb": 75.8177261352539,
+			"rssMb": 183.1640625,
+			"heapLimitMb": 4144
+		},
+		{
+			"phase": "after snapshot",
+			"elapsedMs": 440.8814,
+			"heapMb": 75.88275146484375,
+			"rssMb": 183.23828125,
+			"heapLimitMb": 4144
+		},
+		{
+			"phase": "after describe",
+			"elapsedMs": 7363.9061,
+			"heapMb": 73.98860168457031,
+			"rssMb": 498.7578125,
+			"heapLimitMb": 4144
+		},
+		{
+			"phase": "after fit",
+			"elapsedMs": 30302.1831,
+			"heapMb": 74.32501220703125,
+			"rssMb": 912.4375,
+			"heapLimitMb": 4144
+		},
+		{
+			"phase": "after evaluation",
+			"elapsedMs": 33257.8529,
+			"heapMb": 74.46935272216797,
+			"rssMb": 808.21484375,
+			"heapLimitMb": 4144
+		},
+		{
+			"phase": "after all evidence checks",
+			"elapsedMs": 38178.8065,
+			"heapMb": 303.46964263916016,
+			"rssMb": 1062.89453125,
+			"heapLimitMb": 4144
+		}
+	],
+	"verifiedArtifacts": ["context", "analysis", "fit", "candidate", "evaluation"],
+	"retainedArtifacts": 5,
+	"timings": [
+		{
+			"tool": "describe_log",
+			"elapsedMs": 6921.578300000001
+		},
+		{
+			"tool": "fit_ve_candidate",
+			"elapsedMs": 22937.7491
+		},
+		{
+			"tool": "evaluate_ve_candidate",
+			"elapsedMs": 2955.2848999999987
+		}
+	],
+	"fitSummary": {
+		"status": "candidate",
+		"analysisRef": "d22cb251-685b-4af3-8834-d160f2a6cbb9:analysis",
+		"candidateRef": "d22cb251-685b-4af3-8834-d160f2a6cbb9:candidate",
+		"counts": {
+			"supported": 5,
+			"accepted": 4,
+			"suppressed": 1,
+			"unsupported": 251
+		},
+		"reasonCounts": {
+			"INSUFFICIENT_TRAINING_SAMPLES": 234,
+			"INSUFFICIENT_TRAINING_EPISODES": 251,
+			"BELOW_MINIMUM_PROPOSAL": 1
+		},
+		"bounds": {
+			"requestedMaxPct": 3,
+			"datasetMaxPct": 3,
+			"effectiveMaxPct": 3
+		},
+		"config": {
+			"maxCorrectionPct": 3,
+			"huberThreshold": 0.02,
+			"ridgePenalty": 0.01,
+			"maxConditionNumber": 1000,
+			"relativeRankTolerance": 0.000001,
+			"minCorrectionPct": 0.5,
+			"maxLooRangePct": 2,
+			"minLooRemainingEpisodes": 2,
+			"maxIterations": 5000,
+			"gradientTolerance": 1e-10
+		},
+		"cells": [
+			{
+				"cellIndex": 35,
+				"rpmIndex": 3,
+				"mapIndex": 2,
+				"status": "accepted",
+				"reasons": [],
+				"materialTrainingSamples": 10097,
+				"qualifyingEpisodeIds": [
+					0, 2, 4, 5, 6, 9, 10, 15, 16, 17, 20, 24, 25, 30, 33, 36, 37, 38, 39, 40, 41, 43
+				],
+				"trainingInfluenceMass": 1948.8739130209458,
+				"finalCorrectionPct": 1.9993748996502538,
+				"lastProposedPct": 1.9993748996502538,
+				"lastProposalPass": 2,
+				"atBound": false,
+				"stability": {
+					"minPct": 1.4674895930625038,
+					"maxPct": 2.1882344873930366,
+					"rangePct": 0.7207448943305328,
+					"directionStable": true,
+					"foldCount": 45
+				}
+			},
+			{
+				"cellIndex": 36,
+				"rpmIndex": 4,
+				"mapIndex": 2,
+				"status": "accepted",
+				"reasons": [],
+				"materialTrainingSamples": 9638,
+				"qualifyingEpisodeIds": [
+					0, 5, 9, 15, 17, 20, 22, 24, 25, 30, 31, 32, 33, 36, 37, 38, 39, 40, 41, 42, 43, 44
+				],
+				"trainingInfluenceMass": 3890.366347966673,
+				"finalCorrectionPct": -1.471000428830447,
+				"lastProposedPct": -1.471000428830447,
+				"lastProposalPass": 2,
+				"atBound": false,
+				"stability": {
+					"minPct": -1.6861582634188936,
+					"maxPct": -1.084301369798688,
+					"rangePct": 0.6018568936202056,
+					"directionStable": true,
+					"foldCount": 45
+				}
+			},
+			{
+				"cellIndex": 51,
+				"rpmIndex": 3,
+				"mapIndex": 3,
+				"status": "suppressed",
+				"reasons": ["BELOW_MINIMUM_PROPOSAL"],
+				"materialTrainingSamples": 9342,
+				"qualifyingEpisodeIds": [
+					0, 1, 2, 4, 5, 6, 9, 10, 15, 16, 20, 24, 25, 30, 36, 38, 39, 40, 41, 42, 43, 44
+				],
+				"trainingInfluenceMass": 3530.9850683781933,
+				"finalCorrectionPct": 0,
+				"lastProposedPct": 0.06038312574817156,
+				"lastProposalPass": 1,
+				"atBound": false,
+				"stability": null
+			},
+			{
+				"cellIndex": 52,
+				"rpmIndex": 4,
+				"mapIndex": 3,
+				"status": "accepted",
+				"reasons": [],
+				"materialTrainingSamples": 11737,
+				"qualifyingEpisodeIds": [
+					0, 1, 2, 4, 5, 6, 9, 10, 15, 16, 17, 20, 22, 24, 25, 30, 32, 33, 36, 37, 38, 39, 40, 41,
+					42, 43, 44
+				],
+				"trainingInfluenceMass": 3260.050834404642,
+				"finalCorrectionPct": 1.582264022338437,
+				"lastProposedPct": 1.582264022338437,
+				"lastProposalPass": 2,
+				"atBound": false,
+				"stability": {
+					"minPct": 1.20716268933212,
+					"maxPct": 2.399462432634352,
+					"rangePct": 1.1922997433022322,
+					"directionStable": true,
+					"foldCount": 45
+				}
+			},
+			{
+				"cellIndex": 57,
+				"rpmIndex": 9,
+				"mapIndex": 3,
+				"status": "accepted",
+				"reasons": [],
+				"materialTrainingSamples": 464,
+				"qualifyingEpisodeIds": [5, 30, 31, 35],
+				"trainingInfluenceMass": 186.49337722597636,
+				"finalCorrectionPct": 1.940182597084195,
+				"lastProposedPct": 1.940182597084195,
+				"lastProposalPass": 2,
+				"atBound": false,
+				"stability": {
+					"minPct": 1.318134310372925,
+					"maxPct": 2.0592286470447227,
+					"rangePct": 0.7410943366717977,
+					"directionStable": true,
+					"foldCount": 45
+				}
+			}
+		],
+		"nonUnsupportedCells": [
+			{
+				"rpmIndex": 3,
+				"mapIndex": 2,
+				"status": "accepted",
+				"reasons": []
+			},
+			{
+				"rpmIndex": 4,
+				"mapIndex": 2,
+				"status": "accepted",
+				"reasons": []
+			},
+			{
+				"rpmIndex": 3,
+				"mapIndex": 3,
+				"status": "suppressed",
+				"reasons": ["BELOW_MINIMUM_PROPOSAL"]
+			},
+			{
+				"rpmIndex": 4,
+				"mapIndex": 3,
+				"status": "accepted",
+				"reasons": []
+			},
+			{
+				"rpmIndex": 9,
+				"mapIndex": 3,
+				"status": "accepted",
+				"reasons": []
+			}
+		],
+		"omittedCellDetails": 251,
+		"passes": [
+			{
+				"pass": 1,
+				"activeCells": 5,
+				"conditioning": [
+					{
+						"cellIndices": [35, 36, 51, 52],
+						"rank": 4,
+						"columns": 4,
+						"conditionNumber": 4.826677567140224,
+						"minEigenvalue": 0.12498296478689418,
+						"maxEigenvalue": 2.9117051759108437,
+						"status": "identifiable"
+					},
+					{
+						"cellIndices": [57],
+						"rank": 1,
+						"columns": 1,
+						"conditionNumber": 1,
+						"minEigenvalue": 1,
+						"maxEigenvalue": 1,
+						"status": "identifiable"
+					}
+				],
+				"solver": {
+					"status": "converged",
+					"iterations": 134,
+					"objective": 0.0001879371451108205,
+					"projectedGradient": 9.887249352580341e-11
+				},
+				"folds": 0,
+				"frozen": [
+					{
+						"cellIndex": 51,
+						"reasons": ["BELOW_MINIMUM_PROPOSAL"]
+					}
+				]
+			},
+			{
+				"pass": 2,
+				"activeCells": 4,
+				"conditioning": [
+					{
+						"cellIndices": [35, 36, 52],
+						"rank": 3,
+						"columns": 3,
+						"conditionNumber": 3.2317602771248746,
+						"minEigenvalue": 0.21838954844751587,
+						"maxEigenvalue": 2.280920389471432,
+						"status": "identifiable"
+					},
+					{
+						"cellIndices": [57],
+						"rank": 1,
+						"columns": 1,
+						"conditionNumber": 1,
+						"minEigenvalue": 1,
+						"maxEigenvalue": 1,
+						"status": "identifiable"
+					}
+				],
+				"solver": {
+					"status": "converged",
+					"iterations": 93,
+					"objective": 0.00018859247897918743,
+					"projectedGradient": 5.844381228969908e-11
+				},
+				"folds": 45,
+				"frozen": []
+			}
+		],
+		"trainingRows": 13950,
+		"trainingEpisodes": 45,
+		"limitations": [
+			"Errors are measured AFR minus interpolated calibration target; they are not VE corrections or predicted improvements.",
+			"Calibration semantics must be explicitly bound by the caller; imported axis names alone do not prove MAP kPa or AFR units.",
+			"Only eligible rows with valid targets and in-bounds VE neighborhoods contribute. Diagnostic errors on other rows are not aggregate evidence.",
+			"AFR sensor/transport delay is unimplemented and fixed at zero; no telemetry is time shifted.",
+			"Statistics use equal sample weights, type-7 quantiles, population standard deviation and unscaled MAD. Samples/windows may be correlated; counts are not independent observations.",
+			"Empty statistics and unrepresentable numerical results are null. Coverage has explicit sample/grid denominators and is not a confidence estimate.",
+			"VE values are not interpolated or required for geometric neighborhood membership; missing target corners with positive weight block target lookup.",
+			"Eligibility indices, partitions and timestamps are validated. Existing classifier contracts lack session identity, so callers must supply results from the same unchanged session.",
+			"Phase A support measures training coverage; Phase B adds numerical conditioning and stability checks, not measured correction accuracy.",
+			"Episodes group whole accepted runs without AFR-error selection; nearby runs may remain correlated. Temporal gaps and embargo do not establish independence.",
+			"Partitioning uses fixed full-log eligibility to define episodes, then audits V1 boundaries or recomputes V2 within each partition. Full-log time high-water integrity is retained.",
+			"Calibration association and active ECU table/fueling mode require caller confirmation. Source content hashes detect mismatched artifacts, not incorrect calibration association.",
+			"Fuel is assumed proportional to interpolated VE with other factors fixed. Closed-loop corrections, injector behavior, sensor bias and unimplemented AFR delay can invalidate predictions.",
+			"Effects in unobserved neighboring operating regions are unassessed. V1 categorical fuel-cut limitations remain unchanged.",
+			"Phase B candidates are fitted from ready training rows only; holdout outcomes are not used in fitting, suppression, thresholds or model selection.",
+			"Conditioning uses episode-weighted, column-normalized unregularized influence matrices. Entire unidentifiable connected groups are suppressed; ridge does not establish identifiability.",
+			"Leave-one-training-episode-out ranges are stability diagnostics, not calibrated confidence intervals; episodes may remain correlated.",
+			"Huber loss fits relative fueling residuals rather than directly minimizing holdout AFR error. Phase A prediction assumptions and zero/unimplemented AFR delay remain unchanged.",
+			"Bounds are imposed inside the solver. Suppressed cells remain frozen at zero, with full refitting and repeated conditioning/stability checks; no completed vector is silently clipped."
+		],
+		"runId": "d22cb251-685b-4af3-8834-d160f2a6cbb9",
+		"settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+		"fullEvidenceRef": {
+			"runId": "d22cb251-685b-4af3-8834-d160f2a6cbb9",
+			"contextId": "august-v1-single-live-smoke",
+			"settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+			"artifactId": "d22cb251-685b-4af3-8834-d160f2a6cbb9:fit",
+			"kind": "fit",
+			"sha256": "29551ff57cfdeb28ea7d038c4c36af53a32564d33f5b66e39decad8c5121ff05",
+			"datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+			"candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+		},
+		"facts": [
+			{
+				"key": "fit-summary",
+				"kind": "fit-summary",
+				"statement": "Training-only fit candidate: 4 accepted, 1 suppressed and 251 unsupported VE cells. These are advisory proposals, not measured improvements or ECU-write authorization.",
+				"values": {
+					"status": "candidate",
+					"supported": 5,
+					"accepted": 4,
+					"suppressed": 1,
+					"unsupported": 251
+				},
+				"id": "d22cb251-685b-4af3-8834-d160f2a6cbb9:fit:fit-summary",
+				"evidenceId": "evidence-2",
+				"artifact": {
+					"runId": "d22cb251-685b-4af3-8834-d160f2a6cbb9",
+					"contextId": "august-v1-single-live-smoke",
+					"settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+					"artifactId": "d22cb251-685b-4af3-8834-d160f2a6cbb9:fit",
+					"kind": "fit",
+					"sha256": "29551ff57cfdeb28ea7d038c4c36af53a32564d33f5b66e39decad8c5121ff05",
+					"datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+					"candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+				}
+			}
+		]
+	},
+	"evaluationSummary": {
+		"status": "complete",
+		"candidateRef": "d22cb251-685b-4af3-8834-d160f2a6cbb9:candidate",
+		"basis": "conditional-model-prediction",
+		"paired": {
+			"status": "complete",
+			"rowCount": 3780,
+			"failedPredictions": 0,
+			"baseline": {
+				"count": 3780,
+				"mae": 0.199663269699547,
+				"rmse": 0.26292032294233103,
+				"errors": {
+					"count": 3780,
+					"mean": -0.011981258235702643,
+					"median": 0.07049999999999823,
+					"populationStdDev": 0.2626471885765948,
+					"q25": -0.1460000000000008,
+					"q75": 0.1739999999999977,
+					"iqr": 0.3199999999999985,
+					"mad": 0.12450000000000026,
+					"min": -1.0390000000000015,
+					"max": 0.6112724999999966
+				}
+			},
+			"candidate": {
+				"count": 3780,
+				"mae": 0.16058921215757857,
+				"rmse": 0.23380931814724368,
+				"errors": {
+					"count": 3780,
+					"mean": -0.018353218637619125,
+					"median": 0.04099783136569535,
+					"populationStdDev": 0.23308787316829402,
+					"q25": -0.09533438249722614,
+					"q75": 0.12515806537294516,
+					"iqr": 0.2204924478701713,
+					"mad": 0.09551116434067097,
+					"min": -0.9930204252240333,
+					"max": 0.6112724999999966
+				}
+			},
+			"predictedDeltaMae": -0.03907405754196844,
+			"predictedDeltaRmse": -0.029111004795087353
+		},
+		"affectedOnly": {
+			"status": "complete",
+			"rowCount": 3572,
+			"failedPredictions": 0,
+			"baseline": {
+				"count": 3572,
+				"mae": 0.19336047382418747,
+				"rmse": 0.25353155630083163,
+				"errors": {
+					"count": 3572,
+					"mean": -0.007868093271744214,
+					"median": 0.0724999999999989,
+					"populationStdDev": 0.2534094377654249,
+					"q25": -0.14199999999999946,
+					"q75": 0.17300000000000004,
+					"iqr": 0.3149999999999995,
+					"mad": 0.12149999999999839,
+					"min": -1.0390000000000015,
+					"max": 0.452160000000001
+				}
+			},
+			"candidate": {
+				"count": 3572,
+				"mae": 0.15201110722042535,
+				"rmse": 0.2213050338115993,
+				"errors": {
+					"count": 3572,
+					"mean": -0.014611097280491135,
+					"median": 0.042461870668988766,
+					"populationStdDev": 0.2208221769356807,
+					"q25": -0.08937002006408612,
+					"q75": 0.12470755085211849,
+					"iqr": 0.2140775709162046,
+					"mad": 0.08910165262218774,
+					"min": -0.9930204252240333,
+					"max": 0.4339674851732429
+				}
+			},
+			"predictedDeltaMae": -0.04134936660376212,
+			"predictedDeltaRmse": -0.03222652248923233
+		},
+		"coverage": {
+			"trainingRows": 13950,
+			"holdoutRows": 3780,
+			"supportedCells": 5,
+			"totalCells": 256,
+			"exclusionCounts": {
+				"OUTSIDE_EVALUATION_PARTITIONS": 3669,
+				"NO_EPISODE": 22603,
+				"CLASSIFIER_NOT_ELIGIBLE": 38539,
+				"AFR_OBSERVATION_UNAVAILABLE": 1873,
+				"VE_COORDINATES_UNAVAILABLE": 1873,
+				"PARTITION_SUPPORT_LEAKAGE": 30
+			}
+		},
+		"split": {
+			"status": "ready",
+			"training": {
+				"startRow": 3469,
+				"endRowExclusive": 40314
+			},
+			"holdout": {
+				"startRow": 40514,
+				"endRowExclusive": 56284
+			},
+			"actualGapSec": 13.402999999999793
+		},
+		"neighborhoods": [
+			{
+				"rpmIndex": 5,
+				"mapIndex": 4,
+				"paired": {
+					"status": "complete",
+					"rowCount": 3,
+					"failedPredictions": 0,
+					"baseline": {
+						"count": 3,
+						"mae": 0.963428571428573,
+						"rmse": 0.9634315158402743,
+						"errors": {
+							"count": 3,
+							"mean": -0.963428571428573,
+							"median": -0.962428571428573,
+							"populationStdDev": 0.002381904571504814,
+							"q25": -0.9645714285714302,
+							"q75": -0.9617857142857158,
+							"iqr": 0.0027857142857143913,
+							"mad": 0.0012857142857143789,
+							"min": -0.9667142857142874,
+							"max": -0.9611428571428586
+						}
+					},
+					"candidate": {
+						"count": 3,
+						"mae": 0.963428571428573,
+						"rmse": 0.9634315158402743,
+						"errors": {
+							"count": 3,
+							"mean": -0.963428571428573,
+							"median": -0.962428571428573,
+							"populationStdDev": 0.002381904571504814,
+							"q25": -0.9645714285714302,
+							"q75": -0.9617857142857158,
+							"iqr": 0.0027857142857143913,
+							"mad": 0.0012857142857143789,
+							"min": -0.9667142857142874,
+							"max": -0.9611428571428586
+						}
+					},
+					"predictedDeltaMae": 0,
+					"predictedDeltaRmse": 0
+				}
+			},
+			{
+				"rpmIndex": 3,
+				"mapIndex": 2,
+				"paired": {
+					"status": "complete",
+					"rowCount": 2602,
+					"failedPredictions": 0,
+					"baseline": {
+						"count": 2602,
+						"mae": 0.14467217524980716,
+						"rmse": 0.16221826164766576,
+						"errors": {
+							"count": 2602,
+							"mean": 0.07511875480399616,
+							"median": 0.13449999999999918,
+							"populationStdDev": 0.14377738726478392,
+							"q25": -0.017000000000000792,
+							"q75": 0.17900000000000027,
+							"iqr": 0.19600000000000106,
+							"mad": 0.06550000000000011,
+							"min": -0.5730000000000004,
+							"max": 0.3289999999999971
+						}
+					},
+					"candidate": {
+						"count": 2602,
+						"mae": 0.11516214338432185,
+						"rmse": 0.13168937917405946,
+						"errors": {
+							"count": 2602,
+							"mean": 0.051742057752007305,
+							"median": 0.10586738163847187,
+							"populationStdDev": 0.12109852206710524,
+							"q25": -0.020805511458441117,
+							"q75": 0.12909453630684098,
+							"iqr": 0.1499000477652821,
+							"mad": 0.04858451970970812,
+							"min": -0.6471124748124595,
+							"max": 0.40592533905722306
+						}
+					},
+					"predictedDeltaMae": -0.029510031865485314,
+					"predictedDeltaRmse": -0.0305288824736063
+				}
+			},
+			{
+				"rpmIndex": 4,
+				"mapIndex": 2,
+				"paired": {
+					"status": "complete",
+					"rowCount": 329,
+					"failedPredictions": 0,
+					"baseline": {
+						"count": 329,
+						"mae": 0.1834498480243161,
+						"rmse": 0.19718244063206317,
+						"errors": {
+							"count": 329,
+							"mean": -0.16366261398176307,
+							"median": -0.14899999999999913,
+							"populationStdDev": 0.10997937842283646,
+							"q25": -0.21999999999999886,
+							"q75": -0.12599999999999945,
+							"iqr": 0.09399999999999942,
+							"mad": 0.051000000000000156,
+							"min": -0.5200000000000014,
+							"max": 0.2989999999999995
+						}
+					},
+					"candidate": {
+						"count": 329,
+						"mae": 0.07985071053926719,
+						"rmse": 0.11414280830767412,
+						"errors": {
+							"count": 329,
+							"mean": -0.03913271576046594,
+							"median": -0.05826273164433893,
+							"populationStdDev": 0.10722504952469376,
+							"q25": -0.09530142252027929,
+							"q75": 0.0037446464912083144,
+							"iqr": 0.0990460690114876,
+							"mad": 0.049944390296793977,
+							"min": -0.3386479799320181,
+							"max": 0.4339674851732429
+						}
+					},
+					"predictedDeltaMae": -0.10359913748504891,
+					"predictedDeltaRmse": -0.08303963232438905
+				}
+			},
+			{
+				"rpmIndex": 7,
+				"mapIndex": 2,
+				"paired": {
+					"status": "complete",
+					"rowCount": 4,
+					"failedPredictions": 0,
+					"baseline": {
+						"count": 4,
+						"mae": 0.3549999999999991,
+						"rmse": 0.35842900491240853,
+						"errors": {
+							"count": 4,
+							"mean": 0.3549999999999991,
+							"median": 0.35574999999999957,
+							"populationStdDev": 0.04946060616793962,
+							"q25": 0.30659374999999933,
+							"q75": 0.40415624999999933,
+							"iqr": 0.0975625,
+							"mad": 0.04868749999999977,
+							"min": 0.3034999999999979,
+							"max": 0.40499999999999936
+						}
+					},
+					"candidate": {
+						"count": 4,
+						"mae": 0.3549999999999991,
+						"rmse": 0.35842900491240853,
+						"errors": {
+							"count": 4,
+							"mean": 0.3549999999999991,
+							"median": 0.35574999999999957,
+							"populationStdDev": 0.04946060616793962,
+							"q25": 0.30659374999999933,
+							"q75": 0.40415624999999933,
+							"iqr": 0.0975625,
+							"mad": 0.04868749999999977,
+							"min": 0.3034999999999979,
+							"max": 0.40499999999999936
+						}
+					},
+					"predictedDeltaMae": 0,
+					"predictedDeltaRmse": 0
+				}
+			},
+			{
+				"rpmIndex": 10,
+				"mapIndex": 4,
+				"paired": {
+					"status": "complete",
+					"rowCount": 7,
+					"failedPredictions": 0,
+					"baseline": {
+						"count": 7,
+						"mae": 0.2216428571428562,
+						"rmse": 0.2456409709456919,
+						"errors": {
+							"count": 7,
+							"mean": 0.2216428571428562,
+							"median": 0.1999999999999993,
+							"populationStdDev": 0.10589584734395242,
+							"q25": 0.15000000000000036,
+							"q75": 0.28768749999999965,
+							"iqr": 0.1376874999999993,
+							"mad": 0.09999999999999787,
+							"min": 0.09999999999999787,
+							"max": 0.3761249999999965
+						}
+					},
+					"candidate": {
+						"count": 7,
+						"mae": 0.2216428571428562,
+						"rmse": 0.2456409709456919,
+						"errors": {
+							"count": 7,
+							"mean": 0.2216428571428562,
+							"median": 0.1999999999999993,
+							"populationStdDev": 0.10589584734395242,
+							"q25": 0.15000000000000036,
+							"q75": 0.28768749999999965,
+							"iqr": 0.1376874999999993,
+							"mad": 0.09999999999999787,
+							"min": 0.09999999999999787,
+							"max": 0.3761249999999965
+						}
+					},
+					"predictedDeltaMae": 0,
+					"predictedDeltaRmse": 0
+				}
+			},
+			{
+				"rpmIndex": 9,
+				"mapIndex": 4,
+				"paired": {
+					"status": "complete",
+					"rowCount": 1,
+					"failedPredictions": 0,
+					"baseline": {
+						"count": 1,
+						"mae": 0.37387499999999996,
+						"rmse": 0.37387499999999996,
+						"errors": {
+							"count": 1,
+							"mean": 0.37387499999999996,
+							"median": 0.37387499999999996,
+							"populationStdDev": 0,
+							"q25": 0.37387499999999996,
+							"q75": 0.37387499999999996,
+							"iqr": 0,
+							"mad": 0,
+							"min": 0.37387499999999996,
+							"max": 0.37387499999999996
+						}
+					},
+					"candidate": {
+						"count": 1,
+						"mae": 0.37387499999999996,
+						"rmse": 0.37387499999999996,
+						"errors": {
+							"count": 1,
+							"mean": 0.37387499999999996,
+							"median": 0.37387499999999996,
+							"populationStdDev": 0,
+							"q25": 0.37387499999999996,
+							"q75": 0.37387499999999996,
+							"iqr": 0,
+							"mad": 0,
+							"min": 0.37387499999999996,
+							"max": 0.37387499999999996
+						}
+					},
+					"predictedDeltaMae": 0,
+					"predictedDeltaRmse": 0
+				}
+			},
+			{
+				"rpmIndex": 10,
+				"mapIndex": 5,
+				"paired": {
+					"status": "complete",
+					"rowCount": 18,
+					"failedPredictions": 0,
+					"baseline": {
+						"count": 18,
+						"mae": 0.13094444444444378,
+						"rmse": 0.14250514732418834,
+						"errors": {
+							"count": 18,
+							"mean": 0.08016666666666593,
+							"median": 0.09999999999999964,
+							"populationStdDev": 0.11781775150394055,
+							"q25": 0.09999999999999787,
+							"q75": 0.10000000000000142,
+							"iqr": 3.552713678800501e-15,
+							"mad": 1.784010439376255e-15,
+							"min": -0.2186249999999994,
+							"max": 0.1999999999999993
+						}
+					},
+					"candidate": {
+						"count": 18,
+						"mae": 0.13094444444444378,
+						"rmse": 0.14250514732418834,
+						"errors": {
+							"count": 18,
+							"mean": 0.08016666666666593,
+							"median": 0.09999999999999964,
+							"populationStdDev": 0.11781775150394055,
+							"q25": 0.09999999999999787,
+							"q75": 0.10000000000000142,
+							"iqr": 3.552713678800501e-15,
+							"mad": 1.784010439376255e-15,
+							"min": -0.2186249999999994,
+							"max": 0.1999999999999993
+						}
+					},
+					"predictedDeltaMae": 0,
+					"predictedDeltaRmse": 0
+				}
+			},
+			{
+				"rpmIndex": 10,
+				"mapIndex": 3,
+				"paired": {
+					"status": "complete",
+					"rowCount": 14,
+					"failedPredictions": 0,
+					"baseline": {
+						"count": 14,
+						"mae": 0.19999999999999932,
+						"rmse": 0.19999999999999926,
+						"errors": {
+							"count": 14,
+							"mean": 0.19999999999999932,
+							"median": 0.1999999999999993,
+							"populationStdDev": 1.342983126688847e-15,
+							"q25": 0.19999999999999796,
+							"q75": 0.20000000000000062,
+							"iqr": 2.6645352591003757e-15,
+							"mad": 1.77635683940026e-15,
+							"min": 0.1999999999999975,
+							"max": 0.20000000000000107
+						}
+					},
+					"candidate": {
+						"count": 14,
+						"mae": 0.19999999999999932,
+						"rmse": 0.19999999999999926,
+						"errors": {
+							"count": 14,
+							"mean": 0.19999999999999932,
+							"median": 0.1999999999999993,
+							"populationStdDev": 1.342983126688847e-15,
+							"q25": 0.19999999999999796,
+							"q75": 0.20000000000000062,
+							"iqr": 2.6645352591003757e-15,
+							"mad": 1.77635683940026e-15,
+							"min": 0.1999999999999975,
+							"max": 0.20000000000000107
+						}
+					},
+					"predictedDeltaMae": 0,
+					"predictedDeltaRmse": 0
+				}
+			}
+		],
+		"omittedNeighborhoods": 19,
+		"rows": [
+			{
+				"rowIndex": 40561,
+				"episodeId": 45,
+				"rpmIndex": 5,
+				"mapIndex": 4,
+				"affected": false,
+				"status": "predicted",
+				"baselineAfr": 13.1,
+				"targetAfr": 14.066714285714287,
+				"originalVe": 52.549464,
+				"candidateVe": 52.549464,
+				"predictedAfr": 13.1,
+				"baselineErrorAfr": -0.9667142857142874,
+				"predictedErrorAfr": -0.9667142857142874,
+				"timeSec": 2704.523,
+				"rpm": 1889,
+				"mapKpa": 57.7
+			},
+			{
+				"rowIndex": 40562,
+				"episodeId": 45,
+				"rpmIndex": 5,
+				"mapIndex": 4,
+				"affected": false,
+				"status": "predicted",
+				"baselineAfr": 13.1,
+				"targetAfr": 14.062428571428573,
+				"originalVe": 52.49015200000001,
+				"candidateVe": 52.49015200000001,
+				"predictedAfr": 13.1,
+				"baselineErrorAfr": -0.962428571428573,
+				"predictedErrorAfr": -0.962428571428573,
+				"timeSec": 2704.584,
+				"rpm": 1879,
+				"mapKpa": 57.6
+			},
+			{
+				"rowIndex": 40563,
+				"episodeId": 45,
+				"rpmIndex": 5,
+				"mapIndex": 4,
+				"affected": false,
+				"status": "predicted",
+				"baselineAfr": 13.1,
+				"targetAfr": 14.061142857142858,
+				"originalVe": 52.492288,
+				"candidateVe": 52.492288,
+				"predictedAfr": 13.1,
+				"baselineErrorAfr": -0.9611428571428586,
+				"predictedErrorAfr": -0.9611428571428586,
+				"timeSec": 2704.646,
+				"rpm": 1876,
+				"mapKpa": 57.6
+			}
+		],
+		"changedNeighborhoods": [
+			{
+				"rpmIndex": 2,
+				"mapIndex": 1,
+				"evaluationRows": 0,
+				"status": "unassessed"
+			},
+			{
+				"rpmIndex": 3,
+				"mapIndex": 1,
+				"evaluationRows": 3,
+				"status": "observed"
+			},
+			{
+				"rpmIndex": 4,
+				"mapIndex": 1,
+				"evaluationRows": 282,
+				"status": "observed"
+			},
+			{
+				"rpmIndex": 2,
+				"mapIndex": 2,
+				"evaluationRows": 0,
+				"status": "unassessed"
+			},
+			{
+				"rpmIndex": 3,
+				"mapIndex": 2,
+				"evaluationRows": 2602,
+				"status": "observed"
+			},
+			{
+				"rpmIndex": 4,
+				"mapIndex": 2,
+				"evaluationRows": 329,
+				"status": "observed"
+			},
+			{
+				"rpmIndex": 8,
+				"mapIndex": 2,
+				"evaluationRows": 0,
+				"status": "unassessed"
+			},
+			{
+				"rpmIndex": 9,
+				"mapIndex": 2,
+				"evaluationRows": 96,
+				"status": "observed"
+			},
+			{
+				"rpmIndex": 3,
+				"mapIndex": 3,
+				"evaluationRows": 116,
+				"status": "observed"
+			},
+			{
+				"rpmIndex": 4,
+				"mapIndex": 3,
+				"evaluationRows": 0,
+				"status": "unassessed"
+			},
+			{
+				"rpmIndex": 8,
+				"mapIndex": 3,
+				"evaluationRows": 10,
+				"status": "observed"
+			},
+			{
+				"rpmIndex": 9,
+				"mapIndex": 3,
+				"evaluationRows": 134,
+				"status": "observed"
+			}
+		],
+		"delay": {
+			"status": "unimplemented-zero-placeholder",
+			"appliedMs": 0
+		},
+		"limitations": [
+			"Errors are measured AFR minus interpolated calibration target; they are not VE corrections or predicted improvements.",
+			"Calibration semantics must be explicitly bound by the caller; imported axis names alone do not prove MAP kPa or AFR units.",
+			"Only eligible rows with valid targets and in-bounds VE neighborhoods contribute. Diagnostic errors on other rows are not aggregate evidence.",
+			"AFR sensor/transport delay is unimplemented and fixed at zero; no telemetry is time shifted.",
+			"Statistics use equal sample weights, type-7 quantiles, population standard deviation and unscaled MAD. Samples/windows may be correlated; counts are not independent observations.",
+			"Empty statistics and unrepresentable numerical results are null. Coverage has explicit sample/grid denominators and is not a confidence estimate.",
+			"VE values are not interpolated or required for geometric neighborhood membership; missing target corners with positive weight block target lookup.",
+			"Eligibility indices, partitions and timestamps are validated. Existing classifier contracts lack session identity, so callers must supply results from the same unchanged session.",
+			"Phase A cell support measures training coverage only, not identifiability, correction accuracy, or confidence. No corrections are fitted.",
+			"Episodes group whole accepted runs without AFR-error selection; nearby runs may remain correlated. Temporal gaps and embargo do not establish independence.",
+			"Partitioning uses fixed full-log eligibility to define episodes, then audits V1 boundaries or recomputes V2 within each partition. Full-log time high-water integrity is retained.",
+			"Calibration association and active ECU table/fueling mode require caller confirmation. Source content hashes detect mismatched artifacts, not incorrect calibration association.",
+			"Fuel is assumed proportional to interpolated VE with other factors fixed. Closed-loop corrections, injector behavior, sensor bias and unimplemented AFR delay can invalidate predictions.",
+			"Effects in unobserved neighboring operating regions are unassessed. V1 categorical fuel-cut limitations remain unchanged.",
+			"Candidate AFR and paired metric differences are model-based predictions, not measured improvements. The baseline is observed AFR with the original table unchanged.",
+			"All ready rows in the declared evaluation partition are paired, including unchanged and worsened rows. Any failed prediction makes candidate aggregate metrics unavailable; failed rows are never silently dropped.",
+			"Episode metric variation is descriptive uncertainty only. No calibrated confidence interval, identifiability assessment, optimizer or automatic correction selection is implemented.",
+			"Repeated manual changes after viewing holdout results turn the holdout into development data; reserve a new untouched holdout for final evaluation."
+		],
+		"runId": "d22cb251-685b-4af3-8834-d160f2a6cbb9",
+		"settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+		"fullEvidenceRef": {
+			"runId": "d22cb251-685b-4af3-8834-d160f2a6cbb9",
+			"contextId": "august-v1-single-live-smoke",
+			"settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+			"artifactId": "d22cb251-685b-4af3-8834-d160f2a6cbb9:evaluation",
+			"kind": "evaluation",
+			"sha256": "477c7590f5a122b16c86a1c2f59449d4ce5c2e192279b7d2d769ee690a29cb1d",
+			"datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+			"candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+		},
+		"facts": [
+			{
+				"key": "paired-prediction",
+				"kind": "paired-prediction",
+				"statement": "Conditional held-out model prediction on 3780 identical baseline/candidate rows: MAE 0.199663269699547 -> 0.16058921215757857, RMSE 0.26292032294233103 -> 0.23380931814724368. This is not measured improvement; worsened metrics remain included.",
+				"values": {
+					"rowCount": 3780,
+					"baselineMae": 0.199663269699547,
+					"candidateMae": 0.16058921215757857,
+					"baselineRmse": 0.26292032294233103,
+					"candidateRmse": 0.23380931814724368
+				},
+				"id": "d22cb251-685b-4af3-8834-d160f2a6cbb9:evaluation:paired-prediction",
+				"evidenceId": "evidence-3",
+				"artifact": {
+					"runId": "d22cb251-685b-4af3-8834-d160f2a6cbb9",
+					"contextId": "august-v1-single-live-smoke",
+					"settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+					"artifactId": "d22cb251-685b-4af3-8834-d160f2a6cbb9:evaluation",
+					"kind": "evaluation",
+					"sha256": "477c7590f5a122b16c86a1c2f59449d4ce5c2e192279b7d2d769ee690a29cb1d",
+					"datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+					"candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+				}
+			}
+		]
+	},
+	"limitation": "Memory is sampled at phase boundaries, not a continuous peak RSS measurement; deployment and V2 results may differ."
+}

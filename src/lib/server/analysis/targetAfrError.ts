@@ -10,6 +10,7 @@ import type {
 	TargetAfrErrorAnalysis
 } from '../../shared/types/targetAfrError';
 import { locateTableCoordinates, lookupTargetAfr, validateAnalysisAxes } from './strictTableLookup';
+import type { Immutable } from '../../shared/types/veEvaluation';
 
 export type AnalysisCalibration<Unit extends 'AFR' | 'VE'> = TunerStudioTableMetadata & {
 	sourceId: string;
@@ -82,7 +83,7 @@ export function afrErrorStatistics(errors: readonly number[]): AfrErrorStatistic
 	};
 }
 
-function summarize(rows: readonly SampleAfrError[]): AfrSummary {
+function summarize(rows: readonly Immutable<SampleAfrError>[]): AfrSummary {
 	const contributors = rows.filter((row) => row.contributesToAggregate);
 	const error = afrErrorStatistics(contributors.map((row) => row.errorAfr!));
 	const counts: AfrSummary['counts'] = {
@@ -117,7 +118,7 @@ function summarize(rows: readonly SampleAfrError[]): AfrSummary {
 	const nearest = (value: number | null) =>
 		value === null
 			? null
-			: (contributors.reduce<SampleAfrError | null>((best, row) => {
+			: (contributors.reduce<Immutable<SampleAfrError> | null>((best, row) => {
 					if (!best) return row;
 					const distance = Math.abs(row.errorAfr! - value),
 						previous = Math.abs(best.errorAfr! - value);
@@ -141,6 +142,11 @@ function summarize(rows: readonly SampleAfrError[]): AfrSummary {
 			nearestMedianRow: nearest(error.median)
 		}
 	};
+}
+
+/** Reuse the same deterministic summary for caller-selected, already prepared rows. */
+export function summarizeAfrErrorRows(rows: readonly Immutable<SampleAfrError>[]): AfrSummary {
+	return summarize(rows);
 }
 
 function provenance(

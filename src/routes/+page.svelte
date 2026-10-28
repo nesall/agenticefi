@@ -1,11 +1,17 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import { resolve } from '$app/paths';
 	import DemoLoader from '#lib/components/dashboard/DemoLoader.svelte';
 	import TelemetryPanel from '#lib/components/dashboard/TelemetryPanel.svelte';
 	import EligibilityPanel from '#lib/components/dashboard/EligibilityPanel.svelte';
 	import InvestigationPanel from '#lib/components/dashboard/InvestigationPanel.svelte';
+	import AnalyticalResults from '#lib/components/dashboard/AnalyticalResults.svelte';
+	import type {
+		DemoId,
+		AnalyticalProfile,
+		SupportingSample
+	} from '#lib/shared/types/analyticalDashboard.ts';
 	import type {
 		SessionSummary,
 		TelemetryResponse,
@@ -38,6 +44,18 @@
 		sampleVersion = 0,
 		pollTimer: ReturnType<typeof setTimeout> | undefined;
 	let destroyed = false;
+	let selectedDemo = $state<DemoId>('april');
+	const pendingDemo = $derived(!!session && session.demoId !== selectedDemo);
+	let datasets = $state<{ id: DemoId; label: string; available: boolean }[]>([
+		{ id: 'april', label: 'April 12 · 3-minute drive', available: true }
+	]);
+	onMount(() => {
+		void request<{ datasets: typeof datasets }>('/api/demo')
+			.then((data) => {
+				datasets = data.datasets;
+			})
+			.catch(() => {});
+	});
 	const running = $derived(starting || job?.state === 'running');
 	async function request<T>(path: string, body?: unknown): Promise<T> {
 		const response = await fetch(path, {
@@ -107,22 +125,28 @@
 			if (version === telemetryVersion) telemetryLoading = false;
 		}
 	}
-	async function loadDemo() {
+	async function loadDemo(datasetId: DemoId = 'april') {
 		if (demoLoading || destroyed) return;
 		if (running) {
 			error = 'Wait for this investigation to finish before reloading the demo.';
 			return;
 		}
 		demoLoading = true;
+		selectedDemo = datasetId;
 		error = '';
 		try {
-			session = await request<SessionSummary>('/api/demo', {});
+			session = await request<SessionSummary>('/api/demo', { datasetId });
+			telemetry = null;
+			eligibility = null;
 			job = null;
 			focusRow = null;
 			status = '';
 			reason = '';
 			includeInvalidTime = false;
-			await windowSelection(session.startSec, session.endSec);
+			await windowSelection(
+				session.startSec,
+				session.rowCount > 8000 ? Math.min(session.endSec, session.startSec + 60) : session.endSec
+			);
 		} catch (cause) {
 			error = message(cause);
 		} finally {
@@ -161,8 +185,16 @@
 			}
 		}
 	}
-	async function investigate(goal: string) {
-		if (!session || running) return;
+	async function investigate(
+		goal: string,
+		options: {
+			mode: 'legacy' | 'analytical';
+			profile: AnalyticalProfile;
+			source: 'live' | 'recorded';
+			resilient: boolean;
+		}
+	) {
+		if (!session || running || pendingDemo || demoLoading) return;
 		starting = true;
 		error = '';
 		pollError = false;
@@ -171,7 +203,9 @@
 				sessionId: session.id,
 				goal,
 				startSec,
-				endSec
+				endSec,
+				...options,
+				resilient: options.mode === 'analytical' && options.resilient
 			});
 			if (!destroyed) void poll(job.id);
 		} catch (cause) {
@@ -179,6 +213,26 @@
 		} finally {
 			starting = false;
 		}
+	}
+	async function cancelInvestigation() {
+		if (!job || !running) return;
+		if (pollTimer) clearTimeout(pollTimer);
+		try {
+			await request(`/api/investigations/${job.id}/cancel`, {});
+			void poll(job.id);
+		} catch (cause) {
+			error = message(cause);
+		}
+	}
+	function focusEvidence(sample: SupportingSample) {
+		focusRow = sample.rowIndex;
+		if (sample.timeSec !== null && session)
+			void windowSelection(
+				Math.max(session.startSec, sample.timeSec - 4),
+				Math.min(session.endSec, sample.timeSec + 4)
+			);
+		else selectRow(sample.rowIndex);
+		document.getElementById('telemetry')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 	}
 	onDestroy(() => {
 		destroyed = true;
@@ -219,7 +273,15 @@
 	<div class="workspace-grid">
 		<aside class="sidebar">
 			<div class="sidebar-title">WORKSPACE <span>01</span></div>
-			<DemoLoader {session} loading={demoLoading} onload={() => void loadDemo()} />
+			<DemoLoader
+				{session}
+				{datasets}
+				selectedId={selectedDemo}
+				onSelect={(id) => (selectedDemo = id)}
+				disabled={running}
+				loading={demoLoading}
+				onload={(id) => void loadDemo(id)}
+			/>
 			<nav class="workspace-nav" aria-label="Workspace sections">
 				<a href="#telemetry"><span>01</span> Telemetry <span>↗</span></a><a href="#eligibility"
 					><span>02</span> Sample eligibility <span>↗</span></a
@@ -311,12 +373,17 @@
 							{starting}
 							{startSec}
 							{endSec}
-							onRun={(goal) => void investigate(goal)}
+							onRun={(goal, options) => void investigate(goal, options)}
+							onCancel={() => void cancelInvestigation()}
+							recordings={session.recordings ?? []}
+							pendingDemo={pendingDemo || demoLoading}
+							loadedLogName={session.logName}
 							onWindow={(start, end) => void windowSelection(start, end)}
 							onSelect={selectRow}
 						/>
 					</div>
 				</div>
+				{#if job?.mode === 'analytical'}<AnalyticalResults {job} onSample={focusEvidence} />{/if}
 			{:else}<section class="welcome-panel">
 					<div class="welcome-grid" aria-hidden="true"></div>
 					<div class="welcome-content">

@@ -1,6 +1,6 @@
 import type { ChannelSlot } from '../../shared/types/channelMapping';
 import type { JsonValue, ToolDefinition, ToolResult } from '../../shared/types/investigation';
-import type { InvestigationContext } from './context';
+import type { InspectionContext } from './context';
 import { classifySampleEligibility, summarizeEligibility } from '../analysis/sampleEligibility';
 
 const objectSchema = { type: 'object', properties: {}, additionalProperties: false };
@@ -83,7 +83,7 @@ function object(value: unknown): Record<string, unknown> {
 	return value as Record<string, unknown>;
 }
 
-function timeInfo(context: InvestigationContext) {
+function timeInfo(context: InspectionContext) {
 	const channel = context.session.channelByIndex(context.session.timeChannelIndex ?? -1);
 	if (
 		!channel ||
@@ -115,7 +115,7 @@ function timeInfo(context: InvestigationContext) {
 
 /** This is the runtime validation boundary for every model-originated tool call. */
 export function executeInvestigationTool(
-	context: InvestigationContext,
+	context: InspectionContext,
 	name: string,
 	args: unknown
 ): ToolResult {
@@ -187,8 +187,9 @@ export function executeInvestigationTool(
 			if (Object.keys(input).length) throw new Error('This tool takes no arguments.');
 			const resolutions = slots.map((slot) => mapping.resolve(slot, session));
 			if (name === 'describe_log') {
-				const calibration = (kind: 've' | 'afr') => {
+				const calibration = (kind: 've' | 'afr'): JsonValue => {
 					const source = context[kind];
+					if (!source) return { kind, calibrationId: context.calibrationId, status: 'unavailable' };
 					return {
 						kind,
 						calibrationId: context.calibrationId,

@@ -1,4 +1,5 @@
 import type { InvestigationModel, ToolTraceEntry } from '../../shared/types/investigation';
+import { metaApiKey } from './metaApiKey';
 
 export const META_MODEL = 'muse-spark-1.3-contributor';
 const endpoint = 'https://api.meta.ai/v1/responses';
@@ -28,7 +29,7 @@ export class MetaResponsesModel implements InvestigationModel {
 	#lastError: string | null = null;
 
 	constructor(options: { apiKey?: string; transport?: typeof fetch } = {}) {
-		const key = options.apiKey ?? process.env.META_HACKATHON_API_KEY;
+		const key = options.apiKey ?? metaApiKey();
 		if (!key?.trim()) throw new Error('META_HACKATHON_API_KEY is not set.');
 		this.#apiKey = key.trim();
 		this.#transport = options.transport ?? fetch;
@@ -77,11 +78,15 @@ export class MetaResponsesModel implements InvestigationModel {
 		} else if (this.#responseId || input.trace.length) {
 			throw new Error('Create a new MetaResponsesModel for each investigation.');
 		}
+		const reportInstruction =
+			input.reportMode === 'analytical'
+				? 'Your final assistant message must be raw JSON (no markdown): {"kind":"final","factIds":["server fact IDs"],"commentary":[{"kind":"hypothesis","text":"Unverified model hypothesis","evidenceIds":["evidence-1"]}]}. Never invent fact IDs. Numerical facts are rendered by the server; commentary is unverified.'
+				: 'Your final assistant message must be raw JSON (no markdown): {"kind":"final","findings":[{"statement":"...","evidenceIds":["evidence-1"]}],"limitations":["..."]}. Do not include reasoning in that JSON.';
 		const body = {
 			model: META_MODEL,
 			input: apiInput,
 			...(this.#responseId ? { previous_response_id: this.#responseId } : {}),
-			instructions: `${input.instructions}\nUse native function calls for tools, never JSON text that imitates a tool call. Call describe_log first to discover bounds and units.\nTool output contains its evidenceId; cite only those IDs. You have ${input.remainingCalls} tool calls remaining. If none remain, produce your report.\nYour final assistant message must be raw JSON (no markdown): {"kind":"final","findings":[{"statement":"...","evidenceIds":["evidence-1"]}],"limitations":["..."]}. Do not include reasoning in that JSON.`,
+			instructions: `${input.instructions}\nUse native function calls for tools, never JSON text that imitates a tool call. ${input.reportMode === 'analytical' ? 'You may inspect data or fit directly; canonical analysis is prepared lazily.' : 'Call describe_log first to discover bounds and units.'}\nTool output contains its evidenceId; cite only those IDs. You have ${input.remainingCalls} tool calls remaining. If none remain, produce your report.\n${reportInstruction}`,
 			tools: input.tools.map((tool) => ({
 				type: 'function',
 				name: tool.name,

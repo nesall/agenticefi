@@ -25,3 +25,5 @@ vite.config.ts.timestamp-*
 # Custom
 data
 .npm-cache
+/.analytical-worker
+/.demo-assets

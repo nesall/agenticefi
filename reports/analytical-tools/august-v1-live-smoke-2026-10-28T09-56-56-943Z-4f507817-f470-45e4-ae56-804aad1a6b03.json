@@ -1,0 +1,4499 @@
+{
+  "source": "LIVE Meta API; no mocks, replay, or scripted model calls",
+  "startedAt": "2026-10-28T09:56:56.943Z",
+  "reportId": "4f507817-f470-45e4-ae56-804aad1a6b03",
+  "model": "muse-spark-1.3-contributor",
+  "selection": {
+    "dataset": "august",
+    "profile": "v1",
+    "workerHeapMb": 1024,
+    "sources": {
+      "log": "data/logs/block2/2026-08-08_11.19.56.msl",
+      "ve": "data/logs/block2/veTable1_2026-08-08_23.57.53.table",
+      "afr": "data/logs/block2/AFR_2026-07-30_19.40.54.table",
+      "calibrationId": "block2-calibration"
+    },
+    "version": "steady-afr-ve-v1",
+    "reportPath": "reports/analytical-tools/august-v1-live-smoke.json"
+  },
+  "outcome": "passed",
+  "resilience": {
+    "enabled": true,
+    "maxRetriesPerModelTurn": 2,
+    "modelTurns": 5,
+    "httpAttempts": 5,
+    "retriesScheduled": 0,
+    "recoveredModelTurns": 0
+  },
+  "limits": {
+    "maxToolCalls": 6,
+    "maxIterations": 7,
+    "timeoutMs": 120000,
+    "workerHeapMb": 1024,
+    "maxOutputTokensPerResponse": 4096,
+    "theoreticalMaxOutputTokens": 86016,
+    "maxHttpAttempts": 21,
+    "automaticRetriesPerModelTurn": 2
+  },
+  "elapsedMs": 104642.0424,
+  "setupBlocker": null,
+  "adapterError": null,
+  "evidenceError": null,
+  "usage": {
+    "status": "complete",
+    "inputTokens": 59388,
+    "outputTokens": 3477,
+    "totalTokens": 62865,
+    "fields": {
+      "input": {
+        "knownTokens": 59388,
+        "reportingAttempts": 5,
+        "missingAttempts": 0
+      },
+      "output": {
+        "knownTokens": 3477,
+        "reportingAttempts": 5,
+        "missingAttempts": 0
+      },
+      "total": {
+        "knownTokens": 62865,
+        "reportingAttempts": 5,
+        "missingAttempts": 0
+      },
+      "cachedInput": {
+        "knownTokens": 0,
+        "reportingAttempts": 5,
+        "missingAttempts": 0
+      },
+      "reasoningOutput": {
+        "knownTokens": 2573,
+        "reportingAttempts": 5,
+        "missingAttempts": 0
+      }
+    },
+    "attempts": 5,
+    "limitation": "Totals sum only provider-reported usage across all HTTP attempts. Missing usage is unknown, never zero; partial totals are not a complete billing estimate.",
+    "estimatedCost": null,
+    "costLimitation": "No authoritative per-model pricing is configured; no cost estimate invented. Usage includes reasoning output when provider counts it."
+  },
+  "actualModelResponses": [
+    {
+      "turn": 1,
+      "modelTurn": 1,
+      "attempt": 1,
+      "requestIds": {
+        "x-request-id": "55dd1b61-114c-459e-8e85-354357806a1d"
+      },
+      "retryAfter": null,
+      "retry": {
+        "attempt": 1,
+        "status": 200,
+        "retryDelayMs": null,
+        "decision": "not-transient"
+      },
+      "httpStatus": 200,
+      "elapsedMs": 5180.6489,
+      "responseId": "resp_6ae1c6ee732d2161f2664a8a",
+      "status": "completed",
+      "output": [
+        {
+          "type": "message",
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "Starting bounded VE investigation — inspecting training regions and finalizing the frozen candidate."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "name": "describe_log",
+          "call_id": "call_b52f8879-832b-4da0-b6e8-a3b89b6f0883",
+          "arguments": "{}"
+        }
+      ],
+      "usage": {
+        "input": 1829,
+        "output": 458,
+        "total": 2287,
+        "cachedInput": 0,
+        "reasoningOutput": 399
+      },
+      "observation": null
+    },
+    {
+      "turn": 2,
+      "modelTurn": 2,
+      "attempt": 1,
+      "requestIds": {
+        "x-request-id": "c6342960-c97e-4e72-8d0b-063fb4d07e4b"
+      },
+      "retryAfter": null,
+      "retry": {
+        "attempt": 1,
+        "status": 200,
+        "retryDelayMs": null,
+        "decision": "not-transient"
+      },
+      "httpStatus": 200,
+      "elapsedMs": 14178.238800000001,
+      "responseId": "resp_6ae1c6f8376a858c9c434b77",
+      "status": "completed",
+      "output": [
+        {
+          "type": "message",
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "Log context verified — now inspecting training AFR error evidence."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "name": "analyze_afr_error",
+          "call_id": "call_8a4f9dd1-d3f3-4dac-bacb-ae426c1abb9e",
+          "arguments": "{}"
+        }
+      ],
+      "usage": {
+        "input": 5731,
+        "output": 299,
+        "total": 6030,
+        "cachedInput": 0,
+        "reasoningOutput": 238
+      },
+      "observation": null
+    },
+    {
+      "turn": 3,
+      "modelTurn": 3,
+      "attempt": 1,
+      "requestIds": {
+        "x-request-id": "2c7443e7-a753-4e0b-bfcf-0acb6976e525"
+      },
+      "retryAfter": null,
+      "retry": {
+        "attempt": 1,
+        "status": 200,
+        "retryDelayMs": null,
+        "decision": "not-transient"
+      },
+      "httpStatus": 200,
+      "elapsedMs": 12020.740600000001,
+      "responseId": "resp_6ae1c70fc4d19baddffd4574",
+      "status": "completed",
+      "output": [
+        {
+          "type": "message",
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "Training evidence shows concentrated low-load coverage — now finalizing the frozen candidate."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "name": "fit_ve_candidate",
+          "call_id": "call_2b9453d8-a021-4b8a-853c-1988158e9aca",
+          "arguments": "{}"
+        }
+      ],
+      "usage": {
+        "input": 13682,
+        "output": 186,
+        "total": 13868,
+        "cachedInput": 0,
+        "reasoningOutput": 123
+      },
+      "observation": null
+    },
+    {
+      "turn": 4,
+      "modelTurn": 4,
+      "attempt": 1,
+      "requestIds": {
+        "x-request-id": "0e7aa38f-484d-43ce-8c1f-794ee031576d"
+      },
+      "retryAfter": null,
+      "retry": {
+        "attempt": 1,
+        "status": 200,
+        "retryDelayMs": null,
+        "decision": "not-transient"
+      },
+      "httpStatus": 200,
+      "elapsedMs": 19104.572799999994,
+      "responseId": "resp_6ae1c7271f50289d9e1c422e",
+      "status": "completed",
+      "output": [
+        {
+          "type": "message",
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "Candidate finalized — now checking paired holdout predictions."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "name": "evaluate_ve_candidate",
+          "call_id": "call_f949f490-ff60-450a-882c-09ccd7ee7355",
+          "arguments": "{\"candidateRef\":\"2621d526-2f89-4e25-973f-e84ce63244bb:candidate\"}"
+        }
+      ],
+      "usage": {
+        "input": 16389,
+        "output": 543,
+        "total": 16932,
+        "cachedInput": 0,
+        "reasoningOutput": 448
+      },
+      "observation": null
+    },
+    {
+      "turn": 5,
+      "modelTurn": 5,
+      "attempt": 1,
+      "requestIds": {
+        "x-request-id": "8212b07d-7ccf-4c59-868e-0da800987ab0"
+      },
+      "retryAfter": null,
+      "retry": {
+        "attempt": 1,
+        "status": 200,
+        "retryDelayMs": null,
+        "decision": "not-transient"
+      },
+      "httpStatus": 200,
+      "elapsedMs": 24927.959999999992,
+      "responseId": "resp_6ae1c7456c262251249e41a4",
+      "status": "completed",
+      "output": [
+        {
+          "type": "message",
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "{\"kind\":\"final\",\"factIds\":[\"2621d526-2f89-4e25-973f-e84ce63244bb:context-d84984ffd1dcc2207a95715233d5e5aabbb4371ba8fbaee24e6e217e74a908cf:context\",\"2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-3-2\",\"2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-4-1\",\"2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-8-2\",\"2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-3-3\",\"2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-8-3\",\"2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-4-2\",\"2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-6-7\",\"2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-3-1\",\"2621d526-2f89-4e25-973f-e84ce63244bb:fit:fit-summary\",\"2621d526-2f89-4e25-973f-e84ce63244bb:evaluation:paired-prediction\"],\"commentary\":[{\"kind\":\"interpretation\",\"text\":\"Training evidence is highly concentrated in RPM 1000-1200 / MAP 45-50 kPa with sparse support elsewhere; frozen fit produced 4 accepted, 1 suppressed, 251 unsupported cells; holdout paired prediction on 3780 rows shows conditional predicted deltas only, not measured improvement and no ECU-write authorization.\",\"evidenceIds\":[\"evidence-2\",\"evidence-3\",\"evidence-4\"]\t},{\"kind\":\"limitation\",\"text\":\"Coverage is narrow: 5 supported of 256 VE cells, large exclusions, one suppressed below-minimum cell, many holdout neighborhoods unassessed or with single-digit rows; statistics use equal weights with correlated samples, AFR delay fixed at zero, fuel assumed proportional to VE, calibration association caller-supplied.\",\"evidenceIds\":[\"evidence-1\",\"evidence-2\",\"evidence-3\",\"evidence-4\"]\t},{\"kind\":\"hypothesis\",\"text\":\"Unverified hypothesis: observed mean/median AFR errors may be consistent with localized fueling offsets interacting with closed-loop, sensor bias, or unmodeled transients, but numerical facts do not prove engine causality and require independent measurement.\",\"evidenceIds\":[\"evidence-2\",\"evidence-3\"]\t}]}"
+            }
+          ]
+        }
+      ],
+      "usage": {
+        "input": 21757,
+        "output": 1991,
+        "total": 23748,
+        "cachedInput": 0,
+        "reasoningOutput": 1365
+      },
+      "observation": null
+    }
+  ],
+  "deterministicValidationChecks": [
+    {
+      "name": "offline validation rejects analyze_afr_error negative control",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "offline validation rejects fit_ve_candidate negative control",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "offline validation rejects evaluate_ve_candidate negative control",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "runner completed a final report",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "model selected successful analyze_afr_error",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "model selected successful fit_ve_candidate",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "model selected successful evaluate_ve_candidate",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "every executed call originates in an actual native provider call",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "selected arguments validated: evidence-1",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "selected arguments validated: evidence-2",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "selected arguments validated: evidence-3",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "selected arguments validated: evidence-4",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "no tool failures",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "same-run provenance: context",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "same-run provenance: analysis",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "same-run provenance: fit",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "same-run provenance: candidate",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "same-run provenance: evaluation",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "all returned full evidence references verified",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "retained analysis evidence",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "retained fit evidence",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "retained candidate evidence",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "retained evaluation evidence",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "fit finalized a valid bounded candidate",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "paired holdout uses canonical rows without prediction failures",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "artifact identities link analysis fit candidate and evaluation",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "evaluation follows finalization with the returned candidate reference",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "server facts match authoritative findings",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "model commentary is separate and evidence linked",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    },
+    {
+      "name": "final report remains advisory",
+      "passed": true,
+      "status": "passed",
+      "reason": null
+    }
+  ],
+  "failedChecks": [],
+  "notRunChecks": [],
+  "verifiedEvidenceReferences": [
+    "2621d526-2f89-4e25-973f-e84ce63244bb:context-d84984ffd1dcc2207a95715233d5e5aabbb4371ba8fbaee24e6e217e74a908cf",
+    "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+    "2621d526-2f89-4e25-973f-e84ce63244bb:fit",
+    "2621d526-2f89-4e25-973f-e84ce63244bb:candidate",
+    "2621d526-2f89-4e25-973f-e84ce63244bb:evaluation"
+  ],
+  "deterministicAnalysis": {
+    "coverage": {
+      "trainingRows": 13950,
+      "holdoutRows": 3780,
+      "supportedCells": 5,
+      "totalCells": 256,
+      "exclusionCounts": {
+        "OUTSIDE_EVALUATION_PARTITIONS": 3669,
+        "NO_EPISODE": 22603,
+        "CLASSIFIER_NOT_ELIGIBLE": 38539,
+        "AFR_OBSERVATION_UNAVAILABLE": 1873,
+        "VE_COORDINATES_UNAVAILABLE": 1873,
+        "PARTITION_SUPPORT_LEAKAGE": 30
+      }
+    },
+    "split": {
+      "status": "ready",
+      "training": {
+        "startRow": 3469,
+        "endRowExclusive": 40314
+      },
+      "holdout": {
+        "startRow": 40514,
+        "endRowExclusive": 56284
+      },
+      "actualGapSec": 13.402999999999793
+    },
+    "episodes": 73,
+    "fitStatus": "candidate",
+    "changedCells": 4,
+    "paired": {
+      "status": "complete",
+      "rowCount": 3780,
+      "failedPredictions": 0,
+      "baseline": {
+        "count": 3780,
+        "mae": 0.199663269699547,
+        "rmse": 0.26292032294233103,
+        "errors": {
+          "count": 3780,
+          "mean": -0.011981258235702643,
+          "median": 0.07049999999999823,
+          "populationStdDev": 0.2626471885765948,
+          "q25": -0.1460000000000008,
+          "q75": 0.1739999999999977,
+          "iqr": 0.3199999999999985,
+          "mad": 0.12450000000000026,
+          "min": -1.0390000000000015,
+          "max": 0.6112724999999966
+        }
+      },
+      "candidate": {
+        "count": 3780,
+        "mae": 0.16058921215757857,
+        "rmse": 0.23380931814724368,
+        "errors": {
+          "count": 3780,
+          "mean": -0.018353218637619125,
+          "median": 0.04099783136569535,
+          "populationStdDev": 0.23308787316829402,
+          "q25": -0.09533438249722614,
+          "q75": 0.12515806537294516,
+          "iqr": 0.2204924478701713,
+          "mad": 0.09551116434067097,
+          "min": -0.9930204252240333,
+          "max": 0.6112724999999966
+        }
+      },
+      "predictedDeltaMae": -0.03907405754196844,
+      "predictedDeltaRmse": -0.029111004795087353
+    },
+    "facts": [
+      {
+        "key": "context",
+        "kind": "context",
+        "statement": "The frozen investigation context contains 56284 parsed telemetry rows. Inspection statistics alone do not establish fueling causes.",
+        "values": {
+          "rowCount": 56284
+        },
+        "id": "2621d526-2f89-4e25-973f-e84ce63244bb:context-d84984ffd1dcc2207a95715233d5e5aabbb4371ba8fbaee24e6e217e74a908cf:context",
+        "evidenceId": "evidence-1",
+        "artifact": {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:context-d84984ffd1dcc2207a95715233d5e5aabbb4371ba8fbaee24e6e217e74a908cf",
+          "kind": "context",
+          "sha256": "dc512d920af5bf74b0747755e2e5b6cd810ce187acf54c3a5ef9183915b6d7b7",
+          "datasetId": null,
+          "candidateId": null
+        }
+      },
+      {
+        "key": "region-3-2",
+        "kind": "afr-error",
+        "statement": "Training VE neighborhood RPM 1000-1200, MAP 45-50 kPa has 11937 eligible observations; measured-minus-target AFR mean 0.01405562536650661, median 0.025000000000000355.",
+        "values": {
+          "rpmIndex": 3,
+          "mapIndex": 2,
+          "count": 11937,
+          "meanError": 0.01405562536650661,
+          "medianError": 0.025000000000000355
+        },
+        "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-3-2",
+        "evidenceId": "evidence-2",
+        "artifact": {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+          "kind": "analysis",
+          "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": null
+        }
+      },
+      {
+        "key": "region-4-1",
+        "kind": "afr-error",
+        "statement": "Training VE neighborhood RPM 1200-1500, MAP 40-45 kPa has 424 eligible observations; measured-minus-target AFR mean -0.6035778301886805, median -0.6105000000000018.",
+        "values": {
+          "rpmIndex": 4,
+          "mapIndex": 1,
+          "count": 424,
+          "meanError": -0.6035778301886805,
+          "medianError": -0.6105000000000018
+        },
+        "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-4-1",
+        "evidenceId": "evidence-2",
+        "artifact": {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+          "kind": "analysis",
+          "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": null
+        }
+      },
+      {
+        "key": "region-8-2",
+        "kind": "afr-error",
+        "statement": "Training VE neighborhood RPM 3000-3500, MAP 45-50 kPa has 265 eligible observations; measured-minus-target AFR mean 0.21114735849056554, median 0.21071000000000062.",
+        "values": {
+          "rpmIndex": 8,
+          "mapIndex": 2,
+          "count": 265,
+          "meanError": 0.21114735849056554,
+          "medianError": 0.21071000000000062
+        },
+        "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-8-2",
+        "evidenceId": "evidence-2",
+        "artifact": {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+          "kind": "analysis",
+          "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": null
+        }
+      },
+      {
+        "key": "region-3-3",
+        "kind": "afr-error",
+        "statement": "Training VE neighborhood RPM 1000-1200, MAP 50-55 kPa has 252 eligible observations; measured-minus-target AFR mean -0.028186428571429382, median 0.08922499999999989.",
+        "values": {
+          "rpmIndex": 3,
+          "mapIndex": 3,
+          "count": 252,
+          "meanError": -0.028186428571429382,
+          "medianError": 0.08922499999999989
+        },
+        "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-3-3",
+        "evidenceId": "evidence-2",
+        "artifact": {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+          "kind": "analysis",
+          "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": null
+        }
+      },
+      {
+        "key": "region-8-3",
+        "kind": "afr-error",
+        "statement": "Training VE neighborhood RPM 3000-3500, MAP 50-55 kPa has 210 eligible observations; measured-minus-target AFR mean 0.2292607142857131, median 0.3299999999999983.",
+        "values": {
+          "rpmIndex": 8,
+          "mapIndex": 3,
+          "count": 210,
+          "meanError": 0.2292607142857131,
+          "medianError": 0.3299999999999983
+        },
+        "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-8-3",
+        "evidenceId": "evidence-2",
+        "artifact": {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+          "kind": "analysis",
+          "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": null
+        }
+      },
+      {
+        "key": "region-4-2",
+        "kind": "afr-error",
+        "statement": "Training VE neighborhood RPM 1200-1500, MAP 45-50 kPa has 122 eligible observations; measured-minus-target AFR mean -0.14722950819672212, median -0.2030000000000003.",
+        "values": {
+          "rpmIndex": 4,
+          "mapIndex": 2,
+          "count": 122,
+          "meanError": -0.14722950819672212,
+          "medianError": -0.2030000000000003
+        },
+        "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-4-2",
+        "evidenceId": "evidence-2",
+        "artifact": {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+          "kind": "analysis",
+          "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": null
+        }
+      },
+      {
+        "key": "region-6-7",
+        "kind": "afr-error",
+        "statement": "Training VE neighborhood RPM 2000-2500, MAP 70-80 kPa has 74 eligible observations; measured-minus-target AFR mean 0.4516216216216202, median 0.4519999999999982.",
+        "values": {
+          "rpmIndex": 6,
+          "mapIndex": 7,
+          "count": 74,
+          "meanError": 0.4516216216216202,
+          "medianError": 0.4519999999999982
+        },
+        "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-6-7",
+        "evidenceId": "evidence-2",
+        "artifact": {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+          "kind": "analysis",
+          "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": null
+        }
+      },
+      {
+        "key": "region-3-1",
+        "kind": "afr-error",
+        "statement": "Training VE neighborhood RPM 1000-1200, MAP 40-45 kPa has 65 eligible observations; measured-minus-target AFR mean -0.2155076923076934, median -0.2840000000000007.",
+        "values": {
+          "rpmIndex": 3,
+          "mapIndex": 1,
+          "count": 65,
+          "meanError": -0.2155076923076934,
+          "medianError": -0.2840000000000007
+        },
+        "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-3-1",
+        "evidenceId": "evidence-2",
+        "artifact": {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+          "kind": "analysis",
+          "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": null
+        }
+      },
+      {
+        "key": "fit-summary",
+        "kind": "fit-summary",
+        "statement": "Training-only fit candidate: 4 accepted, 1 suppressed and 251 unsupported VE cells. These are advisory proposals, not measured improvements or ECU-write authorization.",
+        "values": {
+          "status": "candidate",
+          "supported": 5,
+          "accepted": 4,
+          "suppressed": 1,
+          "unsupported": 251
+        },
+        "id": "2621d526-2f89-4e25-973f-e84ce63244bb:fit:fit-summary",
+        "evidenceId": "evidence-3",
+        "artifact": {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:fit",
+          "kind": "fit",
+          "sha256": "29551ff57cfdeb28ea7d038c4c36af53a32564d33f5b66e39decad8c5121ff05",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+        }
+      },
+      {
+        "key": "paired-prediction",
+        "kind": "paired-prediction",
+        "statement": "Conditional held-out model prediction on 3780 identical baseline/candidate rows: MAE 0.199663269699547 -> 0.16058921215757857, RMSE 0.26292032294233103 -> 0.23380931814724368. This is not measured improvement; worsened metrics remain included.",
+        "values": {
+          "rowCount": 3780,
+          "baselineMae": 0.199663269699547,
+          "candidateMae": 0.16058921215757857,
+          "baselineRmse": 0.26292032294233103,
+          "candidateRmse": 0.23380931814724368
+        },
+        "id": "2621d526-2f89-4e25-973f-e84ce63244bb:evaluation:paired-prediction",
+        "evidenceId": "evidence-4",
+        "artifact": {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:evaluation",
+          "kind": "evaluation",
+          "sha256": "477c7590f5a122b16c86a1c2f59449d4ce5c2e192279b7d2d769ee690a29cb1d",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+        }
+      }
+    ],
+    "settings": {
+      "profile": {
+        "version": "steady-afr-ve-v1",
+        "config": {
+          "minCoolantC": 70,
+          "maxWarmupCorrectionDeviationPct": 1,
+          "maxAbsTpsRatePctPerSec": 5,
+          "maxAbsMapRateKpaPerSec": 10,
+          "maxAbsRpmRatePerSec": 200,
+          "maxGapSec": 0.5,
+          "steadyWindowSec": 1,
+          "possibleFuelCutMaxPulseWidthMs": 0.1,
+          "possibleFuelCutMinRpm": 1200,
+          "possibleFuelCutMaxTpsPct": 2
+        }
+      },
+      "preparation": {
+        "trainingFraction": 0.7,
+        "episodeMergeGapSec": 10,
+        "embargoSec": 10,
+        "maxObservationGapSec": 0.5,
+        "maxCorrectionPct": 3,
+        "minTrainingSamplesPerCell": 50,
+        "minTrainingEpisodesPerCell": 3,
+        "minEpisodeSupportSec": 2,
+        "minRelativeInfluence": 0.1
+      },
+      "fitting": {
+        "maxCorrectionPct": 3,
+        "huberThreshold": 0.02,
+        "ridgePenalty": 0.01,
+        "maxConditionNumber": 1000,
+        "relativeRankTolerance": 0.000001,
+        "minCorrectionPct": 0.5,
+        "maxLooRangePct": 2,
+        "minLooRemainingEpisodes": 2,
+        "maxIterations": 5000,
+        "gradientTolerance": 1e-10
+      },
+      "limits": {
+        "maxLogBytes": 67108864,
+        "maxRows": 60000,
+        "maxChannels": 300,
+        "maxCells": 256,
+        "maxTrainingEpisodes": 64,
+        "maxSupportedCells": 32,
+        "maxArtifactBytes": 134217728,
+        "maxResponseBytes": 32000,
+        "jobTimeoutMs": 120000,
+        "retentionMs": 120000
+      },
+      "workerHeapMb": 1024
+    }
+  },
+  "validatedInvestigation": {
+    "status": "completed",
+    "reason": null,
+    "report": {
+      "advisoryOnly": true,
+      "findings": [
+        {
+          "statement": "The frozen investigation context contains 56284 parsed telemetry rows. Inspection statistics alone do not establish fueling causes.",
+          "evidenceIds": [
+            "evidence-1"
+          ],
+          "verification": "server-numerical"
+        },
+        {
+          "statement": "Training VE neighborhood RPM 1000-1200, MAP 45-50 kPa has 11937 eligible observations; measured-minus-target AFR mean 0.01405562536650661, median 0.025000000000000355.",
+          "evidenceIds": [
+            "evidence-2"
+          ],
+          "verification": "server-numerical"
+        },
+        {
+          "statement": "Training VE neighborhood RPM 1200-1500, MAP 40-45 kPa has 424 eligible observations; measured-minus-target AFR mean -0.6035778301886805, median -0.6105000000000018.",
+          "evidenceIds": [
+            "evidence-2"
+          ],
+          "verification": "server-numerical"
+        },
+        {
+          "statement": "Training VE neighborhood RPM 3000-3500, MAP 45-50 kPa has 265 eligible observations; measured-minus-target AFR mean 0.21114735849056554, median 0.21071000000000062.",
+          "evidenceIds": [
+            "evidence-2"
+          ],
+          "verification": "server-numerical"
+        },
+        {
+          "statement": "Training VE neighborhood RPM 1000-1200, MAP 50-55 kPa has 252 eligible observations; measured-minus-target AFR mean -0.028186428571429382, median 0.08922499999999989.",
+          "evidenceIds": [
+            "evidence-2"
+          ],
+          "verification": "server-numerical"
+        },
+        {
+          "statement": "Training VE neighborhood RPM 3000-3500, MAP 50-55 kPa has 210 eligible observations; measured-minus-target AFR mean 0.2292607142857131, median 0.3299999999999983.",
+          "evidenceIds": [
+            "evidence-2"
+          ],
+          "verification": "server-numerical"
+        },
+        {
+          "statement": "Training VE neighborhood RPM 1200-1500, MAP 45-50 kPa has 122 eligible observations; measured-minus-target AFR mean -0.14722950819672212, median -0.2030000000000003.",
+          "evidenceIds": [
+            "evidence-2"
+          ],
+          "verification": "server-numerical"
+        },
+        {
+          "statement": "Training VE neighborhood RPM 2000-2500, MAP 70-80 kPa has 74 eligible observations; measured-minus-target AFR mean 0.4516216216216202, median 0.4519999999999982.",
+          "evidenceIds": [
+            "evidence-2"
+          ],
+          "verification": "server-numerical"
+        },
+        {
+          "statement": "Training VE neighborhood RPM 1000-1200, MAP 40-45 kPa has 65 eligible observations; measured-minus-target AFR mean -0.2155076923076934, median -0.2840000000000007.",
+          "evidenceIds": [
+            "evidence-2"
+          ],
+          "verification": "server-numerical"
+        },
+        {
+          "statement": "Training-only fit candidate: 4 accepted, 1 suppressed and 251 unsupported VE cells. These are advisory proposals, not measured improvements or ECU-write authorization.",
+          "evidenceIds": [
+            "evidence-3"
+          ],
+          "verification": "server-numerical"
+        },
+        {
+          "statement": "Conditional held-out model prediction on 3780 identical baseline/candidate rows: MAE 0.199663269699547 -> 0.16058921215757857, RMSE 0.26292032294233103 -> 0.23380931814724368. This is not measured improvement; worsened metrics remain included.",
+          "evidenceIds": [
+            "evidence-4"
+          ],
+          "verification": "server-numerical"
+        }
+      ],
+      "commentary": [
+        {
+          "kind": "interpretation",
+          "text": "Training evidence is highly concentrated in RPM 1000-1200 / MAP 45-50 kPa with sparse support elsewhere; frozen fit produced 4 accepted, 1 suppressed, 251 unsupported cells; holdout paired prediction on 3780 rows shows conditional predicted deltas only, not measured improvement and no ECU-write authorization.",
+          "evidenceIds": [
+            "evidence-2",
+            "evidence-3",
+            "evidence-4"
+          ],
+          "verification": "unverified-model-commentary"
+        },
+        {
+          "kind": "limitation",
+          "text": "Coverage is narrow: 5 supported of 256 VE cells, large exclusions, one suppressed below-minimum cell, many holdout neighborhoods unassessed or with single-digit rows; statistics use equal weights with correlated samples, AFR delay fixed at zero, fuel assumed proportional to VE, calibration association caller-supplied.",
+          "evidenceIds": [
+            "evidence-1",
+            "evidence-2",
+            "evidence-3",
+            "evidence-4"
+          ],
+          "verification": "unverified-model-commentary"
+        },
+        {
+          "kind": "hypothesis",
+          "text": "Unverified hypothesis: observed mean/median AFR errors may be consistent with localized fueling offsets interacting with closed-loop, sensor bias, or unmodeled transients, but numerical facts do not prove engine causality and require independent measurement.",
+          "evidenceIds": [
+            "evidence-2",
+            "evidence-3"
+          ],
+          "verification": "unverified-model-commentary"
+        }
+      ],
+      "limitations": [
+        "Numerical statements are server-rendered; model commentary is unverified and does not establish engine causes.",
+        "Predicted AFR and metric changes assume proportional fueling and unchanged other factors. AFR delay compensation is unimplemented at 0 ms; improvements are not measured.",
+        "Unsupported, unidentifiable and unstable cells remain unchanged. Calibration association and active ECU table behavior require caller confirmation.",
+        "Only frozen training data determine fitting. Holdout results do not select parameters, masks, profiles or a winning candidate.",
+        "This advisory report cannot authorize ECU writes or automatic application of calibration changes.",
+        "Full evidence is retained in a private, expiring server run. It becomes unavailable after disposal, timeout or worker failure."
+      ]
+    },
+    "trace": [
+      {
+        "evidenceId": "evidence-1",
+        "tool": "describe_log",
+        "arguments": {},
+        "result": {
+          "ok": true,
+          "data": {
+            "contextId": "august-v1-single-live-smoke",
+            "logName": "2026-08-08_11.19.56.msl",
+            "logEncoding": "provided-string",
+            "rowCount": 56284,
+            "channelCount": 252,
+            "channels": [
+              {
+                "name": "Time",
+                "unit": "s"
+              },
+              {
+                "name": "SecL",
+                "unit": "s"
+              },
+              {
+                "name": "RPM",
+                "unit": "RPM"
+              },
+              {
+                "name": "MAP",
+                "unit": "kPa"
+              },
+              {
+                "name": "Boost psi",
+                "unit": ""
+              },
+              {
+                "name": "TPS",
+                "unit": "%"
+              },
+              {
+                "name": "TPSADC",
+                "unit": "ADC"
+              },
+              {
+                "name": "MAF",
+                "unit": "g/sec"
+              },
+              {
+                "name": "MAFload",
+                "unit": "kPa"
+              },
+              {
+                "name": "MAF volts",
+                "unit": "V"
+              },
+              {
+                "name": "MAF Freq",
+                "unit": ""
+              },
+              {
+                "name": "AFR",
+                "unit": "AFR"
+              },
+              {
+                "name": "MAT",
+                "unit": "°F"
+              },
+              {
+                "name": "CLT",
+                "unit": "°F"
+              },
+              {
+                "name": "Engine",
+                "unit": "bit"
+              },
+              {
+                "name": "Batt V",
+                "unit": "v"
+              },
+              {
+                "name": "EGO cor1",
+                "unit": "%"
+              },
+              {
+                "name": "Fuel: Air cor",
+                "unit": "%"
+              },
+              {
+                "name": "Fuel: Warmup cor",
+                "unit": "%"
+              },
+              {
+                "name": "Fuel: Baro cor",
+                "unit": "%"
+              },
+              {
+                "name": "Fuel: Total cor",
+                "unit": "%"
+              },
+              {
+                "name": "Fuel: Accel enrich",
+                "unit": "%"
+              },
+              {
+                "name": "Fuel: Accel PW",
+                "unit": "ms"
+              },
+              {
+                "name": "VE1",
+                "unit": "%"
+              },
+              {
+                "name": "PW",
+                "unit": "ms"
+              },
+              {
+                "name": "Duty Cycle1",
+                "unit": "%"
+              },
+              {
+                "name": "VE2",
+                "unit": "%"
+              },
+              {
+                "name": "PW2",
+                "unit": "ms"
+              },
+              {
+                "name": "Duty Cycle2",
+                "unit": "%"
+              },
+              {
+                "name": "VE1 raw",
+                "unit": "%"
+              },
+              {
+                "name": "VE2 raw",
+                "unit": "%"
+              },
+              {
+                "name": "VE3 raw",
+                "unit": "%"
+              },
+              {
+                "name": "VE4 raw",
+                "unit": "%"
+              },
+              {
+                "name": "Seq PW1",
+                "unit": "ms"
+              },
+              {
+                "name": "Seq PW2",
+                "unit": "ms"
+              },
+              {
+                "name": "Seq PW3",
+                "unit": "ms"
+              },
+              {
+                "name": "Seq PW4",
+                "unit": "ms"
+              },
+              {
+                "name": "Seq PW5",
+                "unit": "ms"
+              },
+              {
+                "name": "Seq PW6",
+                "unit": "ms"
+              },
+              {
+                "name": "Seq PW7",
+                "unit": "ms"
+              },
+              {
+                "name": "Seq PW8",
+                "unit": "ms"
+              },
+              {
+                "name": "Seq PW9",
+                "unit": "ms"
+              },
+              {
+                "name": "Seq PW10",
+                "unit": "ms"
+              },
+              {
+                "name": "Seq PW11",
+                "unit": "ms"
+              },
+              {
+                "name": "Seq PW12",
+                "unit": "ms"
+              },
+              {
+                "name": "SPK: Spark Advance",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Knock retard",
+                "unit": "deg"
+              },
+              {
+                "name": "Knock in",
+                "unit": "%"
+              },
+              {
+                "name": "SPK: Cold advance",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Traction retard",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: CEL retard",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Fuel cut retard",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: External advance",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Base Spark Advance",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Idle Correction Advance",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: MAT Retard",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Flex Advance",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Spark Table 1",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Spark Table 2",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Spark Table 3",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Spark Table 4",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Revlim Retard",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: ALS Timing",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Launch Timing",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: 3 step Timing",
+                "unit": "deg"
+              },
+              {
+                "name": "SPK: Launch VSS Retard",
+                "unit": "deg"
+              },
+              {
+                "name": "Dwell",
+                "unit": "ms"
+              },
+              {
+                "name": "Barometer",
+                "unit": "kPa"
+              },
+              {
+                "name": "PWM Idle duty",
+                "unit": "%"
+              },
+              {
+                "name": "Closed loop idle target RPM",
+                "unit": "rpm"
+              },
+              {
+                "name": "Closed loop idle RPM error",
+                "unit": "rpm"
+              },
+              {
+                "name": "AFR 1 Target",
+                "unit": "AFR"
+              },
+              {
+                "name": "AFR 2 Target",
+                "unit": "AFR"
+              },
+              {
+                "name": "AFR_1_Error",
+                "unit": ""
+              },
+              {
+                "name": "AFR_2_Error",
+                "unit": ""
+              },
+              {
+                "name": "TPSdot",
+                "unit": "%/s"
+              },
+              {
+                "name": "MAPdot",
+                "unit": "kPa/s"
+              },
+              {
+                "name": "RPMdot",
+                "unit": "rpm/sec"
+              },
+              {
+                "name": "Load",
+                "unit": "kPa"
+              },
+              {
+                "name": "Secondary load",
+                "unit": "%"
+              },
+              {
+                "name": "Ign load",
+                "unit": "%"
+              },
+              {
+                "name": "Secondary ign load",
+                "unit": "%"
+              },
+              {
+                "name": "AFR load",
+                "unit": "kPa"
+              },
+              {
+                "name": "Injector timing pri",
+                "unit": "deg"
+              },
+              {
+                "name": "Injector timing sec",
+                "unit": "deg"
+              },
+              {
+                "name": "EGT1",
+                "unit": "°F"
+              },
+              {
+                "name": "Stock IAT",
+                "unit": ""
+              },
+              {
+                "name": "Fuel Pressure _PSI",
+                "unit": ""
+              },
+              {
+                "name": "Fuel Temp _F",
+                "unit": ""
+              },
+              {
+                "name": "ECU Temperature",
+                "unit": ""
+              },
+              {
+                "name": "canin1_8",
+                "unit": ""
+              },
+              {
+                "name": "canout1_8",
+                "unit": ""
+              },
+              {
+                "name": "canout9_16",
+                "unit": ""
+              },
+              {
+                "name": "Timing err",
+                "unit": "%"
+              },
+              {
+                "name": "Lost sync count",
+                "unit": ""
+              },
+              {
+                "name": "Lost sync reason",
+                "unit": ""
+              },
+              {
+                "name": "Fuel flow cc/min",
+                "unit": "cc/min"
+              },
+              {
+                "name": "VSS1",
+                "unit": "MPH"
+              },
+              {
+                "name": "VSS1 ms 1",
+                "unit": "ms-1"
+              },
+              {
+                "name": "MPG_USA",
+                "unit": ""
+              },
+              {
+                "name": "MPG_UK",
+                "unit": ""
+              },
+              {
+                "name": "SDcard file number",
+                "unit": ""
+              },
+              {
+                "name": "SDcard status",
+                "unit": ""
+              },
+              {
+                "name": "SDcard phase",
+                "unit": ""
+              },
+              {
+                "name": "SDcard error",
+                "unit": ""
+              },
+              {
+                "name": "VSS1dot",
+                "unit": "ms-2"
+              },
+              {
+                "name": "PWM A duty",
+                "unit": "%"
+              },
+              {
+                "name": "PWM B duty",
+                "unit": "%"
+              },
+              {
+                "name": "Status1",
+                "unit": ""
+              },
+              {
+                "name": "Status2",
+                "unit": ""
+              },
+              {
+                "name": "Status3",
+                "unit": ""
+              },
+              {
+                "name": "Status4",
+                "unit": ""
+              },
+              {
+                "name": "Status5",
+                "unit": ""
+              },
+              {
+                "name": "Status5s",
+                "unit": ""
+              },
+              {
+                "name": "Status6",
+                "unit": ""
+              },
+              {
+                "name": "Status7",
+                "unit": ""
+              },
+              {
+                "name": "Status8",
+                "unit": ""
+              },
+              {
+                "name": "Status9",
+                "unit": ""
+              },
+              {
+                "name": "Status10",
+                "unit": ""
+              },
+              {
+                "name": "TPS accel",
+                "unit": "%"
+              },
+              {
+                "name": "MAP accel",
+                "unit": "%"
+              },
+              {
+                "name": "Total accel",
+                "unit": "%"
+              },
+              {
+                "name": "Knock cyl# 1",
+                "unit": "%"
+              },
+              {
+                "name": "Knock cyl# 2",
+                "unit": "%"
+              },
+              {
+                "name": "porta",
+                "unit": "bit"
+              },
+              {
+                "name": "portb",
+                "unit": "bit"
+              },
+              {
+                "name": "porteh",
+                "unit": "bit"
+              },
+              {
+                "name": "portk",
+                "unit": "bit"
+              },
+              {
+                "name": "portmj",
+                "unit": "bit"
+              },
+              {
+                "name": "portp",
+                "unit": "bit"
+              },
+              {
+                "name": "portt",
+                "unit": "bit"
+              },
+              {
+                "name": "portm",
+                "unit": "bit"
+              },
+              {
+                "name": "ports",
+                "unit": "bit"
+              },
+              {
+                "name": "CEL status",
+                "unit": "bit"
+              },
+              {
+                "name": "CEL status2",
+                "unit": "bit"
+              },
+              {
+                "name": "CEL error code",
+                "unit": "bit"
+              },
+              {
+                "name": "Fuel Temp1",
+                "unit": "°F"
+              },
+              {
+                "name": "Fuel Temp2",
+                "unit": "°C"
+              },
+              {
+                "name": "Fuel Pressure1_kPa",
+                "unit": "kPa"
+              },
+              {
+                "name": "Fuel Pressure1_psi",
+                "unit": "psi"
+              },
+              {
+                "name": "Fuel Pressure1_bar",
+                "unit": "bar"
+              },
+              {
+                "name": "Fuel Pressure2_kPa",
+                "unit": "kPa"
+              },
+              {
+                "name": "Fuel Pressure2_psi",
+                "unit": "psi"
+              },
+              {
+                "name": "Fuel Pressure2_bar",
+                "unit": "bar"
+              },
+              {
+                "name": "Fan 1 control duty",
+                "unit": "%"
+              },
+              {
+                "name": "Fuel temperature cor",
+                "unit": "%"
+              },
+              {
+                "name": "Fuel pressure cor",
+                "unit": "%"
+              },
+              {
+                "name": "Engine in cruise state",
+                "unit": ""
+              },
+              {
+                "name": "Engine accelerating slowly",
+                "unit": ""
+              },
+              {
+                "name": "Engine decelerating slowly",
+                "unit": ""
+              },
+              {
+                "name": "Engine in overrun",
+                "unit": ""
+              },
+              {
+                "name": "Engine idling",
+                "unit": ""
+              },
+              {
+                "name": "Engine WOT",
+                "unit": ""
+              },
+              {
+                "name": "TC slip * time",
+                "unit": ""
+              },
+              {
+                "name": "Loop",
+                "unit": ""
+              },
+              {
+                "name": "CAN error bits",
+                "unit": ""
+              },
+              {
+                "name": "CAN error count",
+                "unit": ""
+              },
+              {
+                "name": "Mainloop time",
+                "unit": "us"
+              },
+              {
+                "name": "status: RPM Sync",
+                "unit": ""
+              },
+              {
+                "name": "status: Fuel tableswitch",
+                "unit": ""
+              },
+              {
+                "name": "status: Spark tableswitch",
+                "unit": ""
+              },
+              {
+                "name": "status: Full RPM Sync",
+                "unit": ""
+              },
+              {
+                "name": "status: Spark Cut",
+                "unit": ""
+              },
+              {
+                "name": "status: CL Idle",
+                "unit": ""
+              },
+              {
+                "name": "status: Fuel Cut",
+                "unit": ""
+              },
+              {
+                "name": "status: Test Mode",
+                "unit": ""
+              },
+              {
+                "name": "status: Soft Limit",
+                "unit": ""
+              },
+              {
+                "name": "status: EGT Warn",
+                "unit": ""
+              },
+              {
+                "name": "status: Fan",
+                "unit": ""
+              },
+              {
+                "name": "status: MAP Sample Error",
+                "unit": ""
+              },
+              {
+                "name": "status: Water Inj Low",
+                "unit": ""
+              },
+              {
+                "name": "status: VSS Launch L/O",
+                "unit": ""
+              },
+              {
+                "name": "status: VSS Launch",
+                "unit": ""
+              },
+              {
+                "name": "status: DBW Fault",
+                "unit": ""
+              },
+              {
+                "name": "status: Oil Shutdown",
+                "unit": ""
+              },
+              {
+                "name": "status: Overrun Fuel Cut",
+                "unit": ""
+              },
+              {
+                "name": "status: Safety Shutdown",
+                "unit": ""
+              },
+              {
+                "name": "status: CAN RX",
+                "unit": ""
+              },
+              {
+                "name": "status: CAN TX",
+                "unit": ""
+              },
+              {
+                "name": "status: L.T Trim",
+                "unit": ""
+              },
+              {
+                "name": "status: SD Warn",
+                "unit": ""
+              },
+              {
+                "name": "status: SD Card",
+                "unit": ""
+              },
+              {
+                "name": "status: SD Ready",
+                "unit": ""
+              },
+              {
+                "name": "status: SD Log",
+                "unit": ""
+              },
+              {
+                "name": "status: SD Error",
+                "unit": ""
+              },
+              {
+                "name": "status: Tune Error",
+                "unit": ""
+              },
+              {
+                "name": "port:A0 Injector A",
+                "unit": ""
+              },
+              {
+                "name": "port:A1 Injector B",
+                "unit": ""
+              },
+              {
+                "name": "port:A2 Injector C",
+                "unit": ""
+              },
+              {
+                "name": "port:A3 Injector D",
+                "unit": ""
+              },
+              {
+                "name": "port:A4 Injector E",
+                "unit": ""
+              },
+              {
+                "name": "port:A5 Injector F",
+                "unit": ""
+              },
+              {
+                "name": "port:A6 Injector G",
+                "unit": ""
+              },
+              {
+                "name": "port:A7 Injector H",
+                "unit": ""
+              },
+              {
+                "name": "port:B0 Spark A",
+                "unit": ""
+              },
+              {
+                "name": "port:B1 Spark B",
+                "unit": ""
+              },
+              {
+                "name": "port:B2 Spark C",
+                "unit": ""
+              },
+              {
+                "name": "port:B3 Spark D",
+                "unit": ""
+              },
+              {
+                "name": "port:B4 Spark E",
+                "unit": ""
+              },
+              {
+                "name": "port:B5 Spark F",
+                "unit": ""
+              }
+            ],
+            "omittedChannels": 52,
+            "mappings": [
+              {
+                "slot": "rpm",
+                "quantity": "engineSpeed",
+                "channelName": "RPM",
+                "sourceUnit": "RPM",
+                "unit": "rpm",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "load",
+                "quantity": "manifoldPressure",
+                "channelName": "MAP",
+                "sourceUnit": "kPa",
+                "unit": "kPa",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "afr",
+                "quantity": "airFuelRatio",
+                "channelName": "AFR",
+                "sourceUnit": "AFR",
+                "unit": "AFR",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "lambda",
+                "quantity": "lambda",
+                "status": "unavailable",
+                "reason": "No mapped channel exists in this session."
+              },
+              {
+                "slot": "tps",
+                "quantity": "throttlePosition",
+                "channelName": "TPS",
+                "sourceUnit": "%",
+                "unit": "%",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "tpsDot",
+                "quantity": "throttleRate",
+                "channelName": "TPSdot",
+                "sourceUnit": "%/s",
+                "unit": "%/s",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "mapDot",
+                "quantity": "pressureRate",
+                "channelName": "MAPdot",
+                "sourceUnit": "kPa/s",
+                "unit": "kPa/s",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "clt",
+                "quantity": "temperature",
+                "channelName": "CLT",
+                "sourceUnit": "°F",
+                "unit": "°C",
+                "scale": 0.5555555555555556,
+                "offset": -17.77777777777778,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "egt1",
+                "quantity": "temperature",
+                "channelName": "EGT1",
+                "sourceUnit": "°F",
+                "unit": "°C",
+                "scale": 0.5555555555555556,
+                "offset": -17.77777777777778,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "egt2",
+                "quantity": "temperature",
+                "status": "unavailable",
+                "reason": "No mapped channel exists in this session."
+              },
+              {
+                "slot": "pw",
+                "quantity": "pulseWidth",
+                "channelName": "PW",
+                "sourceUnit": "ms",
+                "unit": "ms",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "timing",
+                "quantity": "ignitionAdvance",
+                "channelName": "SPK: Spark Advance",
+                "sourceUnit": "deg",
+                "unit": "deg",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "mat",
+                "quantity": "temperature",
+                "channelName": "MAT",
+                "sourceUnit": "°F",
+                "unit": "°C",
+                "scale": 0.5555555555555556,
+                "offset": -17.77777777777778,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "duty1",
+                "quantity": "percentage",
+                "channelName": "Duty Cycle1",
+                "sourceUnit": "%",
+                "unit": "%",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "duty2",
+                "quantity": "percentage",
+                "channelName": "Duty Cycle2",
+                "sourceUnit": "%",
+                "unit": "%",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "fan1duty",
+                "quantity": "percentage",
+                "channelName": "Fan 1 control duty",
+                "sourceUnit": "%",
+                "unit": "%",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              },
+              {
+                "slot": "fan2duty",
+                "quantity": "percentage",
+                "status": "unavailable",
+                "reason": "No mapped channel exists in this session."
+              },
+              {
+                "slot": "fuelwarmcor",
+                "quantity": "percentage",
+                "channelName": "Fuel: Warmup cor",
+                "sourceUnit": "%",
+                "unit": "%",
+                "scale": 1,
+                "offset": 0,
+                "basis": "declared-unit",
+                "status": "resolved"
+              }
+            ],
+            "time": {
+              "startSec": 0,
+              "endSec": 3752.871,
+              "reason": null
+            },
+            "calibration": [
+              {
+                "kind": "ve",
+                "calibrationId": "block2-calibration",
+                "xAxisName": "rpm",
+                "yAxisName": "fuelload",
+                "rows": 16,
+                "columns": 16,
+                "xBreakpoints": [
+                  700,
+                  800,
+                  900,
+                  1000,
+                  1200,
+                  1500,
+                  2000,
+                  2500,
+                  3000,
+                  3500,
+                  4000,
+                  5000,
+                  6000,
+                  7000,
+                  8000,
+                  9000
+                ],
+                "yBreakpoints": [
+                  30,
+                  40,
+                  45,
+                  50,
+                  55,
+                  60,
+                  65,
+                  70,
+                  80,
+                  90,
+                  100,
+                  125,
+                  150,
+                  175,
+                  200,
+                  260
+                ],
+                "author": "EFI Analytics - philip.tobin@yahoo.com",
+                "writeDate": "Sat Aug 08 23:58:20 PDT 2026"
+              },
+              {
+                "kind": "afr",
+                "calibrationId": "block2-calibration",
+                "xAxisName": "rpm",
+                "yAxisName": "afrload1",
+                "rows": 12,
+                "columns": 12,
+                "xBreakpoints": [
+                  500,
+                  900,
+                  1500,
+                  2200,
+                  3000,
+                  3800,
+                  4600,
+                  5400,
+                  6200,
+                  6800,
+                  7400,
+                  8000
+                ],
+                "yBreakpoints": [
+                  30,
+                  40,
+                  50,
+                  55,
+                  60,
+                  70,
+                  80,
+                  90,
+                  100,
+                  125,
+                  150,
+                  200
+                ],
+                "author": "EFI Analytics - philip.tobin@yahoo.com",
+                "writeDate": "Thu Jul 30 19:41:05 PDT 2026"
+              }
+            ],
+            "limitations": [
+              "Calibration association is caller-supplied."
+            ],
+            "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+            "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+            "fullEvidenceRef": {
+              "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+              "contextId": "august-v1-single-live-smoke",
+              "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+              "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:context-d84984ffd1dcc2207a95715233d5e5aabbb4371ba8fbaee24e6e217e74a908cf",
+              "kind": "context",
+              "sha256": "dc512d920af5bf74b0747755e2e5b6cd810ce187acf54c3a5ef9183915b6d7b7",
+              "datasetId": null,
+              "candidateId": null
+            },
+            "facts": [
+              {
+                "key": "context",
+                "kind": "context",
+                "statement": "The frozen investigation context contains 56284 parsed telemetry rows. Inspection statistics alone do not establish fueling causes.",
+                "values": {
+                  "rowCount": 56284
+                },
+                "id": "2621d526-2f89-4e25-973f-e84ce63244bb:context-d84984ffd1dcc2207a95715233d5e5aabbb4371ba8fbaee24e6e217e74a908cf:context",
+                "evidenceId": "evidence-1",
+                "artifact": {
+                  "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+                  "contextId": "august-v1-single-live-smoke",
+                  "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+                  "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:context-d84984ffd1dcc2207a95715233d5e5aabbb4371ba8fbaee24e6e217e74a908cf",
+                  "kind": "context",
+                  "sha256": "dc512d920af5bf74b0747755e2e5b6cd810ce187acf54c3a5ef9183915b6d7b7",
+                  "datasetId": null,
+                  "candidateId": null
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "evidenceId": "evidence-2",
+        "tool": "analyze_afr_error",
+        "arguments": {},
+        "result": {
+          "ok": true,
+          "data": {
+            "status": "available",
+            "analysisRef": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+            "partition": "training",
+            "classifier": {
+              "version": "steady-afr-ve-v1",
+              "config": {
+                "minCoolantC": 70,
+                "maxWarmupCorrectionDeviationPct": 1,
+                "maxAbsTpsRatePctPerSec": 5,
+                "maxAbsMapRateKpaPerSec": 10,
+                "maxAbsRpmRatePerSec": 200,
+                "maxGapSec": 0.5,
+                "steadyWindowSec": 1,
+                "possibleFuelCutMaxPulseWidthMs": 0.1,
+                "possibleFuelCutMinRpm": 1200,
+                "possibleFuelCutMaxTpsPct": 2
+              },
+              "baseConfig": null
+            },
+            "preparationConfig": {
+              "trainingFraction": 0.7,
+              "episodeMergeGapSec": 10,
+              "embargoSec": 10,
+              "maxObservationGapSec": 0.5,
+              "maxCorrectionPct": 3,
+              "minTrainingSamplesPerCell": 50,
+              "minTrainingEpisodesPerCell": 3,
+              "minEpisodeSupportSec": 2,
+              "minRelativeInfluence": 0.1
+            },
+            "partitionCounts": {
+              "rawTrainingRows": 36845,
+              "classifierEligibleRows": 13961,
+              "readyTrainingRows": 13950
+            },
+            "coverage": {
+              "trainingRows": 13950,
+              "holdoutRows": 3780,
+              "supportedCells": 5,
+              "totalCells": 256,
+              "exclusionCounts": {
+                "OUTSIDE_EVALUATION_PARTITIONS": 3669,
+                "NO_EPISODE": 22603,
+                "CLASSIFIER_NOT_ELIGIBLE": 38539,
+                "AFR_OBSERVATION_UNAVAILABLE": 1873,
+                "VE_COORDINATES_UNAVAILABLE": 1873,
+                "PARTITION_SUPPORT_LEAKAGE": 30
+              }
+            },
+            "split": {
+              "status": "ready",
+              "training": {
+                "startRow": 3469,
+                "endRowExclusive": 40314
+              },
+              "holdout": {
+                "startRow": 40514,
+                "endRowExclusive": 56284
+              },
+              "actualGapSec": 13.402999999999793
+            },
+            "regions": [
+              {
+                "rpmIndex": 3,
+                "mapIndex": 2,
+                "rpmBounds": [
+                  1000,
+                  1200
+                ],
+                "mapBoundsKpa": [
+                  45,
+                  50
+                ],
+                "summary": {
+                  "counts": {
+                    "considered": 11937,
+                    "eligible": 11937,
+                    "excluded": 0,
+                    "validError": 11937,
+                    "eligibleValidError": 11937,
+                    "grouped": 11937,
+                    "targetStatusCounts": {
+                      "available": 11937
+                    },
+                    "veLocationStatusCounts": {
+                      "ok": 11937
+                    },
+                    "errorStatusCounts": {
+                      "available": 11937,
+                      "invalid-measured-afr": 0,
+                      "target-unavailable": 0,
+                      "nonfinite-error": 0
+                    }
+                  },
+                  "coverage": {
+                    "eligibleFractionOfConsidered": 1,
+                    "validErrorFractionOfEligible": 1,
+                    "groupedFractionOfEligible": 1
+                  },
+                  "error": {
+                    "count": 11937,
+                    "mean": 0.01405562536650661,
+                    "median": 0.025000000000000355,
+                    "populationStdDev": 0.1572350494465622,
+                    "q25": -0.08399999999999963,
+                    "q75": 0.1349999999999998,
+                    "iqr": 0.21899999999999942,
+                    "mad": 0.10900000000000176,
+                    "min": -0.7460000000000022,
+                    "max": 0.6449999999999996
+                  },
+                  "supportingRows": {
+                    "minimumErrorRow": 23759,
+                    "maximumErrorRow": 11198,
+                    "nearestMedianRow": 3696
+                  }
+                }
+              },
+              {
+                "rpmIndex": 4,
+                "mapIndex": 1,
+                "rpmBounds": [
+                  1200,
+                  1500
+                ],
+                "mapBoundsKpa": [
+                  40,
+                  45
+                ],
+                "summary": {
+                  "counts": {
+                    "considered": 424,
+                    "eligible": 424,
+                    "excluded": 0,
+                    "validError": 424,
+                    "eligibleValidError": 424,
+                    "grouped": 424,
+                    "targetStatusCounts": {
+                      "available": 424
+                    },
+                    "veLocationStatusCounts": {
+                      "ok": 424
+                    },
+                    "errorStatusCounts": {
+                      "available": 424,
+                      "invalid-measured-afr": 0,
+                      "target-unavailable": 0,
+                      "nonfinite-error": 0
+                    }
+                  },
+                  "coverage": {
+                    "eligibleFractionOfConsidered": 1,
+                    "validErrorFractionOfEligible": 1,
+                    "groupedFractionOfEligible": 1
+                  },
+                  "error": {
+                    "count": 424,
+                    "mean": -0.6035778301886805,
+                    "median": -0.6105000000000018,
+                    "populationStdDev": 0.2682123886995073,
+                    "q25": -0.7655000000000003,
+                    "q75": -0.41700000000000115,
+                    "iqr": 0.34849999999999914,
+                    "mad": 0.18550000000000022,
+                    "min": -1.4410000000000025,
+                    "max": 0.1819999999999986
+                  },
+                  "supportingRows": {
+                    "minimumErrorRow": 38046,
+                    "maximumErrorRow": 26413,
+                    "nearestMedianRow": 20517
+                  }
+                }
+              },
+              {
+                "rpmIndex": 8,
+                "mapIndex": 2,
+                "rpmBounds": [
+                  3000,
+                  3500
+                ],
+                "mapBoundsKpa": [
+                  45,
+                  50
+                ],
+                "summary": {
+                  "counts": {
+                    "considered": 265,
+                    "eligible": 265,
+                    "excluded": 0,
+                    "validError": 265,
+                    "eligibleValidError": 265,
+                    "grouped": 265,
+                    "targetStatusCounts": {
+                      "available": 265
+                    },
+                    "veLocationStatusCounts": {
+                      "ok": 265
+                    },
+                    "errorStatusCounts": {
+                      "available": 265,
+                      "invalid-measured-afr": 0,
+                      "target-unavailable": 0,
+                      "nonfinite-error": 0
+                    }
+                  },
+                  "coverage": {
+                    "eligibleFractionOfConsidered": 1,
+                    "validErrorFractionOfEligible": 1,
+                    "groupedFractionOfEligible": 1
+                  },
+                  "error": {
+                    "count": 265,
+                    "mean": 0.21114735849056554,
+                    "median": 0.21071000000000062,
+                    "populationStdDev": 0.04525224112769463,
+                    "q25": 0.20626249999999757,
+                    "q75": 0.2210599999999996,
+                    "iqr": 0.014797500000002017,
+                    "mad": 0.008384999999996968,
+                    "min": 0.1368899999999993,
+                    "max": 0.3414049999999982
+                  },
+                  "supportingRows": {
+                    "minimumErrorRow": 25382,
+                    "maximumErrorRow": 8008,
+                    "nearestMedianRow": 27674
+                  }
+                }
+              },
+              {
+                "rpmIndex": 3,
+                "mapIndex": 3,
+                "rpmBounds": [
+                  1000,
+                  1200
+                ],
+                "mapBoundsKpa": [
+                  50,
+                  55
+                ],
+                "summary": {
+                  "counts": {
+                    "considered": 252,
+                    "eligible": 252,
+                    "excluded": 0,
+                    "validError": 252,
+                    "eligibleValidError": 252,
+                    "grouped": 252,
+                    "targetStatusCounts": {
+                      "available": 252
+                    },
+                    "veLocationStatusCounts": {
+                      "ok": 252
+                    },
+                    "errorStatusCounts": {
+                      "available": 252,
+                      "invalid-measured-afr": 0,
+                      "target-unavailable": 0,
+                      "nonfinite-error": 0
+                    }
+                  },
+                  "coverage": {
+                    "eligibleFractionOfConsidered": 1,
+                    "validErrorFractionOfEligible": 1,
+                    "groupedFractionOfEligible": 1
+                  },
+                  "error": {
+                    "count": 252,
+                    "mean": -0.028186428571429382,
+                    "median": 0.08922499999999989,
+                    "populationStdDev": 0.33317690858416293,
+                    "q25": -0.18446833333333634,
+                    "q75": 0.23422666666666503,
+                    "iqr": 0.41869500000000137,
+                    "mad": 0.163314999999999,
+                    "min": -0.6976000000000031,
+                    "max": 0.5203333333333351
+                  },
+                  "supportingRows": {
+                    "minimumErrorRow": 24067,
+                    "maximumErrorRow": 17572,
+                    "nearestMedianRow": 8724
+                  }
+                }
+              },
+              {
+                "rpmIndex": 8,
+                "mapIndex": 3,
+                "rpmBounds": [
+                  3000,
+                  3500
+                ],
+                "mapBoundsKpa": [
+                  50,
+                  55
+                ],
+                "summary": {
+                  "counts": {
+                    "considered": 210,
+                    "eligible": 210,
+                    "excluded": 0,
+                    "validError": 210,
+                    "eligibleValidError": 210,
+                    "grouped": 210,
+                    "targetStatusCounts": {
+                      "available": 210
+                    },
+                    "veLocationStatusCounts": {
+                      "ok": 210
+                    },
+                    "errorStatusCounts": {
+                      "available": 210,
+                      "invalid-measured-afr": 0,
+                      "target-unavailable": 0,
+                      "nonfinite-error": 0
+                    }
+                  },
+                  "coverage": {
+                    "eligibleFractionOfConsidered": 1,
+                    "validErrorFractionOfEligible": 1,
+                    "groupedFractionOfEligible": 1
+                  },
+                  "error": {
+                    "count": 210,
+                    "mean": 0.2292607142857131,
+                    "median": 0.3299999999999983,
+                    "populationStdDev": 0.23599489509352525,
+                    "q25": 0.15818750000000126,
+                    "q75": 0.4062187499999981,
+                    "iqr": 0.24803124999999682,
+                    "mad": 0.08124999999999889,
+                    "min": -0.5490000000000013,
+                    "max": 0.431499999999998
+                  },
+                  "supportingRows": {
+                    "minimumErrorRow": 24342,
+                    "maximumErrorRow": 7965,
+                    "nearestMedianRow": 27826
+                  }
+                }
+              },
+              {
+                "rpmIndex": 4,
+                "mapIndex": 2,
+                "rpmBounds": [
+                  1200,
+                  1500
+                ],
+                "mapBoundsKpa": [
+                  45,
+                  50
+                ],
+                "summary": {
+                  "counts": {
+                    "considered": 122,
+                    "eligible": 122,
+                    "excluded": 0,
+                    "validError": 122,
+                    "eligibleValidError": 122,
+                    "grouped": 122,
+                    "targetStatusCounts": {
+                      "available": 122
+                    },
+                    "veLocationStatusCounts": {
+                      "ok": 122
+                    },
+                    "errorStatusCounts": {
+                      "available": 122,
+                      "invalid-measured-afr": 0,
+                      "target-unavailable": 0,
+                      "nonfinite-error": 0
+                    }
+                  },
+                  "coverage": {
+                    "eligibleFractionOfConsidered": 1,
+                    "validErrorFractionOfEligible": 1,
+                    "groupedFractionOfEligible": 1
+                  },
+                  "error": {
+                    "count": 122,
+                    "mean": -0.14722950819672212,
+                    "median": -0.2030000000000003,
+                    "populationStdDev": 0.22709472230714267,
+                    "q25": -0.3057500000000011,
+                    "q75": -0.09999999999999964,
+                    "iqr": 0.20575000000000143,
+                    "mad": 0.10300000000000065,
+                    "min": -0.6250000000000018,
+                    "max": 0.488999999999999
+                  },
+                  "supportingRows": {
+                    "minimumErrorRow": 35704,
+                    "maximumErrorRow": 17546,
+                    "nearestMedianRow": 16964
+                  }
+                }
+              },
+              {
+                "rpmIndex": 6,
+                "mapIndex": 7,
+                "rpmBounds": [
+                  2000,
+                  2500
+                ],
+                "mapBoundsKpa": [
+                  70,
+                  80
+                ],
+                "summary": {
+                  "counts": {
+                    "considered": 74,
+                    "eligible": 74,
+                    "excluded": 0,
+                    "validError": 74,
+                    "eligibleValidError": 74,
+                    "grouped": 74,
+                    "targetStatusCounts": {
+                      "available": 74
+                    },
+                    "veLocationStatusCounts": {
+                      "ok": 74
+                    },
+                    "errorStatusCounts": {
+                      "available": 74,
+                      "invalid-measured-afr": 0,
+                      "target-unavailable": 0,
+                      "nonfinite-error": 0
+                    }
+                  },
+                  "coverage": {
+                    "eligibleFractionOfConsidered": 1,
+                    "validErrorFractionOfEligible": 1,
+                    "groupedFractionOfEligible": 1
+                  },
+                  "error": {
+                    "count": 74,
+                    "mean": 0.4516216216216202,
+                    "median": 0.4519999999999982,
+                    "populationStdDev": 0.03541976189227505,
+                    "q25": 0.4400000000000013,
+                    "q75": 0.4879999999999973,
+                    "iqr": 0.047999999999996046,
+                    "mad": 0.03200000000000005,
+                    "min": 0.3200000000000003,
+                    "max": 0.49599999999999866
+                  },
+                  "supportingRows": {
+                    "minimumErrorRow": 6428,
+                    "maximumErrorRow": 6401,
+                    "nearestMedianRow": 6721
+                  }
+                }
+              },
+              {
+                "rpmIndex": 3,
+                "mapIndex": 1,
+                "rpmBounds": [
+                  1000,
+                  1200
+                ],
+                "mapBoundsKpa": [
+                  40,
+                  45
+                ],
+                "summary": {
+                  "counts": {
+                    "considered": 65,
+                    "eligible": 65,
+                    "excluded": 0,
+                    "validError": 65,
+                    "eligibleValidError": 65,
+                    "grouped": 65,
+                    "targetStatusCounts": {
+                      "available": 65
+                    },
+                    "veLocationStatusCounts": {
+                      "ok": 65
+                    },
+                    "errorStatusCounts": {
+                      "available": 65,
+                      "invalid-measured-afr": 0,
+                      "target-unavailable": 0,
+                      "nonfinite-error": 0
+                    }
+                  },
+                  "coverage": {
+                    "eligibleFractionOfConsidered": 1,
+                    "validErrorFractionOfEligible": 1,
+                    "groupedFractionOfEligible": 1
+                  },
+                  "error": {
+                    "count": 65,
+                    "mean": -0.2155076923076934,
+                    "median": -0.2840000000000007,
+                    "populationStdDev": 0.20510238516986312,
+                    "q25": -0.38000000000000256,
+                    "q75": 0.0009999999999994458,
+                    "iqr": 0.381000000000002,
+                    "mad": 0.10200000000000031,
+                    "min": -0.5950000000000024,
+                    "max": 0.16299999999999848
+                  },
+                  "supportingRows": {
+                    "minimumErrorRow": 21249,
+                    "maximumErrorRow": 4699,
+                    "nearestMedianRow": 25569
+                  }
+                }
+              }
+            ],
+            "omittedPopulatedRegions": 30,
+            "supportingRows": [
+              {
+                "rowIndex": 23759,
+                "episodeId": 29,
+                "partition": "training",
+                "status": "ready",
+                "reasons": [],
+                "afr": {
+                  "rowIndex": 23759,
+                  "timeSec": 1584.118,
+                  "rpm": 1146,
+                  "mapKpa": 49.1,
+                  "measuredAfr": 12.7,
+                  "eligibilityStatus": "eligible",
+                  "eligibilityReasonCodes": [],
+                  "target": {
+                    "rpm": 1146,
+                    "mapKpa": 49.1,
+                    "status": "ok",
+                    "neighborhood": {
+                      "rpmIndex": 1,
+                      "mapIndex": 1,
+                      "rpmBounds": [
+                        900,
+                        1500
+                      ],
+                      "mapBoundsKpa": [
+                        40,
+                        50
+                      ],
+                      "rpmFraction": 0.41,
+                      "mapFraction": 0.9100000000000001
+                    },
+                    "value": 13.446000000000002,
+                    "corners": [
+                      {
+                        "rpmIndex": 1,
+                        "mapIndex": 1,
+                        "weight": 0.053099999999999925,
+                        "value": 13.200000000000001
+                      },
+                      {
+                        "rpmIndex": 2,
+                        "mapIndex": 1,
+                        "weight": 0.03689999999999994,
+                        "value": 13.8
+                      },
+                      {
+                        "rpmIndex": 1,
+                        "mapIndex": 2,
+                        "weight": 0.5369000000000002,
+                        "value": 13.200000000000001
+                      },
+                      {
+                        "rpmIndex": 2,
+                        "mapIndex": 2,
+                        "weight": 0.37310000000000004,
+                        "value": 13.8
+                      }
+                    ],
+                    "valueStatus": "available"
+                  },
+                  "veLocation": {
+                    "rpm": 1146,
+                    "mapKpa": 49.1,
+                    "status": "ok",
+                    "neighborhood": {
+                      "rpmIndex": 3,
+                      "mapIndex": 2,
+                      "rpmBounds": [
+                        1000,
+                        1200
+                      ],
+                      "mapBoundsKpa": [
+                        45,
+                        50
+                      ],
+                      "rpmFraction": 0.73,
+                      "mapFraction": 0.8200000000000003
+                    }
+                  },
+                  "errorStatus": "available",
+                  "errorAfr": -0.7460000000000022,
+                  "contributesToAggregate": true,
+                  "delayMs": 0
+                },
+                "ve": {
+                  "location": {
+                    "rpm": 1146,
+                    "mapKpa": 49.1,
+                    "status": "ok",
+                    "neighborhood": {
+                      "rpmIndex": 3,
+                      "mapIndex": 2,
+                      "rpmBounds": [
+                        1000,
+                        1200
+                      ],
+                      "mapBoundsKpa": [
+                        45,
+                        50
+                      ],
+                      "rpmFraction": 0.73,
+                      "mapFraction": 0.8200000000000003
+                    }
+                  },
+                  "status": "available",
+                  "value": 39.09172,
+                  "corners": [
+                    {
+                      "rpmIndex": 3,
+                      "mapIndex": 2,
+                      "bilinearWeight": 0.04859999999999993,
+                      "originalVe": 38.900000000000006,
+                      "relativeInfluence": 0.04836164793976825
+                    },
+                    {
+                      "rpmIndex": 4,
+                      "mapIndex": 2,
+                      "bilinearWeight": 0.1313999999999998,
+                      "originalVe": 38.1,
+                      "relativeInfluence": 0.12806650615526746
+                    },
+                    {
+                      "rpmIndex": 3,
+                      "mapIndex": 3,
+                      "bilinearWeight": 0.2214000000000001,
+                      "originalVe": 39.7,
+                      "relativeInfluence": 0.2248450567025448
+                    },
+                    {
+                      "rpmIndex": 4,
+                      "mapIndex": 3,
+                      "bilinearWeight": 0.5986000000000002,
+                      "originalVe": 39.1,
+                      "relativeInfluence": 0.5987267892024195
+                    }
+                  ]
+                },
+                "supportRows": {
+                  "startRow": 23744,
+                  "endRow": 23759
+                }
+              },
+              {
+                "rowIndex": 11198,
+                "episodeId": 8,
+                "partition": "training",
+                "status": "ready",
+                "reasons": [],
+                "afr": {
+                  "rowIndex": 11198,
+                  "timeSec": 746.573,
+                  "rpm": 1155,
+                  "mapKpa": 47.5,
+                  "measuredAfr": 14.1,
+                  "eligibilityStatus": "eligible",
+                  "eligibilityReasonCodes": [],
+                  "target": {
+                    "rpm": 1155,
+                    "mapKpa": 47.5,
+                    "status": "ok",
+                    "neighborhood": {
+                      "rpmIndex": 1,
+                      "mapIndex": 1,
+                      "rpmBounds": [
+                        900,
+                        1500
+                      ],
+                      "mapBoundsKpa": [
+                        40,
+                        50
+                      ],
+                      "rpmFraction": 0.425,
+                      "mapFraction": 0.75
+                    },
+                    "value": 13.455,
+                    "corners": [
+                      {
+                        "rpmIndex": 1,
+                        "mapIndex": 1,
+                        "weight": 0.14375,
+                        "value": 13.200000000000001
+                      },
+                      {
+                        "rpmIndex": 2,
+                        "mapIndex": 1,
+                        "weight": 0.10625,
+                        "value": 13.8
+                      },
+                      {
+                        "rpmIndex": 1,
+                        "mapIndex": 2,
+                        "weight": 0.43124999999999997,
+                        "value": 13.200000000000001
+                      },
+                      {
+                        "rpmIndex": 2,
+                        "mapIndex": 2,
+                        "weight": 0.31875,
+                        "value": 13.8
+                      }
+                    ],
+                    "valueStatus": "available"
+                  },
+                  "veLocation": {
+                    "rpm": 1155,
+                    "mapKpa": 47.5,
+                    "status": "ok",
+                    "neighborhood": {
+                      "rpmIndex": 3,
+                      "mapIndex": 2,
+                      "rpmBounds": [
+                        1000,
+                        1200
+                      ],
+                      "mapBoundsKpa": [
+                        45,
+                        50
+                      ],
+                      "rpmFraction": 0.775,
+                      "mapFraction": 0.5
+                    }
+                  },
+                  "errorStatus": "available",
+                  "errorAfr": 0.6449999999999996,
+                  "contributesToAggregate": true,
+                  "delayMs": 0
+                },
+                "ve": {
+                  "location": {
+                    "rpm": 1155,
+                    "mapKpa": 47.5,
+                    "status": "ok",
+                    "neighborhood": {
+                      "rpmIndex": 3,
+                      "mapIndex": 2,
+                      "rpmBounds": [
+                        1000,
+                        1200
+                      ],
+                      "mapBoundsKpa": [
+                        45,
+                        50
+                      ],
+                      "rpmFraction": 0.775,
+                      "mapFraction": 0.5
+                    }
+                  },
+                  "status": "available",
+                  "value": 38.7575,
+                  "corners": [
+                    {
+                      "rpmIndex": 3,
+                      "mapIndex": 2,
+                      "bilinearWeight": 0.11249999999999999,
+                      "originalVe": 38.900000000000006,
+                      "relativeInfluence": 0.11291362962007355
+                    },
+                    {
+                      "rpmIndex": 4,
+                      "mapIndex": 2,
+                      "bilinearWeight": 0.3875,
+                      "originalVe": 38.1,
+                      "relativeInfluence": 0.3809262723343869
+                    },
+                    {
+                      "rpmIndex": 3,
+                      "mapIndex": 3,
+                      "bilinearWeight": 0.11249999999999999,
+                      "originalVe": 39.7,
+                      "relativeInfluence": 0.11523576082048635
+                    },
+                    {
+                      "rpmIndex": 4,
+                      "mapIndex": 3,
+                      "bilinearWeight": 0.3875,
+                      "originalVe": 39.1,
+                      "relativeInfluence": 0.39092433722505326
+                    }
+                  ]
+                },
+                "supportRows": {
+                  "startRow": 11182,
+                  "endRow": 11198
+                }
+              },
+              {
+                "rowIndex": 3696,
+                "episodeId": 0,
+                "partition": "training",
+                "status": "ready",
+                "reasons": [],
+                "afr": {
+                  "rowIndex": 3696,
+                  "timeSec": 246.357,
+                  "rpm": 1075,
+                  "mapKpa": 47.4,
+                  "measuredAfr": 13.4,
+                  "eligibilityStatus": "eligible",
+                  "eligibilityReasonCodes": [],
+                  "target": {
+                    "rpm": 1075,
+                    "mapKpa": 47.4,
+                    "status": "ok",
+                    "neighborhood": {
+                      "rpmIndex": 1,
+                      "mapIndex": 1,
+                      "rpmBounds": [
+                        900,
+                        1500
+                      ],
+                      "mapBoundsKpa": [
+                        40,
+                        50
+                      ],
+                      "rpmFraction": 0.2916666666666667,
+                      "mapFraction": 0.7399999999999999
+                    },
+                    "value": 13.375,
+                    "corners": [
+                      {
+                        "rpmIndex": 1,
+                        "mapIndex": 1,
+                        "weight": 0.18416666666666673,
+                        "value": 13.200000000000001
+                      },
+                      {
+                        "rpmIndex": 2,
+                        "mapIndex": 1,
+                        "weight": 0.07583333333333338,
+                        "value": 13.8
+                      },
+                      {
+                        "rpmIndex": 1,
+                        "mapIndex": 2,
+                        "weight": 0.5241666666666666,
+                        "value": 13.200000000000001
+                      },
+                      {
+                        "rpmIndex": 2,
+                        "mapIndex": 2,
+                        "weight": 0.21583333333333332,
+                        "value": 13.8
+                      }
+                    ],
+                    "valueStatus": "available"
+                  },
+                  "veLocation": {
+                    "rpm": 1075,
+                    "mapKpa": 47.4,
+                    "status": "ok",
+                    "neighborhood": {
+                      "rpmIndex": 3,
+                      "mapIndex": 2,
+                      "rpmBounds": [
+                        1000,
+                        1200
+                      ],
+                      "mapBoundsKpa": [
+                        45,
+                        50
+                      ],
+                      "rpmFraction": 0.375,
+                      "mapFraction": 0.4799999999999997
+                    }
+                  },
+                  "errorStatus": "available",
+                  "errorAfr": 0.025000000000000355,
+                  "contributesToAggregate": true,
+                  "delayMs": 0
+                },
+                "ve": {
+                  "location": {
+                    "rpm": 1075,
+                    "mapKpa": 47.4,
+                    "status": "ok",
+                    "neighborhood": {
+                      "rpmIndex": 3,
+                      "mapIndex": 2,
+                      "rpmBounds": [
+                        1000,
+                        1200
+                      ],
+                      "mapBoundsKpa": [
+                        45,
+                        50
+                      ],
+                      "rpmFraction": 0.375,
+                      "mapFraction": 0.4799999999999997
+                    }
+                  },
+                  "status": "available",
+                  "value": 39.02,
+                  "corners": [
+                    {
+                      "rpmIndex": 3,
+                      "mapIndex": 2,
+                      "bilinearWeight": 0.3250000000000002,
+                      "originalVe": 38.900000000000006,
+                      "relativeInfluence": 0.32400051255766293
+                    },
+                    {
+                      "rpmIndex": 4,
+                      "mapIndex": 2,
+                      "bilinearWeight": 0.1950000000000001,
+                      "originalVe": 38.1,
+                      "relativeInfluence": 0.19040235776524866
+                    },
+                    {
+                      "rpmIndex": 3,
+                      "mapIndex": 3,
+                      "bilinearWeight": 0.2999999999999998,
+                      "originalVe": 39.7,
+                      "relativeInfluence": 0.3052280881599178
+                    },
+                    {
+                      "rpmIndex": 4,
+                      "mapIndex": 3,
+                      "bilinearWeight": 0.17999999999999988,
+                      "originalVe": 39.1,
+                      "relativeInfluence": 0.18036904151717056
+                    }
+                  ]
+                },
+                "supportRows": {
+                  "startRow": 3680,
+                  "endRow": 3696
+                }
+              }
+            ],
+            "omittedSupportingRows": 21,
+            "limitations": [
+              "Errors are measured AFR minus interpolated calibration target; they are not VE corrections or predicted improvements.",
+              "Calibration semantics must be explicitly bound by the caller; imported axis names alone do not prove MAP kPa or AFR units.",
+              "Only eligible rows with valid targets and in-bounds VE neighborhoods contribute. Diagnostic errors on other rows are not aggregate evidence.",
+              "AFR sensor/transport delay is unimplemented and fixed at zero; no telemetry is time shifted.",
+              "Statistics use equal sample weights, type-7 quantiles, population standard deviation and unscaled MAD. Samples/windows may be correlated; counts are not independent observations.",
+              "Empty statistics and unrepresentable numerical results are null. Coverage has explicit sample/grid denominators and is not a confidence estimate.",
+              "VE values are not interpolated or required for geometric neighborhood membership; missing target corners with positive weight block target lookup.",
+              "Eligibility indices, partitions and timestamps are validated. Existing classifier contracts lack session identity, so callers must supply results from the same unchanged session.",
+              "Phase A cell support measures training coverage only, not identifiability, correction accuracy, or confidence. No corrections are fitted.",
+              "Episodes group whole accepted runs without AFR-error selection; nearby runs may remain correlated. Temporal gaps and embargo do not establish independence.",
+              "Partitioning uses fixed full-log eligibility to define episodes, then audits V1 boundaries or recomputes V2 within each partition. Full-log time high-water integrity is retained.",
+              "Calibration association and active ECU table/fueling mode require caller confirmation. Source content hashes detect mismatched artifacts, not incorrect calibration association.",
+              "Fuel is assumed proportional to interpolated VE with other factors fixed. Closed-loop corrections, injector behavior, sensor bias and unimplemented AFR delay can invalidate predictions.",
+              "Effects in unobserved neighboring operating regions are unassessed. V1 categorical fuel-cut limitations remain unchanged."
+            ],
+            "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+            "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+            "fullEvidenceRef": {
+              "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+              "contextId": "august-v1-single-live-smoke",
+              "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+              "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+              "kind": "analysis",
+              "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+              "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+              "candidateId": null
+            },
+            "facts": [
+              {
+                "key": "region-3-2",
+                "kind": "afr-error",
+                "statement": "Training VE neighborhood RPM 1000-1200, MAP 45-50 kPa has 11937 eligible observations; measured-minus-target AFR mean 0.01405562536650661, median 0.025000000000000355.",
+                "values": {
+                  "rpmIndex": 3,
+                  "mapIndex": 2,
+                  "count": 11937,
+                  "meanError": 0.01405562536650661,
+                  "medianError": 0.025000000000000355
+                },
+                "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-3-2",
+                "evidenceId": "evidence-2",
+                "artifact": {
+                  "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+                  "contextId": "august-v1-single-live-smoke",
+                  "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+                  "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+                  "kind": "analysis",
+                  "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+                  "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+                  "candidateId": null
+                }
+              },
+              {
+                "key": "region-4-1",
+                "kind": "afr-error",
+                "statement": "Training VE neighborhood RPM 1200-1500, MAP 40-45 kPa has 424 eligible observations; measured-minus-target AFR mean -0.6035778301886805, median -0.6105000000000018.",
+                "values": {
+                  "rpmIndex": 4,
+                  "mapIndex": 1,
+                  "count": 424,
+                  "meanError": -0.6035778301886805,
+                  "medianError": -0.6105000000000018
+                },
+                "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-4-1",
+                "evidenceId": "evidence-2",
+                "artifact": {
+                  "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+                  "contextId": "august-v1-single-live-smoke",
+                  "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+                  "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+                  "kind": "analysis",
+                  "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+                  "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+                  "candidateId": null
+                }
+              },
+              {
+                "key": "region-8-2",
+                "kind": "afr-error",
+                "statement": "Training VE neighborhood RPM 3000-3500, MAP 45-50 kPa has 265 eligible observations; measured-minus-target AFR mean 0.21114735849056554, median 0.21071000000000062.",
+                "values": {
+                  "rpmIndex": 8,
+                  "mapIndex": 2,
+                  "count": 265,
+                  "meanError": 0.21114735849056554,
+                  "medianError": 0.21071000000000062
+                },
+                "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-8-2",
+                "evidenceId": "evidence-2",
+                "artifact": {
+                  "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+                  "contextId": "august-v1-single-live-smoke",
+                  "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+                  "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+                  "kind": "analysis",
+                  "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+                  "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+                  "candidateId": null
+                }
+              },
+              {
+                "key": "region-3-3",
+                "kind": "afr-error",
+                "statement": "Training VE neighborhood RPM 1000-1200, MAP 50-55 kPa has 252 eligible observations; measured-minus-target AFR mean -0.028186428571429382, median 0.08922499999999989.",
+                "values": {
+                  "rpmIndex": 3,
+                  "mapIndex": 3,
+                  "count": 252,
+                  "meanError": -0.028186428571429382,
+                  "medianError": 0.08922499999999989
+                },
+                "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-3-3",
+                "evidenceId": "evidence-2",
+                "artifact": {
+                  "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+                  "contextId": "august-v1-single-live-smoke",
+                  "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+                  "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+                  "kind": "analysis",
+                  "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+                  "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+                  "candidateId": null
+                }
+              },
+              {
+                "key": "region-8-3",
+                "kind": "afr-error",
+                "statement": "Training VE neighborhood RPM 3000-3500, MAP 50-55 kPa has 210 eligible observations; measured-minus-target AFR mean 0.2292607142857131, median 0.3299999999999983.",
+                "values": {
+                  "rpmIndex": 8,
+                  "mapIndex": 3,
+                  "count": 210,
+                  "meanError": 0.2292607142857131,
+                  "medianError": 0.3299999999999983
+                },
+                "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-8-3",
+                "evidenceId": "evidence-2",
+                "artifact": {
+                  "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+                  "contextId": "august-v1-single-live-smoke",
+                  "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+                  "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+                  "kind": "analysis",
+                  "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+                  "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+                  "candidateId": null
+                }
+              },
+              {
+                "key": "region-4-2",
+                "kind": "afr-error",
+                "statement": "Training VE neighborhood RPM 1200-1500, MAP 45-50 kPa has 122 eligible observations; measured-minus-target AFR mean -0.14722950819672212, median -0.2030000000000003.",
+                "values": {
+                  "rpmIndex": 4,
+                  "mapIndex": 2,
+                  "count": 122,
+                  "meanError": -0.14722950819672212,
+                  "medianError": -0.2030000000000003
+                },
+                "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-4-2",
+                "evidenceId": "evidence-2",
+                "artifact": {
+                  "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+                  "contextId": "august-v1-single-live-smoke",
+                  "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+                  "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+                  "kind": "analysis",
+                  "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+                  "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+                  "candidateId": null
+                }
+              },
+              {
+                "key": "region-6-7",
+                "kind": "afr-error",
+                "statement": "Training VE neighborhood RPM 2000-2500, MAP 70-80 kPa has 74 eligible observations; measured-minus-target AFR mean 0.4516216216216202, median 0.4519999999999982.",
+                "values": {
+                  "rpmIndex": 6,
+                  "mapIndex": 7,
+                  "count": 74,
+                  "meanError": 0.4516216216216202,
+                  "medianError": 0.4519999999999982
+                },
+                "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-6-7",
+                "evidenceId": "evidence-2",
+                "artifact": {
+                  "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+                  "contextId": "august-v1-single-live-smoke",
+                  "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+                  "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+                  "kind": "analysis",
+                  "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+                  "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+                  "candidateId": null
+                }
+              },
+              {
+                "key": "region-3-1",
+                "kind": "afr-error",
+                "statement": "Training VE neighborhood RPM 1000-1200, MAP 40-45 kPa has 65 eligible observations; measured-minus-target AFR mean -0.2155076923076934, median -0.2840000000000007.",
+                "values": {
+                  "rpmIndex": 3,
+                  "mapIndex": 1,
+                  "count": 65,
+                  "meanError": -0.2155076923076934,
+                  "medianError": -0.2840000000000007
+                },
+                "id": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis:region-3-1",
+                "evidenceId": "evidence-2",
+                "artifact": {
+                  "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+                  "contextId": "august-v1-single-live-smoke",
+                  "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+                  "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+                  "kind": "analysis",
+                  "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+                  "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+                  "candidateId": null
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "evidenceId": "evidence-3",
+        "tool": "fit_ve_candidate",
+        "arguments": {},
+        "result": {
+          "ok": true,
+          "data": {
+            "status": "candidate",
+            "analysisRef": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+            "candidateRef": "2621d526-2f89-4e25-973f-e84ce63244bb:candidate",
+            "counts": {
+              "supported": 5,
+              "accepted": 4,
+              "suppressed": 1,
+              "unsupported": 251
+            },
+            "reasonCounts": {
+              "INSUFFICIENT_TRAINING_SAMPLES": 234,
+              "INSUFFICIENT_TRAINING_EPISODES": 251,
+              "BELOW_MINIMUM_PROPOSAL": 1
+            },
+            "bounds": {
+              "requestedMaxPct": 3,
+              "datasetMaxPct": 3,
+              "effectiveMaxPct": 3
+            },
+            "config": {
+              "maxCorrectionPct": 3,
+              "huberThreshold": 0.02,
+              "ridgePenalty": 0.01,
+              "maxConditionNumber": 1000,
+              "relativeRankTolerance": 0.000001,
+              "minCorrectionPct": 0.5,
+              "maxLooRangePct": 2,
+              "minLooRemainingEpisodes": 2,
+              "maxIterations": 5000,
+              "gradientTolerance": 1e-10
+            },
+            "cells": [
+              {
+                "cellIndex": 35,
+                "rpmIndex": 3,
+                "mapIndex": 2,
+                "status": "accepted",
+                "reasons": [],
+                "materialTrainingSamples": 10097,
+                "qualifyingEpisodeIds": [
+                  0,
+                  2,
+                  4,
+                  5,
+                  6,
+                  9,
+                  10,
+                  15,
+                  16,
+                  17,
+                  20,
+                  24,
+                  25,
+                  30,
+                  33,
+                  36,
+                  37,
+                  38,
+                  39,
+                  40,
+                  41,
+                  43
+                ],
+                "trainingInfluenceMass": 1948.8739130209458,
+                "finalCorrectionPct": 1.9993748996502538,
+                "lastProposedPct": 1.9993748996502538,
+                "lastProposalPass": 2,
+                "atBound": false,
+                "stability": {
+                  "minPct": 1.4674895930625038,
+                  "maxPct": 2.1882344873930366,
+                  "rangePct": 0.7207448943305328,
+                  "directionStable": true,
+                  "foldCount": 45
+                }
+              },
+              {
+                "cellIndex": 36,
+                "rpmIndex": 4,
+                "mapIndex": 2,
+                "status": "accepted",
+                "reasons": [],
+                "materialTrainingSamples": 9638,
+                "qualifyingEpisodeIds": [
+                  0,
+                  5,
+                  9,
+                  15,
+                  17,
+                  20,
+                  22,
+                  24,
+                  25,
+                  30,
+                  31,
+                  32,
+                  33,
+                  36,
+                  37,
+                  38,
+                  39,
+                  40,
+                  41,
+                  42,
+                  43,
+                  44
+                ],
+                "trainingInfluenceMass": 3890.366347966673,
+                "finalCorrectionPct": -1.471000428830447,
+                "lastProposedPct": -1.471000428830447,
+                "lastProposalPass": 2,
+                "atBound": false,
+                "stability": {
+                  "minPct": -1.6861582634188936,
+                  "maxPct": -1.084301369798688,
+                  "rangePct": 0.6018568936202056,
+                  "directionStable": true,
+                  "foldCount": 45
+                }
+              },
+              {
+                "cellIndex": 51,
+                "rpmIndex": 3,
+                "mapIndex": 3,
+                "status": "suppressed",
+                "reasons": [
+                  "BELOW_MINIMUM_PROPOSAL"
+                ],
+                "materialTrainingSamples": 9342,
+                "qualifyingEpisodeIds": [
+                  0,
+                  1,
+                  2,
+                  4,
+                  5,
+                  6,
+                  9,
+                  10,
+                  15,
+                  16,
+                  20,
+                  24,
+                  25,
+                  30,
+                  36,
+                  38,
+                  39,
+                  40,
+                  41,
+                  42,
+                  43,
+                  44
+                ],
+                "trainingInfluenceMass": 3530.9850683781933,
+                "finalCorrectionPct": 0,
+                "lastProposedPct": 0.06038312574817156,
+                "lastProposalPass": 1,
+                "atBound": false,
+                "stability": null
+              },
+              {
+                "cellIndex": 52,
+                "rpmIndex": 4,
+                "mapIndex": 3,
+                "status": "accepted",
+                "reasons": [],
+                "materialTrainingSamples": 11737,
+                "qualifyingEpisodeIds": [
+                  0,
+                  1,
+                  2,
+                  4,
+                  5,
+                  6,
+                  9,
+                  10,
+                  15,
+                  16,
+                  17,
+                  20,
+                  22,
+                  24,
+                  25,
+                  30,
+                  32,
+                  33,
+                  36,
+                  37,
+                  38,
+                  39,
+                  40,
+                  41,
+                  42,
+                  43,
+                  44
+                ],
+                "trainingInfluenceMass": 3260.050834404642,
+                "finalCorrectionPct": 1.582264022338437,
+                "lastProposedPct": 1.582264022338437,
+                "lastProposalPass": 2,
+                "atBound": false,
+                "stability": {
+                  "minPct": 1.20716268933212,
+                  "maxPct": 2.399462432634352,
+                  "rangePct": 1.1922997433022322,
+                  "directionStable": true,
+                  "foldCount": 45
+                }
+              },
+              {
+                "cellIndex": 57,
+                "rpmIndex": 9,
+                "mapIndex": 3,
+                "status": "accepted",
+                "reasons": [],
+                "materialTrainingSamples": 464,
+                "qualifyingEpisodeIds": [
+                  5,
+                  30,
+                  31,
+                  35
+                ],
+                "trainingInfluenceMass": 186.49337722597636,
+                "finalCorrectionPct": 1.940182597084195,
+                "lastProposedPct": 1.940182597084195,
+                "lastProposalPass": 2,
+                "atBound": false,
+                "stability": {
+                  "minPct": 1.318134310372925,
+                  "maxPct": 2.0592286470447227,
+                  "rangePct": 0.7410943366717977,
+                  "directionStable": true,
+                  "foldCount": 45
+                }
+              }
+            ],
+            "nonUnsupportedCells": [
+              {
+                "rpmIndex": 3,
+                "mapIndex": 2,
+                "status": "accepted",
+                "reasons": []
+              },
+              {
+                "rpmIndex": 4,
+                "mapIndex": 2,
+                "status": "accepted",
+                "reasons": []
+              },
+              {
+                "rpmIndex": 3,
+                "mapIndex": 3,
+                "status": "suppressed",
+                "reasons": [
+                  "BELOW_MINIMUM_PROPOSAL"
+                ]
+              },
+              {
+                "rpmIndex": 4,
+                "mapIndex": 3,
+                "status": "accepted",
+                "reasons": []
+              },
+              {
+                "rpmIndex": 9,
+                "mapIndex": 3,
+                "status": "accepted",
+                "reasons": []
+              }
+            ],
+            "omittedCellDetails": 251,
+            "passes": [
+              {
+                "pass": 1,
+                "activeCells": 5,
+                "conditioning": [
+                  {
+                    "cellIndices": [
+                      35,
+                      36,
+                      51,
+                      52
+                    ],
+                    "rank": 4,
+                    "columns": 4,
+                    "conditionNumber": 4.826677567140224,
+                    "minEigenvalue": 0.12498296478689418,
+                    "maxEigenvalue": 2.9117051759108437,
+                    "status": "identifiable"
+                  },
+                  {
+                    "cellIndices": [
+                      57
+                    ],
+                    "rank": 1,
+                    "columns": 1,
+                    "conditionNumber": 1,
+                    "minEigenvalue": 1,
+                    "maxEigenvalue": 1,
+                    "status": "identifiable"
+                  }
+                ],
+                "solver": {
+                  "status": "converged",
+                  "iterations": 134,
+                  "objective": 0.0001879371451108205,
+                  "projectedGradient": 9.887249352580341e-11
+                },
+                "folds": 0,
+                "frozen": [
+                  {
+                    "cellIndex": 51,
+                    "reasons": [
+                      "BELOW_MINIMUM_PROPOSAL"
+                    ]
+                  }
+                ]
+              },
+              {
+                "pass": 2,
+                "activeCells": 4,
+                "conditioning": [
+                  {
+                    "cellIndices": [
+                      35,
+                      36,
+                      52
+                    ],
+                    "rank": 3,
+                    "columns": 3,
+                    "conditionNumber": 3.2317602771248746,
+                    "minEigenvalue": 0.21838954844751587,
+                    "maxEigenvalue": 2.280920389471432,
+                    "status": "identifiable"
+                  },
+                  {
+                    "cellIndices": [
+                      57
+                    ],
+                    "rank": 1,
+                    "columns": 1,
+                    "conditionNumber": 1,
+                    "minEigenvalue": 1,
+                    "maxEigenvalue": 1,
+                    "status": "identifiable"
+                  }
+                ],
+                "solver": {
+                  "status": "converged",
+                  "iterations": 93,
+                  "objective": 0.00018859247897918743,
+                  "projectedGradient": 5.844381228969908e-11
+                },
+                "folds": 45,
+                "frozen": []
+              }
+            ],
+            "trainingRows": 13950,
+            "trainingEpisodes": 45,
+            "limitations": [
+              "Errors are measured AFR minus interpolated calibration target; they are not VE corrections or predicted improvements.",
+              "Calibration semantics must be explicitly bound by the caller; imported axis names alone do not prove MAP kPa or AFR units.",
+              "Only eligible rows with valid targets and in-bounds VE neighborhoods contribute. Diagnostic errors on other rows are not aggregate evidence.",
+              "AFR sensor/transport delay is unimplemented and fixed at zero; no telemetry is time shifted.",
+              "Statistics use equal sample weights, type-7 quantiles, population standard deviation and unscaled MAD. Samples/windows may be correlated; counts are not independent observations.",
+              "Empty statistics and unrepresentable numerical results are null. Coverage has explicit sample/grid denominators and is not a confidence estimate.",
+              "VE values are not interpolated or required for geometric neighborhood membership; missing target corners with positive weight block target lookup.",
+              "Eligibility indices, partitions and timestamps are validated. Existing classifier contracts lack session identity, so callers must supply results from the same unchanged session.",
+              "Phase A support measures training coverage; Phase B adds numerical conditioning and stability checks, not measured correction accuracy.",
+              "Episodes group whole accepted runs without AFR-error selection; nearby runs may remain correlated. Temporal gaps and embargo do not establish independence.",
+              "Partitioning uses fixed full-log eligibility to define episodes, then audits V1 boundaries or recomputes V2 within each partition. Full-log time high-water integrity is retained.",
+              "Calibration association and active ECU table/fueling mode require caller confirmation. Source content hashes detect mismatched artifacts, not incorrect calibration association.",
+              "Fuel is assumed proportional to interpolated VE with other factors fixed. Closed-loop corrections, injector behavior, sensor bias and unimplemented AFR delay can invalidate predictions.",
+              "Effects in unobserved neighboring operating regions are unassessed. V1 categorical fuel-cut limitations remain unchanged.",
+              "Phase B candidates are fitted from ready training rows only; holdout outcomes are not used in fitting, suppression, thresholds or model selection.",
+              "Conditioning uses episode-weighted, column-normalized unregularized influence matrices. Entire unidentifiable connected groups are suppressed; ridge does not establish identifiability.",
+              "Leave-one-training-episode-out ranges are stability diagnostics, not calibrated confidence intervals; episodes may remain correlated.",
+              "Huber loss fits relative fueling residuals rather than directly minimizing holdout AFR error. Phase A prediction assumptions and zero/unimplemented AFR delay remain unchanged.",
+              "Bounds are imposed inside the solver. Suppressed cells remain frozen at zero, with full refitting and repeated conditioning/stability checks; no completed vector is silently clipped."
+            ],
+            "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+            "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+            "fullEvidenceRef": {
+              "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+              "contextId": "august-v1-single-live-smoke",
+              "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+              "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:fit",
+              "kind": "fit",
+              "sha256": "29551ff57cfdeb28ea7d038c4c36af53a32564d33f5b66e39decad8c5121ff05",
+              "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+              "candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+            },
+            "facts": [
+              {
+                "key": "fit-summary",
+                "kind": "fit-summary",
+                "statement": "Training-only fit candidate: 4 accepted, 1 suppressed and 251 unsupported VE cells. These are advisory proposals, not measured improvements or ECU-write authorization.",
+                "values": {
+                  "status": "candidate",
+                  "supported": 5,
+                  "accepted": 4,
+                  "suppressed": 1,
+                  "unsupported": 251
+                },
+                "id": "2621d526-2f89-4e25-973f-e84ce63244bb:fit:fit-summary",
+                "evidenceId": "evidence-3",
+                "artifact": {
+                  "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+                  "contextId": "august-v1-single-live-smoke",
+                  "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+                  "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:fit",
+                  "kind": "fit",
+                  "sha256": "29551ff57cfdeb28ea7d038c4c36af53a32564d33f5b66e39decad8c5121ff05",
+                  "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+                  "candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "evidenceId": "evidence-4",
+        "tool": "evaluate_ve_candidate",
+        "arguments": {
+          "candidateRef": "2621d526-2f89-4e25-973f-e84ce63244bb:candidate"
+        },
+        "result": {
+          "ok": true,
+          "data": {
+            "status": "complete",
+            "candidateRef": "2621d526-2f89-4e25-973f-e84ce63244bb:candidate",
+            "basis": "conditional-model-prediction",
+            "paired": {
+              "status": "complete",
+              "rowCount": 3780,
+              "failedPredictions": 0,
+              "baseline": {
+                "count": 3780,
+                "mae": 0.199663269699547,
+                "rmse": 0.26292032294233103,
+                "errors": {
+                  "count": 3780,
+                  "mean": -0.011981258235702643,
+                  "median": 0.07049999999999823,
+                  "populationStdDev": 0.2626471885765948,
+                  "q25": -0.1460000000000008,
+                  "q75": 0.1739999999999977,
+                  "iqr": 0.3199999999999985,
+                  "mad": 0.12450000000000026,
+                  "min": -1.0390000000000015,
+                  "max": 0.6112724999999966
+                }
+              },
+              "candidate": {
+                "count": 3780,
+                "mae": 0.16058921215757857,
+                "rmse": 0.23380931814724368,
+                "errors": {
+                  "count": 3780,
+                  "mean": -0.018353218637619125,
+                  "median": 0.04099783136569535,
+                  "populationStdDev": 0.23308787316829402,
+                  "q25": -0.09533438249722614,
+                  "q75": 0.12515806537294516,
+                  "iqr": 0.2204924478701713,
+                  "mad": 0.09551116434067097,
+                  "min": -0.9930204252240333,
+                  "max": 0.6112724999999966
+                }
+              },
+              "predictedDeltaMae": -0.03907405754196844,
+              "predictedDeltaRmse": -0.029111004795087353
+            },
+            "affectedOnly": {
+              "status": "complete",
+              "rowCount": 3572,
+              "failedPredictions": 0,
+              "baseline": {
+                "count": 3572,
+                "mae": 0.19336047382418747,
+                "rmse": 0.25353155630083163,
+                "errors": {
+                  "count": 3572,
+                  "mean": -0.007868093271744214,
+                  "median": 0.0724999999999989,
+                  "populationStdDev": 0.2534094377654249,
+                  "q25": -0.14199999999999946,
+                  "q75": 0.17300000000000004,
+                  "iqr": 0.3149999999999995,
+                  "mad": 0.12149999999999839,
+                  "min": -1.0390000000000015,
+                  "max": 0.452160000000001
+                }
+              },
+              "candidate": {
+                "count": 3572,
+                "mae": 0.15201110722042535,
+                "rmse": 0.2213050338115993,
+                "errors": {
+                  "count": 3572,
+                  "mean": -0.014611097280491135,
+                  "median": 0.042461870668988766,
+                  "populationStdDev": 0.2208221769356807,
+                  "q25": -0.08937002006408612,
+                  "q75": 0.12470755085211849,
+                  "iqr": 0.2140775709162046,
+                  "mad": 0.08910165262218774,
+                  "min": -0.9930204252240333,
+                  "max": 0.4339674851732429
+                }
+              },
+              "predictedDeltaMae": -0.04134936660376212,
+              "predictedDeltaRmse": -0.03222652248923233
+            },
+            "coverage": {
+              "trainingRows": 13950,
+              "holdoutRows": 3780,
+              "supportedCells": 5,
+              "totalCells": 256,
+              "exclusionCounts": {
+                "OUTSIDE_EVALUATION_PARTITIONS": 3669,
+                "NO_EPISODE": 22603,
+                "CLASSIFIER_NOT_ELIGIBLE": 38539,
+                "AFR_OBSERVATION_UNAVAILABLE": 1873,
+                "VE_COORDINATES_UNAVAILABLE": 1873,
+                "PARTITION_SUPPORT_LEAKAGE": 30
+              }
+            },
+            "split": {
+              "status": "ready",
+              "training": {
+                "startRow": 3469,
+                "endRowExclusive": 40314
+              },
+              "holdout": {
+                "startRow": 40514,
+                "endRowExclusive": 56284
+              },
+              "actualGapSec": 13.402999999999793
+            },
+            "neighborhoods": [
+              {
+                "rpmIndex": 5,
+                "mapIndex": 4,
+                "paired": {
+                  "status": "complete",
+                  "rowCount": 3,
+                  "failedPredictions": 0,
+                  "baseline": {
+                    "count": 3,
+                    "mae": 0.963428571428573,
+                    "rmse": 0.9634315158402743,
+                    "errors": {
+                      "count": 3,
+                      "mean": -0.963428571428573,
+                      "median": -0.962428571428573,
+                      "populationStdDev": 0.002381904571504814,
+                      "q25": -0.9645714285714302,
+                      "q75": -0.9617857142857158,
+                      "iqr": 0.0027857142857143913,
+                      "mad": 0.0012857142857143789,
+                      "min": -0.9667142857142874,
+                      "max": -0.9611428571428586
+                    }
+                  },
+                  "candidate": {
+                    "count": 3,
+                    "mae": 0.963428571428573,
+                    "rmse": 0.9634315158402743,
+                    "errors": {
+                      "count": 3,
+                      "mean": -0.963428571428573,
+                      "median": -0.962428571428573,
+                      "populationStdDev": 0.002381904571504814,
+                      "q25": -0.9645714285714302,
+                      "q75": -0.9617857142857158,
+                      "iqr": 0.0027857142857143913,
+                      "mad": 0.0012857142857143789,
+                      "min": -0.9667142857142874,
+                      "max": -0.9611428571428586
+                    }
+                  },
+                  "predictedDeltaMae": 0,
+                  "predictedDeltaRmse": 0
+                }
+              },
+              {
+                "rpmIndex": 3,
+                "mapIndex": 2,
+                "paired": {
+                  "status": "complete",
+                  "rowCount": 2602,
+                  "failedPredictions": 0,
+                  "baseline": {
+                    "count": 2602,
+                    "mae": 0.14467217524980716,
+                    "rmse": 0.16221826164766576,
+                    "errors": {
+                      "count": 2602,
+                      "mean": 0.07511875480399616,
+                      "median": 0.13449999999999918,
+                      "populationStdDev": 0.14377738726478392,
+                      "q25": -0.017000000000000792,
+                      "q75": 0.17900000000000027,
+                      "iqr": 0.19600000000000106,
+                      "mad": 0.06550000000000011,
+                      "min": -0.5730000000000004,
+                      "max": 0.3289999999999971
+                    }
+                  },
+                  "candidate": {
+                    "count": 2602,
+                    "mae": 0.11516214338432185,
+                    "rmse": 0.13168937917405946,
+                    "errors": {
+                      "count": 2602,
+                      "mean": 0.051742057752007305,
+                      "median": 0.10586738163847187,
+                      "populationStdDev": 0.12109852206710524,
+                      "q25": -0.020805511458441117,
+                      "q75": 0.12909453630684098,
+                      "iqr": 0.1499000477652821,
+                      "mad": 0.04858451970970812,
+                      "min": -0.6471124748124595,
+                      "max": 0.40592533905722306
+                    }
+                  },
+                  "predictedDeltaMae": -0.029510031865485314,
+                  "predictedDeltaRmse": -0.0305288824736063
+                }
+              },
+              {
+                "rpmIndex": 4,
+                "mapIndex": 2,
+                "paired": {
+                  "status": "complete",
+                  "rowCount": 329,
+                  "failedPredictions": 0,
+                  "baseline": {
+                    "count": 329,
+                    "mae": 0.1834498480243161,
+                    "rmse": 0.19718244063206317,
+                    "errors": {
+                      "count": 329,
+                      "mean": -0.16366261398176307,
+                      "median": -0.14899999999999913,
+                      "populationStdDev": 0.10997937842283646,
+                      "q25": -0.21999999999999886,
+                      "q75": -0.12599999999999945,
+                      "iqr": 0.09399999999999942,
+                      "mad": 0.051000000000000156,
+                      "min": -0.5200000000000014,
+                      "max": 0.2989999999999995
+                    }
+                  },
+                  "candidate": {
+                    "count": 329,
+                    "mae": 0.07985071053926719,
+                    "rmse": 0.11414280830767412,
+                    "errors": {
+                      "count": 329,
+                      "mean": -0.03913271576046594,
+                      "median": -0.05826273164433893,
+                      "populationStdDev": 0.10722504952469376,
+                      "q25": -0.09530142252027929,
+                      "q75": 0.0037446464912083144,
+                      "iqr": 0.0990460690114876,
+                      "mad": 0.049944390296793977,
+                      "min": -0.3386479799320181,
+                      "max": 0.4339674851732429
+                    }
+                  },
+                  "predictedDeltaMae": -0.10359913748504891,
+                  "predictedDeltaRmse": -0.08303963232438905
+                }
+              },
+              {
+                "rpmIndex": 7,
+                "mapIndex": 2,
+                "paired": {
+                  "status": "complete",
+                  "rowCount": 4,
+                  "failedPredictions": 0,
+                  "baseline": {
+                    "count": 4,
+                    "mae": 0.3549999999999991,
+                    "rmse": 0.35842900491240853,
+                    "errors": {
+                      "count": 4,
+                      "mean": 0.3549999999999991,
+                      "median": 0.35574999999999957,
+                      "populationStdDev": 0.04946060616793962,
+                      "q25": 0.30659374999999933,
+                      "q75": 0.40415624999999933,
+                      "iqr": 0.0975625,
+                      "mad": 0.04868749999999977,
+                      "min": 0.3034999999999979,
+                      "max": 0.40499999999999936
+                    }
+                  },
+                  "candidate": {
+                    "count": 4,
+                    "mae": 0.3549999999999991,
+                    "rmse": 0.35842900491240853,
+                    "errors": {
+                      "count": 4,
+                      "mean": 0.3549999999999991,
+                      "median": 0.35574999999999957,
+                      "populationStdDev": 0.04946060616793962,
+                      "q25": 0.30659374999999933,
+                      "q75": 0.40415624999999933,
+                      "iqr": 0.0975625,
+                      "mad": 0.04868749999999977,
+                      "min": 0.3034999999999979,
+                      "max": 0.40499999999999936
+                    }
+                  },
+                  "predictedDeltaMae": 0,
+                  "predictedDeltaRmse": 0
+                }
+              },
+              {
+                "rpmIndex": 10,
+                "mapIndex": 4,
+                "paired": {
+                  "status": "complete",
+                  "rowCount": 7,
+                  "failedPredictions": 0,
+                  "baseline": {
+                    "count": 7,
+                    "mae": 0.2216428571428562,
+                    "rmse": 0.2456409709456919,
+                    "errors": {
+                      "count": 7,
+                      "mean": 0.2216428571428562,
+                      "median": 0.1999999999999993,
+                      "populationStdDev": 0.10589584734395242,
+                      "q25": 0.15000000000000036,
+                      "q75": 0.28768749999999965,
+                      "iqr": 0.1376874999999993,
+                      "mad": 0.09999999999999787,
+                      "min": 0.09999999999999787,
+                      "max": 0.3761249999999965
+                    }
+                  },
+                  "candidate": {
+                    "count": 7,
+                    "mae": 0.2216428571428562,
+                    "rmse": 0.2456409709456919,
+                    "errors": {
+                      "count": 7,
+                      "mean": 0.2216428571428562,
+                      "median": 0.1999999999999993,
+                      "populationStdDev": 0.10589584734395242,
+                      "q25": 0.15000000000000036,
+                      "q75": 0.28768749999999965,
+                      "iqr": 0.1376874999999993,
+                      "mad": 0.09999999999999787,
+                      "min": 0.09999999999999787,
+                      "max": 0.3761249999999965
+                    }
+                  },
+                  "predictedDeltaMae": 0,
+                  "predictedDeltaRmse": 0
+                }
+              },
+              {
+                "rpmIndex": 9,
+                "mapIndex": 4,
+                "paired": {
+                  "status": "complete",
+                  "rowCount": 1,
+                  "failedPredictions": 0,
+                  "baseline": {
+                    "count": 1,
+                    "mae": 0.37387499999999996,
+                    "rmse": 0.37387499999999996,
+                    "errors": {
+                      "count": 1,
+                      "mean": 0.37387499999999996,
+                      "median": 0.37387499999999996,
+                      "populationStdDev": 0,
+                      "q25": 0.37387499999999996,
+                      "q75": 0.37387499999999996,
+                      "iqr": 0,
+                      "mad": 0,
+                      "min": 0.37387499999999996,
+                      "max": 0.37387499999999996
+                    }
+                  },
+                  "candidate": {
+                    "count": 1,
+                    "mae": 0.37387499999999996,
+                    "rmse": 0.37387499999999996,
+                    "errors": {
+                      "count": 1,
+                      "mean": 0.37387499999999996,
+                      "median": 0.37387499999999996,
+                      "populationStdDev": 0,
+                      "q25": 0.37387499999999996,
+                      "q75": 0.37387499999999996,
+                      "iqr": 0,
+                      "mad": 0,
+                      "min": 0.37387499999999996,
+                      "max": 0.37387499999999996
+                    }
+                  },
+                  "predictedDeltaMae": 0,
+                  "predictedDeltaRmse": 0
+                }
+              },
+              {
+                "rpmIndex": 10,
+                "mapIndex": 5,
+                "paired": {
+                  "status": "complete",
+                  "rowCount": 18,
+                  "failedPredictions": 0,
+                  "baseline": {
+                    "count": 18,
+                    "mae": 0.13094444444444378,
+                    "rmse": 0.14250514732418834,
+                    "errors": {
+                      "count": 18,
+                      "mean": 0.08016666666666593,
+                      "median": 0.09999999999999964,
+                      "populationStdDev": 0.11781775150394055,
+                      "q25": 0.09999999999999787,
+                      "q75": 0.10000000000000142,
+                      "iqr": 3.552713678800501e-15,
+                      "mad": 1.784010439376255e-15,
+                      "min": -0.2186249999999994,
+                      "max": 0.1999999999999993
+                    }
+                  },
+                  "candidate": {
+                    "count": 18,
+                    "mae": 0.13094444444444378,
+                    "rmse": 0.14250514732418834,
+                    "errors": {
+                      "count": 18,
+                      "mean": 0.08016666666666593,
+                      "median": 0.09999999999999964,
+                      "populationStdDev": 0.11781775150394055,
+                      "q25": 0.09999999999999787,
+                      "q75": 0.10000000000000142,
+                      "iqr": 3.552713678800501e-15,
+                      "mad": 1.784010439376255e-15,
+                      "min": -0.2186249999999994,
+                      "max": 0.1999999999999993
+                    }
+                  },
+                  "predictedDeltaMae": 0,
+                  "predictedDeltaRmse": 0
+                }
+              },
+              {
+                "rpmIndex": 10,
+                "mapIndex": 3,
+                "paired": {
+                  "status": "complete",
+                  "rowCount": 14,
+                  "failedPredictions": 0,
+                  "baseline": {
+                    "count": 14,
+                    "mae": 0.19999999999999932,
+                    "rmse": 0.19999999999999926,
+                    "errors": {
+                      "count": 14,
+                      "mean": 0.19999999999999932,
+                      "median": 0.1999999999999993,
+                      "populationStdDev": 1.342983126688847e-15,
+                      "q25": 0.19999999999999796,
+                      "q75": 0.20000000000000062,
+                      "iqr": 2.6645352591003757e-15,
+                      "mad": 1.77635683940026e-15,
+                      "min": 0.1999999999999975,
+                      "max": 0.20000000000000107
+                    }
+                  },
+                  "candidate": {
+                    "count": 14,
+                    "mae": 0.19999999999999932,
+                    "rmse": 0.19999999999999926,
+                    "errors": {
+                      "count": 14,
+                      "mean": 0.19999999999999932,
+                      "median": 0.1999999999999993,
+                      "populationStdDev": 1.342983126688847e-15,
+                      "q25": 0.19999999999999796,
+                      "q75": 0.20000000000000062,
+                      "iqr": 2.6645352591003757e-15,
+                      "mad": 1.77635683940026e-15,
+                      "min": 0.1999999999999975,
+                      "max": 0.20000000000000107
+                    }
+                  },
+                  "predictedDeltaMae": 0,
+                  "predictedDeltaRmse": 0
+                }
+              }
+            ],
+            "omittedNeighborhoods": 19,
+            "rows": [
+              {
+                "rowIndex": 40561,
+                "episodeId": 45,
+                "rpmIndex": 5,
+                "mapIndex": 4,
+                "affected": false,
+                "status": "predicted",
+                "baselineAfr": 13.1,
+                "targetAfr": 14.066714285714287,
+                "originalVe": 52.549464,
+                "candidateVe": 52.549464,
+                "predictedAfr": 13.1,
+                "baselineErrorAfr": -0.9667142857142874,
+                "predictedErrorAfr": -0.9667142857142874,
+                "timeSec": 2704.523,
+                "rpm": 1889,
+                "mapKpa": 57.7
+              },
+              {
+                "rowIndex": 40562,
+                "episodeId": 45,
+                "rpmIndex": 5,
+                "mapIndex": 4,
+                "affected": false,
+                "status": "predicted",
+                "baselineAfr": 13.1,
+                "targetAfr": 14.062428571428573,
+                "originalVe": 52.49015200000001,
+                "candidateVe": 52.49015200000001,
+                "predictedAfr": 13.1,
+                "baselineErrorAfr": -0.962428571428573,
+                "predictedErrorAfr": -0.962428571428573,
+                "timeSec": 2704.584,
+                "rpm": 1879,
+                "mapKpa": 57.6
+              },
+              {
+                "rowIndex": 40563,
+                "episodeId": 45,
+                "rpmIndex": 5,
+                "mapIndex": 4,
+                "affected": false,
+                "status": "predicted",
+                "baselineAfr": 13.1,
+                "targetAfr": 14.061142857142858,
+                "originalVe": 52.492288,
+                "candidateVe": 52.492288,
+                "predictedAfr": 13.1,
+                "baselineErrorAfr": -0.9611428571428586,
+                "predictedErrorAfr": -0.9611428571428586,
+                "timeSec": 2704.646,
+                "rpm": 1876,
+                "mapKpa": 57.6
+              }
+            ],
+            "changedNeighborhoods": [
+              {
+                "rpmIndex": 2,
+                "mapIndex": 1,
+                "evaluationRows": 0,
+                "status": "unassessed"
+              },
+              {
+                "rpmIndex": 3,
+                "mapIndex": 1,
+                "evaluationRows": 3,
+                "status": "observed"
+              },
+              {
+                "rpmIndex": 4,
+                "mapIndex": 1,
+                "evaluationRows": 282,
+                "status": "observed"
+              },
+              {
+                "rpmIndex": 2,
+                "mapIndex": 2,
+                "evaluationRows": 0,
+                "status": "unassessed"
+              },
+              {
+                "rpmIndex": 3,
+                "mapIndex": 2,
+                "evaluationRows": 2602,
+                "status": "observed"
+              },
+              {
+                "rpmIndex": 4,
+                "mapIndex": 2,
+                "evaluationRows": 329,
+                "status": "observed"
+              },
+              {
+                "rpmIndex": 8,
+                "mapIndex": 2,
+                "evaluationRows": 0,
+                "status": "unassessed"
+              },
+              {
+                "rpmIndex": 9,
+                "mapIndex": 2,
+                "evaluationRows": 96,
+                "status": "observed"
+              },
+              {
+                "rpmIndex": 3,
+                "mapIndex": 3,
+                "evaluationRows": 116,
+                "status": "observed"
+              },
+              {
+                "rpmIndex": 4,
+                "mapIndex": 3,
+                "evaluationRows": 0,
+                "status": "unassessed"
+              },
+              {
+                "rpmIndex": 8,
+                "mapIndex": 3,
+                "evaluationRows": 10,
+                "status": "observed"
+              },
+              {
+                "rpmIndex": 9,
+                "mapIndex": 3,
+                "evaluationRows": 134,
+                "status": "observed"
+              }
+            ],
+            "delay": {
+              "status": "unimplemented-zero-placeholder",
+              "appliedMs": 0
+            },
+            "limitations": [
+              "Errors are measured AFR minus interpolated calibration target; they are not VE corrections or predicted improvements.",
+              "Calibration semantics must be explicitly bound by the caller; imported axis names alone do not prove MAP kPa or AFR units.",
+              "Only eligible rows with valid targets and in-bounds VE neighborhoods contribute. Diagnostic errors on other rows are not aggregate evidence.",
+              "AFR sensor/transport delay is unimplemented and fixed at zero; no telemetry is time shifted.",
+              "Statistics use equal sample weights, type-7 quantiles, population standard deviation and unscaled MAD. Samples/windows may be correlated; counts are not independent observations.",
+              "Empty statistics and unrepresentable numerical results are null. Coverage has explicit sample/grid denominators and is not a confidence estimate.",
+              "VE values are not interpolated or required for geometric neighborhood membership; missing target corners with positive weight block target lookup.",
+              "Eligibility indices, partitions and timestamps are validated. Existing classifier contracts lack session identity, so callers must supply results from the same unchanged session.",
+              "Phase A cell support measures training coverage only, not identifiability, correction accuracy, or confidence. No corrections are fitted.",
+              "Episodes group whole accepted runs without AFR-error selection; nearby runs may remain correlated. Temporal gaps and embargo do not establish independence.",
+              "Partitioning uses fixed full-log eligibility to define episodes, then audits V1 boundaries or recomputes V2 within each partition. Full-log time high-water integrity is retained.",
+              "Calibration association and active ECU table/fueling mode require caller confirmation. Source content hashes detect mismatched artifacts, not incorrect calibration association.",
+              "Fuel is assumed proportional to interpolated VE with other factors fixed. Closed-loop corrections, injector behavior, sensor bias and unimplemented AFR delay can invalidate predictions.",
+              "Effects in unobserved neighboring operating regions are unassessed. V1 categorical fuel-cut limitations remain unchanged.",
+              "Candidate AFR and paired metric differences are model-based predictions, not measured improvements. The baseline is observed AFR with the original table unchanged.",
+              "All ready rows in the declared evaluation partition are paired, including unchanged and worsened rows. Any failed prediction makes candidate aggregate metrics unavailable; failed rows are never silently dropped.",
+              "Episode metric variation is descriptive uncertainty only. No calibrated confidence interval, identifiability assessment, optimizer or automatic correction selection is implemented.",
+              "Repeated manual changes after viewing holdout results turn the holdout into development data; reserve a new untouched holdout for final evaluation."
+            ],
+            "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+            "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+            "fullEvidenceRef": {
+              "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+              "contextId": "august-v1-single-live-smoke",
+              "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+              "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:evaluation",
+              "kind": "evaluation",
+              "sha256": "477c7590f5a122b16c86a1c2f59449d4ce5c2e192279b7d2d769ee690a29cb1d",
+              "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+              "candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+            },
+            "facts": [
+              {
+                "key": "paired-prediction",
+                "kind": "paired-prediction",
+                "statement": "Conditional held-out model prediction on 3780 identical baseline/candidate rows: MAE 0.199663269699547 -> 0.16058921215757857, RMSE 0.26292032294233103 -> 0.23380931814724368. This is not measured improvement; worsened metrics remain included.",
+                "values": {
+                  "rowCount": 3780,
+                  "baselineMae": 0.199663269699547,
+                  "candidateMae": 0.16058921215757857,
+                  "baselineRmse": 0.26292032294233103,
+                  "candidateRmse": 0.23380931814724368
+                },
+                "id": "2621d526-2f89-4e25-973f-e84ce63244bb:evaluation:paired-prediction",
+                "evidenceId": "evidence-4",
+                "artifact": {
+                  "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+                  "contextId": "august-v1-single-live-smoke",
+                  "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+                  "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:evaluation",
+                  "kind": "evaluation",
+                  "sha256": "477c7590f5a122b16c86a1c2f59449d4ce5c2e192279b7d2d769ee690a29cb1d",
+                  "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+                  "candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "analytical": {
+      "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+      "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+      "evidenceRefs": [
+        {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:context-d84984ffd1dcc2207a95715233d5e5aabbb4371ba8fbaee24e6e217e74a908cf",
+          "kind": "context",
+          "sha256": "dc512d920af5bf74b0747755e2e5b6cd810ce187acf54c3a5ef9183915b6d7b7",
+          "datasetId": null,
+          "candidateId": null
+        },
+        {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:analysis",
+          "kind": "analysis",
+          "sha256": "1c7dcb286ddd88e94ced79d806f492971e8544066d6979c217c55fe165ef4d1c",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": null
+        },
+        {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:fit",
+          "kind": "fit",
+          "sha256": "29551ff57cfdeb28ea7d038c4c36af53a32564d33f5b66e39decad8c5121ff05",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+        },
+        {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:candidate",
+          "kind": "candidate",
+          "sha256": "dae8e54f6482b0fbe11657f2a004d9a14331ebe48e706fda8d83a8b777f10396",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+        },
+        {
+          "runId": "2621d526-2f89-4e25-973f-e84ce63244bb",
+          "contextId": "august-v1-single-live-smoke",
+          "settingsId": "2f7493c5268b6829aa07fafcd07dfb605b65c030674f6c0432f47a290ee9bcaa",
+          "artifactId": "2621d526-2f89-4e25-973f-e84ce63244bb:evaluation",
+          "kind": "evaluation",
+          "sha256": "477c7590f5a122b16c86a1c2f59449d4ce5c2e192279b7d2d769ee690a29cb1d",
+          "datasetId": "013524132dd653d1db8b261eb617d16262e6d6b562e8ca61a9c0ba25b5eed8d3",
+          "candidateId": "147061b1dd299d98afcf23dd664046d374a36c9407999263364b87cda1787b32"
+        }
+      ],
+      "timings": [
+        {
+          "tool": "describe_log",
+          "elapsedMs": 2984.1836000000003
+        },
+        {
+          "tool": "analyze_afr_error",
+          "elapsedMs": 9251.4813
+        },
+        {
+          "tool": "fit_ve_candidate",
+          "elapsedMs": 9127.2163
+        },
+        {
+          "tool": "evaluate_ve_candidate",
+          "elapsedMs": 2860.0478000000003
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "One august v1 run tests integration, not tuning accuracy or profile superiority.",
+    "Tool results and server facts are deterministic calculations; provider messages and native calls are actual model outputs.",
+    "AFR delay is zero and predictions are conditional; no ECU write or measured improvement is authorized.",
+    "Retried POST requests can consume provider resources or incur charges more than once; unavailable usage and cost are not inferred."
+  ]
+}

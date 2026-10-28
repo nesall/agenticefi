@@ -4,6 +4,7 @@ import {
 	META_MODEL
 } from '../../src/lib/server/investigation/metaResponsesModel';
 import { investigationTools } from '../../src/lib/server/investigation/tools';
+import { analyticalTools } from '../../src/lib/server/investigation/analyticalProtocol';
 import { runInvestigation } from '../../src/lib/server/investigation/runner';
 import type { InvestigationModel, ToolTraceEntry } from '../../src/lib/shared/types/investigation';
 import { context, final } from './helpers';
@@ -51,6 +52,20 @@ const transport = () => vi.fn<typeof fetch>();
 afterEach(() => vi.unstubAllEnvs());
 
 describe('Meta Responses protocol adapter', () => {
+	it('advertises analytical native tools and the separate fact/commentary report contract', async () => {
+		const fetch = transport().mockResolvedValue(response([call({ name: 'fit_ve_candidate' })]));
+		const model = new MetaResponsesModel({ apiKey: 'test-secret', transport: fetch });
+		expect(
+			await model.next({ ...input(), tools: analyticalTools, reportMode: 'analytical' }, signal())
+		).toEqual({ kind: 'tool', name: 'fit_ve_candidate', arguments: {} });
+		const body = JSON.parse(String(fetch.mock.calls[0][1]!.body));
+		expect(body.tools.map((t: { name: string }) => t.name)).toEqual(
+			analyticalTools.map((t) => t.name)
+		);
+		expect(body.instructions).toContain('factIds');
+		expect(body.instructions).toContain('commentary');
+		expect(body.instructions).not.toContain('Call describe_log first');
+	});
 	it('uses native flat tools, the approved endpoint/model and sequential mode', async () => {
 		const fetch = transport().mockResolvedValue(
 			response([{ type: 'reasoning', summary: [] }, call()])
@@ -130,9 +145,19 @@ describe('Meta Responses protocol adapter', () => {
 
 	it('reads the key from the server environment without printing it', () => {
 		vi.stubEnv('META_HACKATHON_API_KEY', '');
+		vi.stubEnv('META_API_KEY', '');
 		expect(() => new MetaResponsesModel()).toThrow('META_HACKATHON_API_KEY is not set');
 		vi.stubEnv('META_HACKATHON_API_KEY', 'environment-secret');
 		expect(JSON.stringify(new MetaResponsesModel())).not.toContain('environment-secret');
+	});
+	it('uses the alias credential for requests when the project-specific key is absent', async () => {
+		vi.stubEnv('META_HACKATHON_API_KEY', '');
+		vi.stubEnv('META_API_KEY', 'alias-secret');
+		const fetch = transport().mockResolvedValue(response([message()]));
+		const model = new MetaResponsesModel({ transport: fetch });
+		await model.next(input(), signal());
+		expect(fetch.mock.calls[0][1]!.headers).toMatchObject({ Authorization: 'Bearer alias-secret' });
+		expect(JSON.stringify(model)).not.toContain('alias-secret');
 	});
 
 	it.each([400, 401, 429, 500])(

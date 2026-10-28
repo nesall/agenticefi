@@ -20,6 +20,10 @@ export type InvestigationContext = {
 	eligibilityProfile: EligibilityConfig;
 };
 
+/** Inspection remains available when an analytical run explicitly lacks calibration. */
+export type InspectionContext = Omit<InvestigationContext, 've' | 'afr'> &
+	Partial<Pick<InvestigationContext, 've' | 'afr'>>;
+
 /** Association is explicitly supplied by the caller, never inferred from dates. */
 export function createInvestigationContext(input: {
 	id: string;

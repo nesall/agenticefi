@@ -6,8 +6,16 @@ import type {
 	SampleEligibility
 } from './sampleEligibility';
 import type { InvestigationResult } from './investigation';
+import type {
+	DemoId,
+	AnalyticalProfile,
+	AnalyticalPresentation,
+	InvestigationProgress
+} from './analyticalDashboard';
 
 export type SessionSummary = {
+	demoId?: DemoId;
+	recordings?: AnalyticalProfile[];
 	id: string;
 	logName: string;
 	calibrationId: string;
@@ -53,6 +61,17 @@ export type EligibilityPage = {
 	unlocatableTimeCount: number;
 };
 export type InvestigationJob = {
+	logName?: string;
+	calibrationId?: string;
+	demoId?: DemoId;
+	rowCount?: number;
+	outcome?: 'completed' | 'failed' | 'cancelled';
+	mode?: 'legacy' | 'analytical';
+	source?: 'live' | 'recorded';
+	profile?: AnalyticalProfile;
+	progress?: InvestigationProgress;
+	presentation?: AnalyticalPresentation | null;
+	recordedAt?: string;
 	id: string;
 	sessionId: string;
 	state: 'running' | 'finished';

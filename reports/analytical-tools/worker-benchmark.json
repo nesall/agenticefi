@@ -1,0 +1,36 @@
+[
+	{
+		"file": "2025-04-12_16.16.28.msl",
+		"version": "steady-afr-ve-v1",
+		"totalWallMs": 971.2600000000002,
+		"mainLoopTicks": 61,
+		"maximumTickGapMs": 20.498899999999594,
+		"timings": [
+			{
+				"tool": "fit_ve_candidate",
+				"elapsedMs": 814.0379000000003
+			},
+			{
+				"tool": "evaluate_ve_candidate",
+				"elapsedMs": 156.3105000000005
+			}
+		]
+	},
+	{
+		"file": "2026-07-25_17.56.47.msl",
+		"version": "steady-afr-ve-v2-experimental",
+		"totalWallMs": 8401.563,
+		"mainLoopTicks": 535,
+		"maximumTickGapMs": 19.40270000000055,
+		"timings": [
+			{
+				"tool": "fit_ve_candidate",
+				"elapsedMs": 7269.2545
+			},
+			{
+				"tool": "evaluate_ve_candidate",
+				"elapsedMs": 1132.0164999999997
+			}
+		]
+	}
+]

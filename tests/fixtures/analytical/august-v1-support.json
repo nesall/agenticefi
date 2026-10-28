@@ -1,0 +1,188 @@
+{
+	"description": "Recorded August V1 support-count regression fixture; copied from a genuine successful smoke report. Numerical fitting is not rerun by this fixture.",
+	"model": "muse-spark-1.3-contributor",
+	"outcome": "passed",
+	"startedAt": "2026-10-28T09:56:56.943Z",
+	"selection": {
+		"dataset": "august",
+		"profile": "v1",
+		"workerHeapMb": 1024,
+		"sources": {
+			"log": "data/logs/block2/2026-08-08_11.19.56.msl",
+			"ve": "data/logs/block2/veTable1_2026-08-08_23.57.53.table",
+			"afr": "data/logs/block2/AFR_2026-07-30_19.40.54.table",
+			"calibrationId": "block2-calibration"
+		},
+		"version": "steady-afr-ve-v1",
+		"reportPath": "reports/analytical-tools/august-v1-live-smoke.json"
+	},
+	"validatedInvestigation": {
+		"status": "completed",
+		"reason": null,
+		"report": {
+			"advisoryOnly": true,
+			"findings": [
+				{
+					"statement": "The frozen investigation context contains 56284 parsed telemetry rows. Inspection statistics alone do not establish fueling causes.",
+					"evidenceIds": ["evidence-1"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 1000-1200, MAP 45-50 kPa has 11937 eligible observations; measured-minus-target AFR mean 0.01405562536650661, median 0.025000000000000355.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 1200-1500, MAP 40-45 kPa has 424 eligible observations; measured-minus-target AFR mean -0.6035778301886805, median -0.6105000000000018.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 3000-3500, MAP 45-50 kPa has 265 eligible observations; measured-minus-target AFR mean 0.21114735849056554, median 0.21071000000000062.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 1000-1200, MAP 50-55 kPa has 252 eligible observations; measured-minus-target AFR mean -0.028186428571429382, median 0.08922499999999989.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 3000-3500, MAP 50-55 kPa has 210 eligible observations; measured-minus-target AFR mean 0.2292607142857131, median 0.3299999999999983.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 1200-1500, MAP 45-50 kPa has 122 eligible observations; measured-minus-target AFR mean -0.14722950819672212, median -0.2030000000000003.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 2000-2500, MAP 70-80 kPa has 74 eligible observations; measured-minus-target AFR mean 0.4516216216216202, median 0.4519999999999982.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 1000-1200, MAP 40-45 kPa has 65 eligible observations; measured-minus-target AFR mean -0.2155076923076934, median -0.2840000000000007.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training-only fit candidate: 4 accepted, 1 suppressed and 251 unsupported VE cells. These are advisory proposals, not measured improvements or ECU-write authorization.",
+					"evidenceIds": ["evidence-3"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Conditional held-out model prediction on 3780 identical baseline/candidate rows: MAE 0.199663269699547 -> 0.16058921215757857, RMSE 0.26292032294233103 -> 0.23380931814724368. This is not measured improvement; worsened metrics remain included.",
+					"evidenceIds": ["evidence-4"],
+					"verification": "server-numerical"
+				}
+			],
+			"commentary": [
+				{
+					"kind": "interpretation",
+					"text": "Training evidence is highly concentrated in RPM 1000-1200 / MAP 45-50 kPa with sparse support elsewhere; frozen fit produced 4 accepted, 1 suppressed, 251 unsupported cells; holdout paired prediction on 3780 rows shows conditional predicted deltas only, not measured improvement and no ECU-write authorization.",
+					"evidenceIds": ["evidence-2", "evidence-3", "evidence-4"],
+					"verification": "unverified-model-commentary"
+				},
+				{
+					"kind": "limitation",
+					"text": "Coverage is narrow: 5 supported of 256 VE cells, large exclusions, one suppressed below-minimum cell, many holdout neighborhoods unassessed or with single-digit rows; statistics use equal weights with correlated samples, AFR delay fixed at zero, fuel assumed proportional to VE, calibration association caller-supplied.",
+					"evidenceIds": ["evidence-1", "evidence-2", "evidence-3", "evidence-4"],
+					"verification": "unverified-model-commentary"
+				},
+				{
+					"kind": "hypothesis",
+					"text": "Unverified hypothesis: observed mean/median AFR errors may be consistent with localized fueling offsets interacting with closed-loop, sensor bias, or unmodeled transients, but numerical facts do not prove engine causality and require independent measurement.",
+					"evidenceIds": ["evidence-2", "evidence-3"],
+					"verification": "unverified-model-commentary"
+				}
+			],
+			"limitations": [
+				"Numerical statements are server-rendered; model commentary is unverified and does not establish engine causes.",
+				"Predicted AFR and metric changes assume proportional fueling and unchanged other factors. AFR delay compensation is unimplemented at 0 ms; improvements are not measured.",
+				"Unsupported, unidentifiable and unstable cells remain unchanged. Calibration association and active ECU table behavior require caller confirmation.",
+				"Only frozen training data determine fitting. Holdout results do not select parameters, masks, profiles or a winning candidate.",
+				"This advisory report cannot authorize ECU writes or automatic application of calibration changes.",
+				"Full evidence is retained in a private, expiring server run. It becomes unavailable after disposal, timeout or worker failure."
+			]
+		},
+		"trace": [
+			{
+				"evidenceId": "evidence-1",
+				"tool": "describe_log",
+				"arguments": {},
+				"result": {
+					"ok": true,
+					"data": {}
+				}
+			},
+			{
+				"evidenceId": "evidence-2",
+				"tool": "analyze_afr_error",
+				"arguments": {},
+				"result": {
+					"ok": true,
+					"data": {
+						"coverage": {
+							"trainingRows": 13950,
+							"holdoutRows": 3780,
+							"supportedCells": 5,
+							"totalCells": 256,
+							"exclusionCounts": {
+								"OUTSIDE_EVALUATION_PARTITIONS": 3669,
+								"NO_EPISODE": 22603,
+								"CLASSIFIER_NOT_ELIGIBLE": 38539,
+								"AFR_OBSERVATION_UNAVAILABLE": 1873,
+								"VE_COORDINATES_UNAVAILABLE": 1873,
+								"PARTITION_SUPPORT_LEAKAGE": 30
+							}
+						}
+					}
+				}
+			},
+			{
+				"evidenceId": "evidence-3",
+				"tool": "fit_ve_candidate",
+				"arguments": {},
+				"result": {
+					"ok": true,
+					"data": {
+						"counts": {
+							"supported": 5,
+							"accepted": 4,
+							"suppressed": 1,
+							"unsupported": 251
+						}
+					}
+				}
+			},
+			{
+				"evidenceId": "evidence-4",
+				"tool": "evaluate_ve_candidate",
+				"arguments": {
+					"candidateRef": "2621d526-2f89-4e25-973f-e84ce63244bb:candidate"
+				},
+				"result": {
+					"ok": true,
+					"data": {
+						"coverage": {
+							"trainingRows": 13950,
+							"holdoutRows": 3780,
+							"supportedCells": 5,
+							"totalCells": 256,
+							"exclusionCounts": {
+								"OUTSIDE_EVALUATION_PARTITIONS": 3669,
+								"NO_EPISODE": 22603,
+								"CLASSIFIER_NOT_ELIGIBLE": 38539,
+								"AFR_OBSERVATION_UNAVAILABLE": 1873,
+								"VE_COORDINATES_UNAVAILABLE": 1873,
+								"PARTITION_SUPPORT_LEAKAGE": 30
+							}
+						}
+					}
+				}
+			}
+		]
+	}
+}

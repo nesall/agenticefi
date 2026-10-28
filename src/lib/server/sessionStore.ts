@@ -1,4 +1,9 @@
 import { randomUUID } from 'node:crypto';
+import { AnalyticalRun } from './investigation/analyticalRun';
+import { curatedDemo } from './demo/catalog';
+import { recordedInvestigation, recordedProfiles } from './recordedInvestigation';
+import type { DemoId, AnalyticalProfile } from '../shared/types/analyticalDashboard';
+import { metaApiKey } from './investigation/metaApiKey';
 import { classifySampleEligibility, summarizeEligibility } from './analysis/sampleEligibility';
 import { runInvestigation } from './investigation/runner';
 import type { InvestigationContext } from './investigation/context';
@@ -26,12 +31,14 @@ type StoredSession = {
 	owner: string;
 	context: InvestigationContext;
 	classification: EligibilityResult;
+	demoId?: DemoId;
 	expiresAt: number;
 };
 type StoredRun = {
 	owner: string;
 	job: InvestigationJob;
 	abort: AbortController;
+	analytical?: AnalyticalRun;
 	expiresAt: number;
 };
 const statuses: EligibilityStatus[] = [
@@ -45,6 +52,7 @@ const statuses: EligibilityStatus[] = [
 export class DashboardStore {
 	#sessions = new Map<string, StoredSession>();
 	#runs = new Map<string, StoredRun>();
+	#classificationCache = new WeakMap<InvestigationContext['session'], EligibilityResult>();
 	constructor(
 		private options = {
 			ttlMs: 30 * 60 * 1000,
@@ -64,7 +72,7 @@ export class DashboardStore {
 				this.#runs.delete(id);
 			}
 	}
-	create(owner: string, context: InvestigationContext): SessionSummary {
+	create(owner: string, context: InvestigationContext, demoId?: DemoId): SessionSummary {
 		this.clean();
 		const existing = [...this.#sessions.values()].find(
 			(session) => session.owner === owner && session.context.logName === context.logName
@@ -76,11 +84,17 @@ export class DashboardStore {
 				'Demo capacity reached. Please try again after existing sessions expire.'
 			);
 		const id = randomUUID();
+		let classification = this.#classificationCache.get(context.session);
+		if (!classification) {
+			classification = classifySampleEligibility(context.session, context.eligibilityProfile);
+			this.#classificationCache.set(context.session, classification);
+		}
 		const session: StoredSession = {
+			demoId,
 			id,
 			owner,
 			context: { ...context, id },
-			classification: classifySampleEligibility(context.session, context.eligibilityProfile),
+			classification,
 			expiresAt: this.options.now() + this.options.ttlMs
 		};
 		this.#sessions.set(id, session);
@@ -100,6 +114,8 @@ export class DashboardStore {
 		const times = session.timeSec()?.filter(Number.isFinite) ?? [];
 		if (!times.length) throw new DashboardError(422, 'The demo has no usable time axis.');
 		return {
+			demoId: stored.demoId,
+			recordings: stored.demoId ? recordedProfiles(stored.demoId) : [],
 			id,
 			logName: context.logName,
 			calibrationId: context.calibrationId,
@@ -126,7 +142,7 @@ export class DashboardStore {
 				writeDate: source.writeDate ?? null
 			})),
 			limitations: [...context.limitations, ...classification.limitations],
-			museAvailable: !!process.env.META_HACKATHON_API_KEY?.trim()
+			museAvailable: !!metaApiKey()
 		};
 	}
 	private bounds(startSec: number, endSec: number) {
@@ -268,8 +284,15 @@ export class DashboardStore {
 	start(
 		owner: string,
 		id: string,
-		input: { goal: string; startSec: number; endSec: number },
-		model: InvestigationModel,
+		input: {
+			goal: string;
+			startSec: number;
+			endSec: number;
+			mode?: 'legacy' | 'analytical';
+			profile?: AnalyticalProfile;
+			source?: 'live' | 'recorded';
+		},
+		model: InvestigationModel | null,
 		diagnostic: () => string | null = () => null
 	): InvestigationJob {
 		this.bounds(input.startSec, input.endSec);
@@ -284,6 +307,26 @@ export class DashboardStore {
 		)
 			throw new DashboardError(400, 'Provide a goal and a time window inside this log.');
 		const runs = [...this.#runs.values()];
+		if (input.mode !== 'analytical' && input.profile && input.profile !== 'v1')
+			throw new DashboardError(400, 'Legacy inspection uses V1 screening.');
+		if (!model && input.source !== 'recorded')
+			throw new DashboardError(503, 'Muse Spark is not configured.');
+		if (
+			(input.mode && !['legacy', 'analytical'].includes(input.mode)) ||
+			(input.profile && !['v1', 'v2-experimental'].includes(input.profile)) ||
+			(input.source && !['live', 'recorded'].includes(input.source))
+		)
+			throw new DashboardError(400, 'Invalid investigation selection.');
+		if (input.mode !== 'analytical' && input.source === 'recorded')
+			throw new DashboardError(400, 'Recordings require analytical mode.');
+		if (input.mode === 'analytical' && !session.demoId)
+			throw new DashboardError(400, 'Analytical dashboard runs require a curated demo.');
+		if (
+			input.mode === 'analytical' &&
+			input.source !== 'recorded' &&
+			runs.some((r) => r.job.mode === 'analytical' && r.job.state === 'running')
+		)
+			throw new DashboardError(429, 'One analytical dashboard investigation can run at a time.');
 		if (runs.some((r) => r.owner === owner && r.job.sessionId === id && r.job.state === 'running'))
 			throw new DashboardError(409, 'An investigation is already running for this session.');
 		if (
@@ -292,6 +335,15 @@ export class DashboardStore {
 		)
 			throw new DashboardError(429, 'Investigation capacity reached. Please try again later.');
 		const job: InvestigationJob = {
+			logName: session.context.logName,
+			calibrationId: session.context.calibrationId,
+			demoId: session.demoId,
+			rowCount: session.context.session.rowCount,
+			mode: input.mode ?? 'legacy',
+			source: input.source ?? 'live',
+			profile: input.profile ?? 'v1',
+			progress: { phase: 'preparing', tool: null, completed: [] },
+			presentation: null,
 			id: randomUUID(),
 			sessionId: id,
 			state: 'running',
@@ -309,6 +361,11 @@ export class DashboardStore {
 			expiresAt: session.expiresAt
 		};
 		this.#runs.set(job.id, run);
+		if (input.mode === 'analytical') {
+			void this.investigateAnalytically(run, session, input, model, diagnostic);
+			return structuredClone(job);
+		}
+		if (!model) throw new DashboardError(503, 'Muse Spark is not configured.');
 		void runInvestigation(session.context, model, {
 			goal: `${input.goal}\nRequested parsed-time window: ${input.startSec} to ${input.endSec} seconds. Use describe_log, summarize_window, assess_data_quality, and assess_sample_eligibility as appropriate. Keep the configured screening limitations explicit.`,
 			maxIterations: 10,
@@ -328,6 +385,100 @@ export class DashboardStore {
 				job.error = 'The investigation could not complete. Please try again.';
 			});
 		return structuredClone(job);
+	}
+	private async investigateAnalytically(
+		run: StoredRun,
+		session: StoredSession,
+		input: { goal: string; profile?: AnalyticalProfile; source?: 'live' | 'recorded' },
+		model: InvestigationModel | null,
+		diagnostic: () => string | null
+	) {
+		const job = run.job;
+		try {
+			if (input.source === 'recorded') {
+				const snapshot = await recordedInvestigation(
+					session.demoId!,
+					input.profile ?? 'v1',
+					session.context
+				);
+				if (run.abort.signal.aborted) throw new Error('Cancelled.');
+				job.result = snapshot.result;
+				job.presentation = snapshot.presentation;
+				job.recordedAt = snapshot.recordedAt;
+			} else {
+				const demo = await curatedDemo(session.demoId!);
+				if (!model) throw new Error('Muse Spark is not configured.');
+				if (run.abort.signal.aborted) throw new Error('Cancelled.');
+				const state = new AnalyticalRun({
+					...demo.input,
+					contextId: session.id,
+					profile: {
+						version:
+							input.profile === 'v2-experimental'
+								? 'steady-afr-ve-v2-experimental'
+								: 'steady-afr-ve-v1'
+					}
+				});
+				run.analytical = state;
+				job.result = await runInvestigation(state, model, {
+					goal: `${input.goal}\nInvestigate the whole canonical log using analyze_afr_error, fit_ve_candidate, and evaluate_ve_candidate when supported. Do not change frozen settings or treat chart selection as a fitting mask. Report missing evidence, legitimate no-correction outcomes and worsened holdout predictions.`,
+					maxIterations: 7,
+					maxToolCalls: 6,
+					timeoutMs: 120000,
+					signal: run.abort.signal,
+					onProgress: (progress) => {
+						job.progress = progress;
+					}
+				});
+				if (!run.abort.signal.aborted && state.manifest.evidenceRefs.length) {
+					try {
+						job.presentation = await state.getPresentation(run.abort.signal);
+					} catch {
+						job.error =
+							'Some analytical details are unavailable after a worker failure or resource limit.';
+					}
+				}
+				if (job.result.status !== 'completed') job.error = diagnostic() ?? job.result.reason;
+				if (
+					job.result.status === 'completed' &&
+					['analyze_afr_error', 'fit_ve_candidate', 'evaluate_ve_candidate'].some(
+						(name) => !job.result!.trace.some((entry) => entry.tool === name && entry.result.ok)
+					)
+				)
+					job.error =
+						'The agent finished without completing all analytical stages. Available evidence is shown; missing sections remain unavailable.';
+			}
+		} catch {
+			job.error = run.abort.signal.aborted
+				? 'Investigation cancelled.'
+				: 'The investigation or recording is unavailable. No replacement results were generated.';
+		} finally {
+			await run.analytical?.dispose();
+			run.analytical = undefined;
+			job.state = 'finished';
+			job.outcome = run.abort.signal.aborted
+				? 'cancelled'
+				: job.error
+					? 'failed'
+					: job.result?.status === 'completed'
+						? 'completed'
+						: 'failed';
+			job.finishedAt = this.options.now();
+			job.progress = {
+				phase: 'finished',
+				tool: null,
+				completed: job.result?.trace ?? job.progress?.completed ?? []
+			};
+		}
+	}
+	cancel(owner: string, id: string): InvestigationJob {
+		this.clean();
+		const run = this.#runs.get(id);
+		if (!run || run.owner !== owner)
+			throw new DashboardError(404, 'Investigation is unavailable or expired.');
+		run.abort.abort();
+		void run.analytical?.dispose();
+		return structuredClone(run.job);
 	}
 	job(owner: string, id: string): InvestigationJob {
 		this.clean();

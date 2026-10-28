@@ -1,0 +1,25 @@
+{
+	"eventLoopBudgetMs": 250,
+	"results": [
+		{
+			"file": "2025-04-12_16.16.28.msl",
+			"version": "steady-afr-ve-v1",
+			"rows": 2859,
+			"prepareMs": 422.94949999999994,
+			"fitMs": 164.6223,
+			"evaluateMs": 178.41409999999996,
+			"totalSynchronousMs": 765.9858999999999,
+			"datasetBytes": 5574578
+		},
+		{
+			"file": "2026-07-25_17.56.47.msl",
+			"version": "steady-afr-ve-v2-experimental",
+			"rows": 18990,
+			"prepareMs": 3441.9934,
+			"fitMs": 2644.3037000000004,
+			"evaluateMs": 1282.0666,
+			"totalSynchronousMs": 7368.3637,
+			"datasetBytes": 35994307
+		}
+	]
+}

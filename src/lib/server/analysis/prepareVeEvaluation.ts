@@ -63,6 +63,13 @@ function configuration(overrides: Partial<VePreparationConfig> = {}): VePreparat
 	return config;
 }
 
+/** Public validation boundary for callers that freeze settings before preparing data. */
+export function vePreparationConfig(
+	overrides: Partial<VePreparationConfig> = {}
+): VePreparationConfig {
+	return configuration(overrides);
+}
+
 /** Group complete accepted runs, merging nearby runs irrespective of AFR error or
  * neighborhood. Invalid/reversed time, gaps and stitches always break episodes.
  */
