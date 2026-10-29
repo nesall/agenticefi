@@ -1,6 +1,10 @@
 <script lang="ts">
 	import type { InvestigationJob } from '../../shared/types/dashboard';
-	import { investigationStatus } from './investigationStatus';
+	import {
+		investigationStatus,
+		investigationPhaseLabels,
+		finalReportTimedOutAfterVeEvaluation
+	} from './investigationStatus';
 	import Bot from '@lucide/svelte/icons/bot';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import CircleCheck from '@lucide/svelte/icons/circle-check';
@@ -9,6 +13,7 @@
 	let { job, onTrace }: { job: InvestigationJob; onTrace: (evidenceId?: string) => void } =
 		$props();
 	const completed = $derived(job.result?.trace ?? job.progress?.completed ?? []);
+	const reportTimedOut = $derived(finalReportTimedOutAfterVeEvaluation(job));
 </script>
 
 <section
@@ -40,15 +45,28 @@
 			'running'
 				? job.source === 'recorded'
 					? 'loading historical result'
-					: (job.progress?.phase.replaceAll('-', ' ') ?? 'running')
+					: job.progress
+						? investigationPhaseLabels[job.progress.phase]
+						: 'Running'
 				: investigationStatus(job)}
 		</div>
-		<p class="mt-1 text-xs break-words text-surface-500">
+		{#if reportTimedOut}<div
+				class="mt-2 space-y-1 text-sm"
+				data-testid="analysis-complete-report-timeout"
+			>
+				<p class="font-medium">VE analysis and evaluation completed</p>
+				<p class="text-warning-700-300">Final AI report timed out</p>
+				<p class="text-xs text-surface-500">
+					Retained candidate and held-out conditional model predictions are available in Results.
+					This is a partial investigation, not measured improvement.
+				</p>
+			</div>{/if}
+		<p class="mt-1 text-xs wrap-break-word text-surface-500">
 			{job.logName ?? 'Run identity unavailable'}{job.progress?.tool
 				? ` · ${job.progress.tool.replaceAll('_', ' ')}`
 				: ''} · {completed.length} completed calls
 		</p>
-		{#if job.error}<p class="mt-2 break-words text-error-700-300" role="alert">{job.error}</p>{/if}
+		{#if job.error}<p class="mt-2 wrap-break-word text-error-700-300" role="alert">{job.error}</p>{/if}
 		<p class="mt-2 text-xs break-all text-surface-500">
 			Job ID: {job.id}{#if job.termination}
 				· {job.termination.code} · model turn {job.termination.modelTurn}{#if job.termination.tool}

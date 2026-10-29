@@ -34,6 +34,7 @@
 	import type { ChannelSlot } from '#lib/shared/types/channelMapping.ts';
 	import type { SampleEligibility } from '#lib/shared/types/sampleEligibility.ts';
 	import { number } from '#lib/components/dashboard/presentation.ts';
+	import ThemeToggle from '#lib/components/dashboard/ThemeToggle.svelte';
 
 	let session = $state<SessionSummary | null>(null),
 		telemetry = $state<TelemetryResponse | null>(null),
@@ -401,38 +402,41 @@
 					aria-hidden="true"
 				/><span>Agentic<span class="text-primary-600-400">EFI</span></span></a
 			>
-			<DemoLoader
-				{session}
-				{datasets}
-				selectedId={selectedDemo}
-				onSelect={(id) => (selectedDemo = id)}
-				disabled={running}
-				loading={demoLoading}
-				onload={(id) => void loadDemo(id)}
-			/>
-			{#if session}<dl class="hidden items-center gap-5 text-xs xl:flex">
-					<div>
-						<dt class="text-surface-500">Duration</dt>
-						<dd class="font-mono font-semibold">
-							{number(session.endSec - session.startSec, 1)} s
-						</dd>
-					</div>
-					<div>
-						<dt class="text-surface-500">Samples</dt>
-						<dd class="font-mono font-semibold">{number(session.rowCount, 0)}</dd>
-					</div>
-					<div>
-						<dt class="text-surface-500">Channels</dt>
-						<dd class="font-mono font-semibold">{session.channelCount}</dd>
-					</div>
-					<div>
-						<dt class="text-surface-500">Passes screening</dt>
-						<dd class="font-mono font-semibold">
-							{number(session.eligibility.statuses.eligible, 0)}
-						</dd>
-					</div>
-				</dl>
-			{/if}
+			<div class="flex flex-wrap items-center gap-4">
+				<DemoLoader
+					{session}
+					{datasets}
+					selectedId={selectedDemo}
+					onSelect={(id) => (selectedDemo = id)}
+					disabled={running}
+					loading={demoLoading}
+					onload={(id) => void loadDemo(id)}
+				/>
+				{#if session}<dl class="hidden items-center gap-5 text-xs xl:flex">
+						<div>
+							<dt class="text-surface-500">Duration</dt>
+							<dd class="font-mono font-semibold">
+								{number(session.endSec - session.startSec, 1)} s
+							</dd>
+						</div>
+						<div>
+							<dt class="text-surface-500">Samples</dt>
+							<dd class="font-mono font-semibold">{number(session.rowCount, 0)}</dd>
+						</div>
+						<div>
+							<dt class="text-surface-500">Channels</dt>
+							<dd class="font-mono font-semibold">{session.channelCount}</dd>
+						</div>
+						<div>
+							<dt class="text-surface-500">Passes screening</dt>
+							<dd class="font-mono font-semibold">
+								{number(session.eligibility.statuses.eligible, 0)}
+							</dd>
+						</div>
+					</dl>
+				{/if}
+				<ThemeToggle />
+			</div>
 		</div>
 	</header>
 	<main class="mx-auto w-full max-w-[1920px] space-y-4 p-4 lg:p-6">

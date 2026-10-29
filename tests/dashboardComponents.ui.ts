@@ -16,6 +16,7 @@ import TelemetryChart from '../src/lib/components/dashboard/TelemetryChart.svelt
 import TelemetryPanel from '../src/lib/components/dashboard/TelemetryPanel.svelte';
 import { telemetryFixture } from './telemetryFixtures';
 import { number as displayNumber } from '../src/lib/components/dashboard/presentation';
+import { evaluatedTimeoutJob } from './investigationPresentationFixtures';
 
 function job(): InvestigationJob {
 	return {
@@ -75,6 +76,31 @@ function job(): InvestigationJob {
 	};
 }
 describe('dashboard server rendering (no browser or API)', () => {
+	it('distinguishes completed VE results from a timed-out narrative while preserving error details and trace access', () => {
+		const value = evaluatedTimeoutJob();
+		const html = render(RunProgress, { props: { job: value, onTrace: () => {} } }).body;
+		expect(html).toContain('VE analysis and evaluation completed');
+		expect(html).toContain('Final AI report timed out');
+		expect(html).toContain(value.error!);
+		expect(html).toContain('Deadline exceeded / partial');
+		expect(html).toContain('Inspect trace');
+		value.presentation = null;
+		expect(render(RunProgress, { props: { job: value, onTrace: () => {} } }).body).not.toContain(
+			'VE analysis and evaluation completed'
+		);
+	});
+	it('shows friendly live phases and preserves the historical loading label', () => {
+		const value = job();
+		value.state = 'running';
+		value.progress = { phase: 'awaiting-model', tool: null, completed: [] };
+		expect(render(RunProgress, { props: { job: value, onTrace: () => {} } }).body).toContain(
+			'Analyzing'
+		);
+		value.source = 'recorded';
+		const html = render(RunProgress, { props: { job: value, onTrace: () => {} } }).body;
+		expect(html).toContain('loading historical result');
+		expect(html).not.toContain('Analyzing');
+	});
 	it('renders exact zero without a trailing circular glyph, while retaining status distinctions and near-zero precision', () => {
 		const base = {
 			rpmIndex: 0,
@@ -385,7 +411,7 @@ describe('dashboard server rendering (no browser or API)', () => {
 		value.result = null;
 		value.progress = { phase: 'executing-tool', tool: 'fit_ve_candidate', completed: [] };
 		const html = render(RunProgress, { props: { job: value, onTrace: () => {} } }).body;
-		expect(html).toContain('executing tool');
+		expect(html).toContain('Running analysis tool');
 		expect(html).toContain('fit ve candidate');
 		expect(html).toContain('0 completed calls');
 		expect(html).toContain('aria-busy="true"');

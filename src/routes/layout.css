@@ -7,3 +7,5 @@
 @import '@skeletonlabs/skeleton/themes/cerberus';
 @import '@skeletonlabs/skeleton/themes/terminus';
 @import '@skeletonlabs/skeleton/themes/dracula';
+
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));

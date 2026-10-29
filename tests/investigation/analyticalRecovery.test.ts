@@ -173,6 +173,25 @@ const diagnostics = () => {
 };
 
 describe('single bounded analytical final-report recovery (mock HTTP, actual deterministic tools)', () => {
+	it('instructs evaluation before finalization while retaining fit-first and unavailable paths', async () => {
+		const next = vi
+			.fn<InvestigationModel['next']>()
+			.mockResolvedValueOnce(tool('describe_log'))
+			.mockResolvedValue({ kind: 'final', factIds: [], commentary: [] });
+		const result = await runInvestigation(run(), { next }, { goal: 'Inspect' });
+		const instructions = next.mock.calls[0][0].instructions;
+		expect(instructions).toContain(
+			'describe_log -> analyze_afr_error -> fit_ve_candidate -> evaluate_ve_candidate -> final report'
+		);
+		expect(instructions).toContain(
+			'Do not voluntarily finalize with this evaluation still pending'
+		);
+		expect(instructions).toContain('unchanged or no-supported-proposal candidates');
+		expect(instructions).toContain('Fit may be called first');
+		expect(instructions).toContain('tool-reported unavailability');
+		expect(result.termination?.code).toBe('incomplete-workflow');
+		expect(result.trace).toHaveLength(1);
+	});
 	it('continues from the early final response without replaying completed calls and evaluates the frozen candidate', async () => {
 		const state = run(),
 			m = model(),
