@@ -155,7 +155,14 @@ export class InvestigationDiagnostics {
 	#events: DiagnosticEvent[] = [];
 	#dropped = 0;
 	#finished = false;
-	constructor(private options: Options = {}) {}
+	#directory: string;
+	#persistenceWarned = false;
+	constructor(private options: Options = {}) {
+		this.#directory = resolve(
+			options.directory ??
+				(process.env.AGENTICEFI_DIAGNOSTICS_DIR?.trim() || '.investigation-diagnostics')
+		);
+	}
 	get events(): readonly DiagnosticEvent[] {
 		return structuredClone(this.#events);
 	}
@@ -234,7 +241,7 @@ export class InvestigationDiagnostics {
 				/* Observers cannot affect execution. */
 			}
 			if (this.options.persist !== false) {
-				const directory = resolve(this.options.directory ?? '.investigation-diagnostics');
+				const directory = this.#directory;
 				const body = JSON.stringify(
 					{ version: 1, jobId: this.#jobId, droppedEvents: this.#dropped, events: this.#events },
 					null,
@@ -244,7 +251,7 @@ export class InvestigationDiagnostics {
 				writes = writes
 					.catch(() => {})
 					.then(async () => {
-						await mkdir(directory, { recursive: true });
+						await mkdir(directory, { recursive: true, mode: 0o700 });
 						await writeFile(join(directory, name + '.tmp'), body, { mode: 0o600 });
 						await rename(join(directory, name + '.tmp'), join(directory, name));
 						const files = await readdir(directory);
@@ -257,7 +264,16 @@ export class InvestigationDiagnostics {
 							await unlink(join(directory, file.n));
 					})
 					.catch(() => {
-						/* Logging failure cannot change the investigation. */
+						// One fixed warning per recorder; never expose filesystem errors or paths.
+						if (this.#persistenceWarned) return;
+						this.#persistenceWarned = true;
+						try {
+							console.warn(
+								'[AgenticEFI] Investigation diagnostics persistence failed; in-memory diagnostics retained.'
+							);
+						} catch {
+							/* Even a logging failure cannot change the investigation. */
+						}
 					});
 			}
 		} catch {

@@ -1,0 +1,39 @@
+[Unit]
+Description=AgenticEFI controlled hackathon demonstration
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=agenticefi
+Group=agenticefi
+WorkingDirectory=/opt/agenticefi/current
+# The system manager reads this root:root 0600 file before dropping privileges.
+EnvironmentFile=/etc/agenticefi/agenticefi.env
+Environment=NODE_ENV=production
+Environment=NODE_OPTIONS=
+ExecStartPre=/usr/bin/node deploy/verify-release.mjs
+ExecStart=/usr/bin/node build
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=30
+# This is a last-resort stop limit, NOT a background-job drain procedure.
+TimeoutStopSec=330
+KillMode=control-group
+UMask=0077
+StateDirectory=agenticefi
+StateDirectoryMode=0700
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true
+ReadWritePaths=/var/lib/agenticefi
+MemoryMax=3G
+SyslogIdentifier=agenticefi
+LogRateLimitIntervalSec=30s
+LogRateLimitBurst=100
+
+[Install]
+WantedBy=multi-user.target

@@ -47,7 +47,15 @@ export function numberParam(url: URL, key: string, fallback?: number): number {
 	return Number(raw);
 }
 export async function requestObject(request: Request): Promise<Record<string, unknown>> {
-	const text = await request.text();
+	let text: string;
+	try {
+		text = await request.text();
+	} catch (error) {
+		// adapter-node rejects oversized streams before our own JSON-size check.
+		if (error && typeof error === 'object' && 'status' in error && error.status === 413)
+			throw new DashboardError(413, 'Request is too large.');
+		throw error;
+	}
 	if (text.length > 8192) throw new DashboardError(413, 'Request is too large.');
 	try {
 		const data: unknown = JSON.parse(text);

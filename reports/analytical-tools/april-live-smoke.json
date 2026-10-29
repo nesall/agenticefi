@@ -1,2216 +1,2104 @@
 {
-  "source": "LIVE Meta API; no mocks, replay, scripted model calls, or retries",
-  "startedAt": "2026-10-27T21:39:13.173Z",
-  "model": "muse-spark-1.3-contributor",
-  "outcome": "passed",
-  "limits": {
-    "maxToolCalls": 6,
-    "maxIterations": 7,
-    "timeoutMs": 120000,
-    "maxOutputTokensPerResponse": 4096,
-    "theoreticalMaxOutputTokens": 28672,
-    "automaticRetries": 0
-  },
-  "elapsedMs": 45954.333,
-  "setupBlocker": null,
-  "adapterError": null,
-  "evidenceError": null,
-  "usage": {
-    "inputTokens": 27569,
-    "outputTokens": 2732,
-    "totalTokens": 30301,
-    "estimatedCost": null,
-    "costLimitation": "No authoritative per-model pricing is configured; no cost estimate invented. Usage includes reasoning output when provider counts it."
-  },
-  "actualModelResponses": [
-    {
-      "turn": 1,
-      "httpStatus": 200,
-      "elapsedMs": 7390.3047,
-      "responseId": "resp_6ae11a086a6c998fd2e04735",
-      "status": "completed",
-      "output": [
-        {
-          "type": "message",
-          "role": "assistant",
-          "content": [
-            {
-              "type": "output_text",
-              "text": "Starting your bounded RX-7 review — finalizing the frozen candidate and checking coverage."
-            }
-          ]
-        },
-        {
-          "type": "function_call",
-          "name": "fit_ve_candidate",
-          "call_id": "call_10c74a84-febf-42d0-9cd1-003b971516ef",
-          "arguments": "{}"
-        }
-      ],
-      "usage": {
-        "input": 1818,
-        "output": 751,
-        "total": 2569,
-        "cachedInput": 0,
-        "reasoningOutput": 686
-      },
-      "observation": null
-    },
-    {
-      "turn": 2,
-      "httpStatus": 200,
-      "elapsedMs": 11869.824999999999,
-      "responseId": "resp_6ae11a10cc76882d11ec490d",
-      "status": "completed",
-      "output": [
-        {
-          "type": "message",
-          "role": "assistant",
-          "content": [
-            {
-              "type": "output_text",
-              "text": "No supported cells in the frozen fit — now gathering training and holdout evidence."
-            }
-          ]
-        },
-        {
-          "type": "function_call",
-          "name": "analyze_afr_error",
-          "call_id": "call_55cf152d-fd88-475e-9a70-38db5e5e591e",
-          "arguments": "{}"
-        }
-      ],
-      "usage": {
-        "input": 3306,
-        "output": 388,
-        "total": 3694,
-        "cachedInput": 0,
-        "reasoningOutput": 322
-      },
-      "observation": null
-    },
-    {
-      "turn": 3,
-      "httpStatus": 200,
-      "elapsedMs": 9704.038700000001,
-      "responseId": "resp_6ae11a19c49c9e49ed4c4236",
-      "status": "completed",
-      "output": [
-        {
-          "type": "message",
-          "role": "assistant",
-          "content": [
-            {
-              "type": "output_text",
-              "text": "Inspection shows limited training coverage — now evaluating paired holdout predictions."
-            }
-          ]
-        },
-        {
-          "type": "function_call",
-          "name": "evaluate_ve_candidate",
-          "call_id": "call_31195f85-1c90-49dc-9e62-16af379eeed2",
-          "arguments": "{\"candidateRef\":\"877810f7-52a4-467a-b92a-d6f3c12ef303:candidate\"}"
-        }
-      ],
-      "usage": {
-        "input": 9382,
-        "output": 221,
-        "total": 9603,
-        "cachedInput": 0,
-        "reasoningOutput": 122
-      },
-      "observation": null
-    },
-    {
-      "turn": 4,
-      "httpStatus": 200,
-      "elapsedMs": 15755.1715,
-      "responseId": "resp_6ae11a2bacec973b39d34a65",
-      "status": "completed",
-      "output": [
-        {
-          "type": "message",
-          "role": "assistant",
-          "content": [
-            {
-              "type": "output_text",
-              "text": "{\"kind\":\"final\",\"factIds\":[\"877810f7-52a4-467a-b92a-d6f3c12ef303:fit:fit-summary\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-3\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-2\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-2\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-3-2\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-3\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation:paired-prediction\"],\"commentary\":[{\"kind\":\"interpretation\",\"text\":\"Training-region AFR-error evidence is concentrated in low idle neighborhoods (800-900 RPM, 45-55 kPa) with 256 and 206 observations, tapering to 105, 24 and 16 rows at higher RPM/MAP; this describes only observed diagnostic errors, not VE corrections.\",\"evidenceIds\":[\"evidence-2\"]},{\"kind\":\"limitation\",\"text\":\"Frozen candidate finalized as no-supported-proposal with 0 accepted, 0 suppressed, 256 unsupported cells from 607 ready training rows in 2 episodes; minimum per-cell thresholds requiring 50 samples and 3 episodes were not met, so unchanged zero-correction is valid and no ECU write is authorized.\",\"evidenceIds\":[\"evidence-1\",\"evidence-2\"]},{\"kind\":\"hypothesis\",\"text\":\"Limited episode diversity (only 2 training episodes) may explain why even densely sampled neighborhoods failed support despite hundreds of rows, as samples within episodes may remain correlated.\",\"evidenceIds\":[\"evidence-1\",\"evidence-2\"]},{\"kind\":\"interpretation\",\"text\":\"Paired holdout predictions on 183 rows show identical baseline and candidate MAE/RMSE with zero delta because candidate VE equals original VE; these are conditional model predictions, not measured improvements, with no affected rows.\",\"evidenceIds\":[\"evidence-3\"]},{\"kind\":\"limitation\",\"text\":\"AFR delay fixed at zero, equal sample weighting, correlated windows, unassessed neighboring regions, and assumed proportional fuel-to-VE with fixed other factors limit causal inference; coverage denominators are not confidence estimates.\",\"evidenceIds\":[\"evidence-1\",\"evidence-2\",\"evidence-3\"]}]}"
-            }
-          ]
-        }
-      ],
-      "usage": {
-        "input": 13063,
-        "output": 1372,
-        "total": 14435,
-        "cachedInput": 0,
-        "reasoningOutput": 813
-      },
-      "observation": null
-    }
-  ],
-  "deterministicValidationChecks": [
-    {
-      "name": "offline validation rejects analyze_afr_error negative control",
-      "passed": true
-    },
-    {
-      "name": "offline validation rejects fit_ve_candidate negative control",
-      "passed": true
-    },
-    {
-      "name": "offline validation rejects evaluate_ve_candidate negative control",
-      "passed": true
-    },
-    {
-      "name": "runner completed a final report",
-      "passed": true
-    },
-    {
-      "name": "model selected successful analyze_afr_error",
-      "passed": true
-    },
-    {
-      "name": "model selected successful fit_ve_candidate",
-      "passed": true
-    },
-    {
-      "name": "model selected successful evaluate_ve_candidate",
-      "passed": true
-    },
-    {
-      "name": "every executed call originates in an actual native provider call",
-      "passed": true
-    },
-    {
-      "name": "selected arguments validated: evidence-1",
-      "passed": true
-    },
-    {
-      "name": "selected arguments validated: evidence-2",
-      "passed": true
-    },
-    {
-      "name": "selected arguments validated: evidence-3",
-      "passed": true
-    },
-    {
-      "name": "no tool failures",
-      "passed": true
-    },
-    {
-      "name": "same-run provenance: analysis",
-      "passed": true
-    },
-    {
-      "name": "same-run provenance: fit",
-      "passed": true
-    },
-    {
-      "name": "same-run provenance: candidate",
-      "passed": true
-    },
-    {
-      "name": "same-run provenance: evaluation",
-      "passed": true
-    },
-    {
-      "name": "all returned full evidence references verified",
-      "passed": true
-    },
-    {
-      "name": "retained analysis evidence",
-      "passed": true
-    },
-    {
-      "name": "retained fit evidence",
-      "passed": true
-    },
-    {
-      "name": "retained candidate evidence",
-      "passed": true
-    },
-    {
-      "name": "retained evaluation evidence",
-      "passed": true
-    },
-    {
-      "name": "April V1 unsupported-cell outcome preserved",
-      "passed": true
-    },
-    {
-      "name": "candidate remains unchanged",
-      "passed": true
-    },
-    {
-      "name": "paired holdout uses canonical rows and unchanged metrics",
-      "passed": true
-    },
-    {
-      "name": "artifact identities link analysis fit candidate and evaluation",
-      "passed": true
-    },
-    {
-      "name": "evaluation follows finalization with the returned candidate reference",
-      "passed": true
-    },
-    {
-      "name": "server facts match authoritative findings",
-      "passed": true
-    },
-    {
-      "name": "model commentary is separate and evidence linked",
-      "passed": true
-    },
-    {
-      "name": "final report remains advisory",
-      "passed": true
-    }
-  ],
-  "verifiedEvidenceReferences": [
-    "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-    "877810f7-52a4-467a-b92a-d6f3c12ef303:fit",
-    "877810f7-52a4-467a-b92a-d6f3c12ef303:candidate",
-    "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation"
-  ],
-  "deterministicAnalysis": {
-    "coverage": {
-      "trainingRows": 607,
-      "holdoutRows": 183,
-      "supportedCells": 0,
-      "totalCells": 256,
-      "exclusionCounts": {
-        "OUTSIDE_EVALUATION_PARTITIONS": 236,
-        "NO_EPISODE": 922,
-        "CLASSIFIER_NOT_ELIGIBLE": 2044,
-        "PARTITION_SUPPORT_LEAKAGE": 31,
-        "VE_COORDINATES_UNAVAILABLE": 73,
-        "AFR_OBSERVATION_UNAVAILABLE": 27
-      }
-    },
-    "split": {
-      "status": "ready",
-      "training": {
-        "startRow": 18,
-        "endRowExclusive": 2144
-      },
-      "holdout": {
-        "startRow": 2362,
-        "endRowExclusive": 2859
-      },
-      "actualGapSec": 14.605000000000018
-    },
-    "episodes": 4,
-    "fitStatus": "no-supported-proposal",
-    "changedCells": 0,
-    "paired": {
-      "status": "complete",
-      "rowCount": 183,
-      "failedPredictions": 0,
-      "baseline": {
-        "count": 183,
-        "mae": 0.15921599271402595,
-        "rmse": 0.19831132610939423,
-        "errors": {
-          "count": 183,
-          "mean": 0.016481056466301186,
-          "median": -0.0013200000000015422,
-          "populationStdDev": 0.19762529403146012,
-          "q25": -0.1999999999999993,
-          "q75": 0.19799999999999862,
-          "iqr": 0.3979999999999979,
-          "mad": 0.19867999999999952,
-          "min": -0.3043199999999988,
-          "max": 0.3749999999999982
-        }
-      },
-      "candidate": {
-        "count": 183,
-        "mae": 0.15921599271402595,
-        "rmse": 0.19831132610939423,
-        "errors": {
-          "count": 183,
-          "mean": 0.016481056466301186,
-          "median": -0.0013200000000015422,
-          "populationStdDev": 0.19762529403146012,
-          "q25": -0.1999999999999993,
-          "q75": 0.19799999999999862,
-          "iqr": 0.3979999999999979,
-          "mad": 0.19867999999999952,
-          "min": -0.3043199999999988,
-          "max": 0.3749999999999982
-        }
-      },
-      "predictedDeltaMae": 0,
-      "predictedDeltaRmse": 0
-    },
-    "facts": [
-      {
-        "key": "fit-summary",
-        "kind": "fit-summary",
-        "statement": "Training-only fit no-supported-proposal: 0 accepted, 0 suppressed and 256 unsupported VE cells. These are advisory proposals, not measured improvements or ECU-write authorization.",
-        "values": {
-          "status": "no-supported-proposal",
-          "supported": 0,
-          "accepted": 0,
-          "suppressed": 0,
-          "unsupported": 256
-        },
-        "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit:fit-summary",
-        "evidenceId": "evidence-1",
-        "artifact": {
-          "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-          "contextId": "april-single-live-smoke",
-          "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-          "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit",
-          "kind": "fit",
-          "sha256": "4e24fe5f947456197aaf2debbbd7bf1654813e9e41a1a03376f6971ab076fad3",
-          "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-          "candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
-        }
-      },
-      {
-        "key": "region-1-3",
-        "kind": "afr-error",
-        "statement": "Training VE neighborhood RPM 800-900, MAP 50-55 kPa has 256 eligible observations; measured-minus-target AFR mean 0.056869804687498915, median -1.7763568394002505e-15.",
-        "values": {
-          "rpmIndex": 1,
-          "mapIndex": 3,
-          "count": 256,
-          "meanError": 0.056869804687498915,
-          "medianError": -1.7763568394002505e-15
-        },
-        "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-3",
-        "evidenceId": "evidence-2",
-        "artifact": {
-          "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-          "contextId": "april-single-live-smoke",
-          "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-          "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-          "kind": "analysis",
-          "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-          "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-          "candidateId": null
-        }
-      },
-      {
-        "key": "region-1-2",
-        "kind": "afr-error",
-        "statement": "Training VE neighborhood RPM 800-900, MAP 45-50 kPa has 206 eligible observations; measured-minus-target AFR mean 0.0728155339805815, median 0.09999999999999964.",
-        "values": {
-          "rpmIndex": 1,
-          "mapIndex": 2,
-          "count": 206,
-          "meanError": 0.0728155339805815,
-          "medianError": 0.09999999999999964
-        },
-        "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-2",
-        "evidenceId": "evidence-2",
-        "artifact": {
-          "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-          "contextId": "april-single-live-smoke",
-          "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-          "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-          "kind": "analysis",
-          "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-          "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-          "candidateId": null
-        }
-      },
-      {
-        "key": "region-2-2",
-        "kind": "afr-error",
-        "statement": "Training VE neighborhood RPM 900-1000, MAP 45-50 kPa has 105 eligible observations; measured-minus-target AFR mean 0.07981904761904653, median 0.08699999999999974.",
-        "values": {
-          "rpmIndex": 2,
-          "mapIndex": 2,
-          "count": 105,
-          "meanError": 0.07981904761904653,
-          "medianError": 0.08699999999999974
-        },
-        "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-2",
-        "evidenceId": "evidence-2",
-        "artifact": {
-          "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-          "contextId": "april-single-live-smoke",
-          "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-          "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-          "kind": "analysis",
-          "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-          "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-          "candidateId": null
-        }
-      },
-      {
-        "key": "region-3-2",
-        "kind": "afr-error",
-        "statement": "Training VE neighborhood RPM 1000-1200, MAP 45-50 kPa has 24 eligible observations; measured-minus-target AFR mean -0.2533333333333348, median -0.22350000000000136.",
-        "values": {
-          "rpmIndex": 3,
-          "mapIndex": 2,
-          "count": 24,
-          "meanError": -0.2533333333333348,
-          "medianError": -0.22350000000000136
-        },
-        "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-3-2",
-        "evidenceId": "evidence-2",
-        "artifact": {
-          "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-          "contextId": "april-single-live-smoke",
-          "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-          "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-          "kind": "analysis",
-          "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-          "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-          "candidateId": null
-        }
-      },
-      {
-        "key": "region-2-3",
-        "kind": "afr-error",
-        "statement": "Training VE neighborhood RPM 900-1000, MAP 50-55 kPa has 16 eligible observations; measured-minus-target AFR mean 0.34975333333333225, median 0.3379199999999978.",
-        "values": {
-          "rpmIndex": 2,
-          "mapIndex": 3,
-          "count": 16,
-          "meanError": 0.34975333333333225,
-          "medianError": 0.3379199999999978
-        },
-        "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-3",
-        "evidenceId": "evidence-2",
-        "artifact": {
-          "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-          "contextId": "april-single-live-smoke",
-          "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-          "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-          "kind": "analysis",
-          "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-          "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-          "candidateId": null
-        }
-      },
-      {
-        "key": "paired-prediction",
-        "kind": "paired-prediction",
-        "statement": "Conditional held-out model prediction on 183 identical baseline/candidate rows: MAE 0.15921599271402595 -> 0.15921599271402595, RMSE 0.19831132610939423 -> 0.19831132610939423. This is not measured improvement; worsened metrics remain included.",
-        "values": {
-          "rowCount": 183,
-          "baselineMae": 0.15921599271402595,
-          "candidateMae": 0.15921599271402595,
-          "baselineRmse": 0.19831132610939423,
-          "candidateRmse": 0.19831132610939423
-        },
-        "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation:paired-prediction",
-        "evidenceId": "evidence-3",
-        "artifact": {
-          "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-          "contextId": "april-single-live-smoke",
-          "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-          "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation",
-          "kind": "evaluation",
-          "sha256": "1f89dcc6f5cf1ed835c73c7cb5b3b310a5d6762a62a1a6d563ab6148d2055d74",
-          "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-          "candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
-        }
-      }
-    ],
-    "settings": {
-      "profile": {
-        "version": "steady-afr-ve-v1",
-        "config": {
-          "minCoolantC": 70,
-          "maxWarmupCorrectionDeviationPct": 1,
-          "maxAbsTpsRatePctPerSec": 5,
-          "maxAbsMapRateKpaPerSec": 10,
-          "maxAbsRpmRatePerSec": 200,
-          "maxGapSec": 0.5,
-          "steadyWindowSec": 1,
-          "possibleFuelCutMaxPulseWidthMs": 0.1,
-          "possibleFuelCutMinRpm": 1200,
-          "possibleFuelCutMaxTpsPct": 2
-        }
-      },
-      "preparation": {
-        "trainingFraction": 0.7,
-        "episodeMergeGapSec": 10,
-        "embargoSec": 10,
-        "maxObservationGapSec": 0.5,
-        "maxCorrectionPct": 3,
-        "minTrainingSamplesPerCell": 50,
-        "minTrainingEpisodesPerCell": 3,
-        "minEpisodeSupportSec": 2,
-        "minRelativeInfluence": 0.1
-      },
-      "fitting": {
-        "maxCorrectionPct": 3,
-        "huberThreshold": 0.02,
-        "ridgePenalty": 0.01,
-        "maxConditionNumber": 1000,
-        "relativeRankTolerance": 0.000001,
-        "minCorrectionPct": 0.5,
-        "maxLooRangePct": 2,
-        "minLooRemainingEpisodes": 2,
-        "maxIterations": 5000,
-        "gradientTolerance": 1e-10
-      },
-      "limits": {
-        "maxLogBytes": 67108864,
-        "maxRows": 60000,
-        "maxChannels": 300,
-        "maxCells": 256,
-        "maxTrainingEpisodes": 64,
-        "maxSupportedCells": 32,
-        "maxArtifactBytes": 134217728,
-        "maxResponseBytes": 32000,
-        "jobTimeoutMs": 120000,
-        "retentionMs": 120000
-      }
-    }
-  },
-  "validatedInvestigation": {
-    "status": "completed",
-    "reason": null,
-    "report": {
-      "advisoryOnly": true,
-      "findings": [
-        {
-          "statement": "Training-only fit no-supported-proposal: 0 accepted, 0 suppressed and 256 unsupported VE cells. These are advisory proposals, not measured improvements or ECU-write authorization.",
-          "evidenceIds": [
-            "evidence-1"
-          ],
-          "verification": "server-numerical"
-        },
-        {
-          "statement": "Training VE neighborhood RPM 800-900, MAP 50-55 kPa has 256 eligible observations; measured-minus-target AFR mean 0.056869804687498915, median -1.7763568394002505e-15.",
-          "evidenceIds": [
-            "evidence-2"
-          ],
-          "verification": "server-numerical"
-        },
-        {
-          "statement": "Training VE neighborhood RPM 800-900, MAP 45-50 kPa has 206 eligible observations; measured-minus-target AFR mean 0.0728155339805815, median 0.09999999999999964.",
-          "evidenceIds": [
-            "evidence-2"
-          ],
-          "verification": "server-numerical"
-        },
-        {
-          "statement": "Training VE neighborhood RPM 900-1000, MAP 45-50 kPa has 105 eligible observations; measured-minus-target AFR mean 0.07981904761904653, median 0.08699999999999974.",
-          "evidenceIds": [
-            "evidence-2"
-          ],
-          "verification": "server-numerical"
-        },
-        {
-          "statement": "Training VE neighborhood RPM 1000-1200, MAP 45-50 kPa has 24 eligible observations; measured-minus-target AFR mean -0.2533333333333348, median -0.22350000000000136.",
-          "evidenceIds": [
-            "evidence-2"
-          ],
-          "verification": "server-numerical"
-        },
-        {
-          "statement": "Training VE neighborhood RPM 900-1000, MAP 50-55 kPa has 16 eligible observations; measured-minus-target AFR mean 0.34975333333333225, median 0.3379199999999978.",
-          "evidenceIds": [
-            "evidence-2"
-          ],
-          "verification": "server-numerical"
-        },
-        {
-          "statement": "Conditional held-out model prediction on 183 identical baseline/candidate rows: MAE 0.15921599271402595 -> 0.15921599271402595, RMSE 0.19831132610939423 -> 0.19831132610939423. This is not measured improvement; worsened metrics remain included.",
-          "evidenceIds": [
-            "evidence-3"
-          ],
-          "verification": "server-numerical"
-        }
-      ],
-      "commentary": [
-        {
-          "kind": "interpretation",
-          "text": "Training-region AFR-error evidence is concentrated in low idle neighborhoods (800-900 RPM, 45-55 kPa) with 256 and 206 observations, tapering to 105, 24 and 16 rows at higher RPM/MAP; this describes only observed diagnostic errors, not VE corrections.",
-          "evidenceIds": [
-            "evidence-2"
-          ],
-          "verification": "unverified-model-commentary"
-        },
-        {
-          "kind": "limitation",
-          "text": "Frozen candidate finalized as no-supported-proposal with 0 accepted, 0 suppressed, 256 unsupported cells from 607 ready training rows in 2 episodes; minimum per-cell thresholds requiring 50 samples and 3 episodes were not met, so unchanged zero-correction is valid and no ECU write is authorized.",
-          "evidenceIds": [
-            "evidence-1",
-            "evidence-2"
-          ],
-          "verification": "unverified-model-commentary"
-        },
-        {
-          "kind": "hypothesis",
-          "text": "Limited episode diversity (only 2 training episodes) may explain why even densely sampled neighborhoods failed support despite hundreds of rows, as samples within episodes may remain correlated.",
-          "evidenceIds": [
-            "evidence-1",
-            "evidence-2"
-          ],
-          "verification": "unverified-model-commentary"
-        },
-        {
-          "kind": "interpretation",
-          "text": "Paired holdout predictions on 183 rows show identical baseline and candidate MAE/RMSE with zero delta because candidate VE equals original VE; these are conditional model predictions, not measured improvements, with no affected rows.",
-          "evidenceIds": [
-            "evidence-3"
-          ],
-          "verification": "unverified-model-commentary"
-        },
-        {
-          "kind": "limitation",
-          "text": "AFR delay fixed at zero, equal sample weighting, correlated windows, unassessed neighboring regions, and assumed proportional fuel-to-VE with fixed other factors limit causal inference; coverage denominators are not confidence estimates.",
-          "evidenceIds": [
-            "evidence-1",
-            "evidence-2",
-            "evidence-3"
-          ],
-          "verification": "unverified-model-commentary"
-        }
-      ],
-      "limitations": [
-        "Numerical statements are server-rendered; model commentary is unverified and does not establish engine causes.",
-        "Predicted AFR and metric changes assume proportional fueling and unchanged other factors. AFR delay compensation is unimplemented at 0 ms; improvements are not measured.",
-        "Unsupported, unidentifiable and unstable cells remain unchanged. Calibration association and active ECU table behavior require caller confirmation.",
-        "Only frozen training data determine fitting. Holdout results do not select parameters, masks, profiles or a winning candidate.",
-        "This advisory report cannot authorize ECU writes or automatic application of calibration changes.",
-        "Full evidence is retained in a private, expiring server run. It becomes unavailable after disposal, timeout or worker failure."
-      ]
-    },
-    "trace": [
-      {
-        "evidenceId": "evidence-1",
-        "tool": "fit_ve_candidate",
-        "arguments": {},
-        "result": {
-          "ok": true,
-          "data": {
-            "status": "no-supported-proposal",
-            "analysisRef": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-            "candidateRef": "877810f7-52a4-467a-b92a-d6f3c12ef303:candidate",
-            "counts": {
-              "supported": 0,
-              "accepted": 0,
-              "suppressed": 0,
-              "unsupported": 256
-            },
-            "reasonCounts": {
-              "INSUFFICIENT_TRAINING_SAMPLES": 249,
-              "INSUFFICIENT_TRAINING_EPISODES": 256
-            },
-            "bounds": {
-              "requestedMaxPct": 3,
-              "datasetMaxPct": 3,
-              "effectiveMaxPct": 3
-            },
-            "config": {
-              "maxCorrectionPct": 3,
-              "huberThreshold": 0.02,
-              "ridgePenalty": 0.01,
-              "maxConditionNumber": 1000,
-              "relativeRankTolerance": 0.000001,
-              "minCorrectionPct": 0.5,
-              "maxLooRangePct": 2,
-              "minLooRemainingEpisodes": 2,
-              "maxIterations": 5000,
-              "gradientTolerance": 1e-10
-            },
-            "cells": [],
-            "nonUnsupportedCells": [],
-            "omittedCellDetails": 256,
-            "passes": [],
-            "trainingRows": 607,
-            "trainingEpisodes": 2,
-            "limitations": [
-              "Errors are measured AFR minus interpolated calibration target; they are not VE corrections or predicted improvements.",
-              "Calibration semantics must be explicitly bound by the caller; imported axis names alone do not prove MAP kPa or AFR units.",
-              "Only eligible rows with valid targets and in-bounds VE neighborhoods contribute. Diagnostic errors on other rows are not aggregate evidence.",
-              "AFR sensor/transport delay is unimplemented and fixed at zero; no telemetry is time shifted.",
-              "Statistics use equal sample weights, type-7 quantiles, population standard deviation and unscaled MAD. Samples/windows may be correlated; counts are not independent observations.",
-              "Empty statistics and unrepresentable numerical results are null. Coverage has explicit sample/grid denominators and is not a confidence estimate.",
-              "VE values are not interpolated or required for geometric neighborhood membership; missing target corners with positive weight block target lookup.",
-              "Eligibility indices, partitions and timestamps are validated. Existing classifier contracts lack session identity, so callers must supply results from the same unchanged session.",
-              "Phase A support measures training coverage; Phase B adds numerical conditioning and stability checks, not measured correction accuracy.",
-              "Episodes group whole accepted runs without AFR-error selection; nearby runs may remain correlated. Temporal gaps and embargo do not establish independence.",
-              "Partitioning uses fixed full-log eligibility to define episodes, then audits V1 boundaries or recomputes V2 within each partition. Full-log time high-water integrity is retained.",
-              "Calibration association and active ECU table/fueling mode require caller confirmation. Source content hashes detect mismatched artifacts, not incorrect calibration association.",
-              "Fuel is assumed proportional to interpolated VE with other factors fixed. Closed-loop corrections, injector behavior, sensor bias and unimplemented AFR delay can invalidate predictions.",
-              "Effects in unobserved neighboring operating regions are unassessed. V1 categorical fuel-cut limitations remain unchanged.",
-              "Phase B candidates are fitted from ready training rows only; holdout outcomes are not used in fitting, suppression, thresholds or model selection.",
-              "Conditioning uses episode-weighted, column-normalized unregularized influence matrices. Entire unidentifiable connected groups are suppressed; ridge does not establish identifiability.",
-              "Leave-one-training-episode-out ranges are stability diagnostics, not calibrated confidence intervals; episodes may remain correlated.",
-              "Huber loss fits relative fueling residuals rather than directly minimizing holdout AFR error. Phase A prediction assumptions and zero/unimplemented AFR delay remain unchanged.",
-              "Bounds are imposed inside the solver. Suppressed cells remain frozen at zero, with full refitting and repeated conditioning/stability checks; no completed vector is silently clipped."
-            ],
-            "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-            "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-            "fullEvidenceRef": {
-              "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-              "contextId": "april-single-live-smoke",
-              "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-              "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit",
-              "kind": "fit",
-              "sha256": "4e24fe5f947456197aaf2debbbd7bf1654813e9e41a1a03376f6971ab076fad3",
-              "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-              "candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
-            },
-            "facts": [
-              {
-                "key": "fit-summary",
-                "kind": "fit-summary",
-                "statement": "Training-only fit no-supported-proposal: 0 accepted, 0 suppressed and 256 unsupported VE cells. These are advisory proposals, not measured improvements or ECU-write authorization.",
-                "values": {
-                  "status": "no-supported-proposal",
-                  "supported": 0,
-                  "accepted": 0,
-                  "suppressed": 0,
-                  "unsupported": 256
-                },
-                "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit:fit-summary",
-                "evidenceId": "evidence-1",
-                "artifact": {
-                  "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-                  "contextId": "april-single-live-smoke",
-                  "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-                  "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit",
-                  "kind": "fit",
-                  "sha256": "4e24fe5f947456197aaf2debbbd7bf1654813e9e41a1a03376f6971ab076fad3",
-                  "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-                  "candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
-                }
-              }
-            ]
-          }
-        }
-      },
-      {
-        "evidenceId": "evidence-2",
-        "tool": "analyze_afr_error",
-        "arguments": {},
-        "result": {
-          "ok": true,
-          "data": {
-            "status": "available",
-            "analysisRef": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-            "partition": "training",
-            "classifier": {
-              "version": "steady-afr-ve-v1",
-              "config": {
-                "minCoolantC": 70,
-                "maxWarmupCorrectionDeviationPct": 1,
-                "maxAbsTpsRatePctPerSec": 5,
-                "maxAbsMapRateKpaPerSec": 10,
-                "maxAbsRpmRatePerSec": 200,
-                "maxGapSec": 0.5,
-                "steadyWindowSec": 1,
-                "possibleFuelCutMaxPulseWidthMs": 0.1,
-                "possibleFuelCutMinRpm": 1200,
-                "possibleFuelCutMaxTpsPct": 2
-              },
-              "baseConfig": null
-            },
-            "preparationConfig": {
-              "trainingFraction": 0.7,
-              "episodeMergeGapSec": 10,
-              "embargoSec": 10,
-              "maxObservationGapSec": 0.5,
-              "maxCorrectionPct": 3,
-              "minTrainingSamplesPerCell": 50,
-              "minTrainingEpisodesPerCell": 3,
-              "minEpisodeSupportSec": 2,
-              "minRelativeInfluence": 0.1
-            },
-            "partitionCounts": {
-              "rawTrainingRows": 2126,
-              "classifierEligibleRows": 616,
-              "readyTrainingRows": 607
-            },
-            "coverage": {
-              "trainingRows": 607,
-              "holdoutRows": 183,
-              "supportedCells": 0,
-              "totalCells": 256,
-              "exclusionCounts": {
-                "OUTSIDE_EVALUATION_PARTITIONS": 236,
-                "NO_EPISODE": 922,
-                "CLASSIFIER_NOT_ELIGIBLE": 2044,
-                "PARTITION_SUPPORT_LEAKAGE": 31,
-                "VE_COORDINATES_UNAVAILABLE": 73,
-                "AFR_OBSERVATION_UNAVAILABLE": 27
-              }
-            },
-            "split": {
-              "status": "ready",
-              "training": {
-                "startRow": 18,
-                "endRowExclusive": 2144
-              },
-              "holdout": {
-                "startRow": 2362,
-                "endRowExclusive": 2859
-              },
-              "actualGapSec": 14.605000000000018
-            },
-            "regions": [
-              {
-                "rpmIndex": 1,
-                "mapIndex": 3,
-                "rpmBounds": [
-                  800,
-                  900
-                ],
-                "mapBoundsKpa": [
-                  50,
-                  55
-                ],
-                "summary": {
-                  "counts": {
-                    "considered": 256,
-                    "eligible": 256,
-                    "excluded": 0,
-                    "validError": 256,
-                    "eligibleValidError": 256,
-                    "grouped": 256,
-                    "targetStatusCounts": {
-                      "available": 256
-                    },
-                    "veLocationStatusCounts": {
-                      "ok": 256
-                    },
-                    "errorStatusCounts": {
-                      "available": 256,
-                      "invalid-measured-afr": 0,
-                      "target-unavailable": 0,
-                      "nonfinite-error": 0
-                    }
-                  },
-                  "coverage": {
-                    "eligibleFractionOfConsidered": 1,
-                    "validErrorFractionOfEligible": 1,
-                    "groupedFractionOfEligible": 1
-                  },
-                  "error": {
-                    "count": 256,
-                    "mean": 0.056869804687498915,
-                    "median": -1.7763568394002505e-15,
-                    "populationStdDev": 0.13774537905546527,
-                    "q25": -0.030360000000002163,
-                    "q75": 0.0992500000000005,
-                    "iqr": 0.12961000000000267,
-                    "mad": 0.0942700000000025,
-                    "min": -0.1326400000000021,
-                    "max": 0.3993999999999982
-                  },
-                  "supportingRows": {
-                    "minimumErrorRow": 51,
-                    "maximumErrorRow": 2076,
-                    "nearestMedianRow": 692
-                  }
-                }
-              },
-              {
-                "rpmIndex": 1,
-                "mapIndex": 2,
-                "rpmBounds": [
-                  800,
-                  900
-                ],
-                "mapBoundsKpa": [
-                  45,
-                  50
-                ],
-                "summary": {
-                  "counts": {
-                    "considered": 206,
-                    "eligible": 206,
-                    "excluded": 0,
-                    "validError": 206,
-                    "eligibleValidError": 206,
-                    "grouped": 206,
-                    "targetStatusCounts": {
-                      "available": 206
-                    },
-                    "veLocationStatusCounts": {
-                      "ok": 206
-                    },
-                    "errorStatusCounts": {
-                      "available": 206,
-                      "invalid-measured-afr": 0,
-                      "target-unavailable": 0,
-                      "nonfinite-error": 0
-                    }
-                  },
-                  "coverage": {
-                    "eligibleFractionOfConsidered": 1,
-                    "validErrorFractionOfEligible": 1,
-                    "groupedFractionOfEligible": 1
-                  },
-                  "error": {
-                    "count": 206,
-                    "mean": 0.0728155339805815,
-                    "median": 0.09999999999999964,
-                    "populationStdDev": 0.09970264017429344,
-                    "q25": -1.7763568394002505e-15,
-                    "q75": 0.10000000000000142,
-                    "iqr": 0.1000000000000032,
-                    "mad": 0.09999999999999785,
-                    "min": -0.1000000000000032,
-                    "max": 0.3000000000000007
-                  },
-                  "supportingRows": {
-                    "minimumErrorRow": 234,
-                    "maximumErrorRow": 630,
-                    "nearestMedianRow": 558
-                  }
-                }
-              },
-              {
-                "rpmIndex": 2,
-                "mapIndex": 2,
-                "rpmBounds": [
-                  900,
-                  1000
-                ],
-                "mapBoundsKpa": [
-                  45,
-                  50
-                ],
-                "summary": {
-                  "counts": {
-                    "considered": 105,
-                    "eligible": 105,
-                    "excluded": 0,
-                    "validError": 105,
-                    "eligibleValidError": 105,
-                    "grouped": 105,
-                    "targetStatusCounts": {
-                      "available": 105
-                    },
-                    "veLocationStatusCounts": {
-                      "ok": 105
-                    },
-                    "errorStatusCounts": {
-                      "available": 105,
-                      "invalid-measured-afr": 0,
-                      "target-unavailable": 0,
-                      "nonfinite-error": 0
-                    }
-                  },
-                  "coverage": {
-                    "eligibleFractionOfConsidered": 1,
-                    "validErrorFractionOfEligible": 1,
-                    "groupedFractionOfEligible": 1
-                  },
-                  "error": {
-                    "count": 105,
-                    "mean": 0.07981904761904653,
-                    "median": 0.08699999999999974,
-                    "populationStdDev": 0.20927688566892308,
-                    "q25": -0.021000000000000796,
-                    "q75": 0.18899999999999828,
-                    "iqr": 0.20999999999999908,
-                    "mad": 0.1070000000000011,
-                    "min": -0.39400000000000013,
-                    "max": 0.5209999999999972
-                  },
-                  "supportingRows": {
-                    "minimumErrorRow": 1653,
-                    "maximumErrorRow": 477,
-                    "nearestMedianRow": 1726
-                  }
-                }
-              },
-              {
-                "rpmIndex": 3,
-                "mapIndex": 2,
-                "rpmBounds": [
-                  1000,
-                  1200
-                ],
-                "mapBoundsKpa": [
-                  45,
-                  50
-                ],
-                "summary": {
-                  "counts": {
-                    "considered": 24,
-                    "eligible": 24,
-                    "excluded": 0,
-                    "validError": 24,
-                    "eligibleValidError": 24,
-                    "grouped": 24,
-                    "targetStatusCounts": {
-                      "available": 24
-                    },
-                    "veLocationStatusCounts": {
-                      "ok": 24
-                    },
-                    "errorStatusCounts": {
-                      "available": 24,
-                      "invalid-measured-afr": 0,
-                      "target-unavailable": 0,
-                      "nonfinite-error": 0
-                    }
-                  },
-                  "coverage": {
-                    "eligibleFractionOfConsidered": 1,
-                    "validErrorFractionOfEligible": 1,
-                    "groupedFractionOfEligible": 1
-                  },
-                  "error": {
-                    "count": 24,
-                    "mean": -0.2533333333333348,
-                    "median": -0.22350000000000136,
-                    "populationStdDev": 0.3261742462072822,
-                    "q25": -0.5107499999999998,
-                    "q75": -0.12800000000000145,
-                    "iqr": 0.38274999999999837,
-                    "mad": 0.18100000000000005,
-                    "min": -0.8310000000000013,
-                    "max": 0.3979999999999979
-                  },
-                  "supportingRows": {
-                    "minimumErrorRow": 1644,
-                    "maximumErrorRow": 484,
-                    "nearestMedianRow": 1046
-                  }
-                }
-              },
-              {
-                "rpmIndex": 2,
-                "mapIndex": 3,
-                "rpmBounds": [
-                  900,
-                  1000
-                ],
-                "mapBoundsKpa": [
-                  50,
-                  55
-                ],
-                "summary": {
-                  "counts": {
-                    "considered": 16,
-                    "eligible": 16,
-                    "excluded": 0,
-                    "validError": 16,
-                    "eligibleValidError": 16,
-                    "grouped": 16,
-                    "targetStatusCounts": {
-                      "available": 16
-                    },
-                    "veLocationStatusCounts": {
-                      "ok": 16
-                    },
-                    "errorStatusCounts": {
-                      "available": 16,
-                      "invalid-measured-afr": 0,
-                      "target-unavailable": 0,
-                      "nonfinite-error": 0
-                    }
-                  },
-                  "coverage": {
-                    "eligibleFractionOfConsidered": 1,
-                    "validErrorFractionOfEligible": 1,
-                    "groupedFractionOfEligible": 1
-                  },
-                  "error": {
-                    "count": 16,
-                    "mean": 0.34975333333333225,
-                    "median": 0.3379199999999978,
-                    "populationStdDev": 0.31798583386074164,
-                    "q25": -0.0023450000000013738,
-                    "q75": 0.758680833333333,
-                    "iqr": 0.7610258333333344,
-                    "mad": 0.350319999999999,
-                    "min": -0.03333000000000297,
-                    "max": 0.7742499999999986
-                  },
-                  "supportingRows": {
-                    "minimumErrorRow": 411,
-                    "maximumErrorRow": 2024,
-                    "nearestMedianRow": 1119
-                  }
-                }
-              }
-            ],
-            "omittedPopulatedRegions": 0,
-            "supportingRows": [
-              {
-                "rowIndex": 51,
-                "episodeId": 0,
-                "partition": "training",
-                "status": "ready",
-                "reasons": [],
-                "afr": {
-                  "rowIndex": 51,
-                  "timeSec": 3.298,
-                  "rpm": 836,
-                  "mapKpa": 51.7,
-                  "measuredAfr": 13.1,
-                  "eligibilityStatus": "eligible",
-                  "eligibilityReasonCodes": [],
-                  "target": {
-                    "rpm": 836,
-                    "mapKpa": 51.7,
-                    "status": "ok",
-                    "neighborhood": {
-                      "rpmIndex": 0,
-                      "mapIndex": 2,
-                      "rpmBounds": [
-                        500,
-                        900
-                      ],
-                      "mapBoundsKpa": [
-                        50,
-                        55
-                      ],
-                      "rpmFraction": 0.84,
-                      "mapFraction": 0.3400000000000006
-                    },
-                    "value": 13.232640000000002,
-                    "corners": [
-                      {
-                        "rpmIndex": 0,
-                        "mapIndex": 2,
-                        "weight": 0.10559999999999993,
-                        "value": 13.200000000000001
-                      },
-                      {
-                        "rpmIndex": 1,
-                        "mapIndex": 2,
-                        "weight": 0.5543999999999996,
-                        "value": 13.200000000000001
-                      },
-                      {
-                        "rpmIndex": 0,
-                        "mapIndex": 3,
-                        "weight": 0.0544000000000001,
-                        "value": 13.8
-                      },
-                      {
-                        "rpmIndex": 1,
-                        "mapIndex": 3,
-                        "weight": 0.28560000000000046,
-                        "value": 13.200000000000001
-                      }
-                    ],
-                    "valueStatus": "available"
-                  },
-                  "veLocation": {
-                    "rpm": 836,
-                    "mapKpa": 51.7,
-                    "status": "ok",
-                    "neighborhood": {
-                      "rpmIndex": 1,
-                      "mapIndex": 3,
-                      "rpmBounds": [
-                        800,
-                        900
-                      ],
-                      "mapBoundsKpa": [
-                        50,
-                        55
-                      ],
-                      "rpmFraction": 0.36,
-                      "mapFraction": 0.3400000000000006
-                    }
-                  },
-                  "errorStatus": "available",
-                  "errorAfr": -0.1326400000000021,
-                  "contributesToAggregate": true,
-                  "delayMs": 0
-                },
-                "ve": {
-                  "location": {
-                    "rpm": 836,
-                    "mapKpa": 51.7,
-                    "status": "ok",
-                    "neighborhood": {
-                      "rpmIndex": 1,
-                      "mapIndex": 3,
-                      "rpmBounds": [
-                        800,
-                        900
-                      ],
-                      "mapBoundsKpa": [
-                        50,
-                        55
-                      ],
-                      "rpmFraction": 0.36,
-                      "mapFraction": 0.3400000000000006
-                    }
-                  },
-                  "status": "available",
-                  "value": 45.435120000000005,
-                  "corners": [
-                    {
-                      "rpmIndex": 1,
-                      "mapIndex": 3,
-                      "bilinearWeight": 0.42239999999999966,
-                      "originalVe": 45.1,
-                      "relativeInfluence": 0.4192844654091369
-                    },
-                    {
-                      "rpmIndex": 2,
-                      "mapIndex": 3,
-                      "bilinearWeight": 0.2375999999999998,
-                      "originalVe": 42,
-                      "relativeInfluence": 0.21963626375367756
-                    },
-                    {
-                      "rpmIndex": 1,
-                      "mapIndex": 4,
-                      "bilinearWeight": 0.21760000000000038,
-                      "originalVe": 49.800000000000004,
-                      "relativeInfluence": 0.2385044872776834
-                    },
-                    {
-                      "rpmIndex": 2,
-                      "mapIndex": 4,
-                      "bilinearWeight": 0.1224000000000002,
-                      "originalVe": 45.5,
-                      "relativeInfluence": 0.12257478355950217
-                    }
-                  ]
-                },
-                "supportRows": {
-                  "startRow": 36,
-                  "endRow": 51
-                }
-              },
-              {
-                "rowIndex": 2076,
-                "episodeId": 1,
-                "partition": "training",
-                "status": "ready",
-                "reasons": [],
-                "afr": {
-                  "rowIndex": 2076,
-                  "timeSec": 138.318,
-                  "rpm": 890,
-                  "mapKpa": 50.2,
-                  "measuredAfr": 13.6,
-                  "eligibilityStatus": "eligible",
-                  "eligibilityReasonCodes": [],
-                  "target": {
-                    "rpm": 890,
-                    "mapKpa": 50.2,
-                    "status": "ok",
-                    "neighborhood": {
-                      "rpmIndex": 0,
-                      "mapIndex": 2,
-                      "rpmBounds": [
-                        500,
-                        900
-                      ],
-                      "mapBoundsKpa": [
-                        50,
-                        55
-                      ],
-                      "rpmFraction": 0.975,
-                      "mapFraction": 0.04000000000000057
-                    },
-                    "value": 13.200600000000001,
-                    "corners": [
-                      {
-                        "rpmIndex": 0,
-                        "mapIndex": 2,
-                        "weight": 0.024000000000000007,
-                        "value": 13.200000000000001
-                      },
-                      {
-                        "rpmIndex": 1,
-                        "mapIndex": 2,
-                        "weight": 0.9359999999999994,
-                        "value": 13.200000000000001
-                      },
-                      {
-                        "rpmIndex": 0,
-                        "mapIndex": 3,
-                        "weight": 0.0010000000000000152,
-                        "value": 13.8
-                      },
-                      {
-                        "rpmIndex": 1,
-                        "mapIndex": 3,
-                        "weight": 0.039000000000000555,
-                        "value": 13.200000000000001
-                      }
-                    ],
-                    "valueStatus": "available"
-                  },
-                  "veLocation": {
-                    "rpm": 890,
-                    "mapKpa": 50.2,
-                    "status": "ok",
-                    "neighborhood": {
-                      "rpmIndex": 1,
-                      "mapIndex": 3,
-                      "rpmBounds": [
-                        800,
-                        900
-                      ],
-                      "mapBoundsKpa": [
-                        50,
-                        55
-                      ],
-                      "rpmFraction": 0.9,
-                      "mapFraction": 0.04000000000000057
-                    }
-                  },
-                  "errorStatus": "available",
-                  "errorAfr": 0.3993999999999982,
-                  "contributesToAggregate": true,
-                  "delayMs": 0
-                },
-                "ve": {
-                  "location": {
-                    "rpm": 890,
-                    "mapKpa": 50.2,
-                    "status": "ok",
-                    "neighborhood": {
-                      "rpmIndex": 1,
-                      "mapIndex": 3,
-                      "rpmBounds": [
-                        800,
-                        900
-                      ],
-                      "mapBoundsKpa": [
-                        50,
-                        55
-                      ],
-                      "rpmFraction": 0.9,
-                      "mapFraction": 0.04000000000000057
-                    }
-                  },
-                  "status": "available",
-                  "value": 42.454800000000006,
-                  "corners": [
-                    {
-                      "rpmIndex": 1,
-                      "mapIndex": 3,
-                      "bilinearWeight": 0.09599999999999992,
-                      "originalVe": 45.1,
-                      "relativeInfluence": 0.10198140139630844
-                    },
-                    {
-                      "rpmIndex": 2,
-                      "mapIndex": 3,
-                      "bilinearWeight": 0.8639999999999994,
-                      "originalVe": 42,
-                      "relativeInfluence": 0.8547443398626297
-                    },
-                    {
-                      "rpmIndex": 1,
-                      "mapIndex": 4,
-                      "bilinearWeight": 0.0040000000000000565,
-                      "originalVe": 49.800000000000004,
-                      "relativeInfluence": 0.004692048955595193
-                    },
-                    {
-                      "rpmIndex": 2,
-                      "mapIndex": 4,
-                      "bilinearWeight": 0.03600000000000051,
-                      "originalVe": 45.5,
-                      "relativeInfluence": 0.0385822097854665
-                    }
-                  ]
-                },
-                "supportRows": {
-                  "startRow": 2060,
-                  "endRow": 2076
-                }
-              },
-              {
-                "rowIndex": 692,
-                "episodeId": 0,
-                "partition": "training",
-                "status": "ready",
-                "reasons": [],
-                "afr": {
-                  "rowIndex": 692,
-                  "timeSec": 46.041,
-                  "rpm": 877,
-                  "mapKpa": 50,
-                  "measuredAfr": 13.2,
-                  "eligibilityStatus": "eligible",
-                  "eligibilityReasonCodes": [],
-                  "target": {
-                    "rpm": 877,
-                    "mapKpa": 50,
-                    "status": "ok",
-                    "neighborhood": {
-                      "rpmIndex": 0,
-                      "mapIndex": 2,
-                      "rpmBounds": [
-                        500,
-                        900
-                      ],
-                      "mapBoundsKpa": [
-                        50,
-                        55
-                      ],
-                      "rpmFraction": 0.9425,
-                      "mapFraction": 0
-                    },
-                    "value": 13.200000000000001,
-                    "corners": [
-                      {
-                        "rpmIndex": 0,
-                        "mapIndex": 2,
-                        "weight": 0.057499999999999996,
-                        "value": 13.200000000000001
-                      },
-                      {
-                        "rpmIndex": 1,
-                        "mapIndex": 2,
-                        "weight": 0.9425,
-                        "value": 13.200000000000001
-                      },
-                      {
-                        "rpmIndex": 0,
-                        "mapIndex": 3,
-                        "weight": 0,
-                        "value": 13.8
-                      },
-                      {
-                        "rpmIndex": 1,
-                        "mapIndex": 3,
-                        "weight": 0,
-                        "value": 13.200000000000001
-                      }
-                    ],
-                    "valueStatus": "available"
-                  },
-                  "veLocation": {
-                    "rpm": 877,
-                    "mapKpa": 50,
-                    "status": "ok",
-                    "neighborhood": {
-                      "rpmIndex": 1,
-                      "mapIndex": 3,
-                      "rpmBounds": [
-                        800,
-                        900
-                      ],
-                      "mapBoundsKpa": [
-                        50,
-                        55
-                      ],
-                      "rpmFraction": 0.77,
-                      "mapFraction": 0
-                    }
-                  },
-                  "errorStatus": "available",
-                  "errorAfr": -1.7763568394002505e-15,
-                  "contributesToAggregate": true,
-                  "delayMs": 0
-                },
-                "ve": {
-                  "location": {
-                    "rpm": 877,
-                    "mapKpa": 50,
-                    "status": "ok",
-                    "neighborhood": {
-                      "rpmIndex": 1,
-                      "mapIndex": 3,
-                      "rpmBounds": [
-                        800,
-                        900
-                      ],
-                      "mapBoundsKpa": [
-                        50,
-                        55
-                      ],
-                      "rpmFraction": 0.77,
-                      "mapFraction": 0
-                    }
-                  },
-                  "status": "available",
-                  "value": 42.713,
-                  "corners": [
-                    {
-                      "rpmIndex": 1,
-                      "mapIndex": 3,
-                      "bilinearWeight": 0.22999999999999998,
-                      "originalVe": 45.1,
-                      "relativeInfluence": 0.2428534638166366
-                    },
-                    {
-                      "rpmIndex": 2,
-                      "mapIndex": 3,
-                      "bilinearWeight": 0.77,
-                      "originalVe": 42,
-                      "relativeInfluence": 0.7571465361833635
-                    },
-                    {
-                      "rpmIndex": 1,
-                      "mapIndex": 4,
-                      "bilinearWeight": 0,
-                      "originalVe": 49.800000000000004,
-                      "relativeInfluence": 0
-                    },
-                    {
-                      "rpmIndex": 2,
-                      "mapIndex": 4,
-                      "bilinearWeight": 0,
-                      "originalVe": 45.5,
-                      "relativeInfluence": 0
-                    }
-                  ]
-                },
-                "supportRows": {
-                  "startRow": 677,
-                  "endRow": 692
-                }
-              }
-            ],
-            "omittedSupportingRows": 12,
-            "limitations": [
-              "Errors are measured AFR minus interpolated calibration target; they are not VE corrections or predicted improvements.",
-              "Calibration semantics must be explicitly bound by the caller; imported axis names alone do not prove MAP kPa or AFR units.",
-              "Only eligible rows with valid targets and in-bounds VE neighborhoods contribute. Diagnostic errors on other rows are not aggregate evidence.",
-              "AFR sensor/transport delay is unimplemented and fixed at zero; no telemetry is time shifted.",
-              "Statistics use equal sample weights, type-7 quantiles, population standard deviation and unscaled MAD. Samples/windows may be correlated; counts are not independent observations.",
-              "Empty statistics and unrepresentable numerical results are null. Coverage has explicit sample/grid denominators and is not a confidence estimate.",
-              "VE values are not interpolated or required for geometric neighborhood membership; missing target corners with positive weight block target lookup.",
-              "Eligibility indices, partitions and timestamps are validated. Existing classifier contracts lack session identity, so callers must supply results from the same unchanged session.",
-              "Phase A cell support measures training coverage only, not identifiability, correction accuracy, or confidence. No corrections are fitted.",
-              "Episodes group whole accepted runs without AFR-error selection; nearby runs may remain correlated. Temporal gaps and embargo do not establish independence.",
-              "Partitioning uses fixed full-log eligibility to define episodes, then audits V1 boundaries or recomputes V2 within each partition. Full-log time high-water integrity is retained.",
-              "Calibration association and active ECU table/fueling mode require caller confirmation. Source content hashes detect mismatched artifacts, not incorrect calibration association.",
-              "Fuel is assumed proportional to interpolated VE with other factors fixed. Closed-loop corrections, injector behavior, sensor bias and unimplemented AFR delay can invalidate predictions.",
-              "Effects in unobserved neighboring operating regions are unassessed. V1 categorical fuel-cut limitations remain unchanged."
-            ],
-            "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-            "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-            "fullEvidenceRef": {
-              "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-              "contextId": "april-single-live-smoke",
-              "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-              "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-              "kind": "analysis",
-              "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-              "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-              "candidateId": null
-            },
-            "facts": [
-              {
-                "key": "region-1-3",
-                "kind": "afr-error",
-                "statement": "Training VE neighborhood RPM 800-900, MAP 50-55 kPa has 256 eligible observations; measured-minus-target AFR mean 0.056869804687498915, median -1.7763568394002505e-15.",
-                "values": {
-                  "rpmIndex": 1,
-                  "mapIndex": 3,
-                  "count": 256,
-                  "meanError": 0.056869804687498915,
-                  "medianError": -1.7763568394002505e-15
-                },
-                "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-3",
-                "evidenceId": "evidence-2",
-                "artifact": {
-                  "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-                  "contextId": "april-single-live-smoke",
-                  "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-                  "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-                  "kind": "analysis",
-                  "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-                  "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-                  "candidateId": null
-                }
-              },
-              {
-                "key": "region-1-2",
-                "kind": "afr-error",
-                "statement": "Training VE neighborhood RPM 800-900, MAP 45-50 kPa has 206 eligible observations; measured-minus-target AFR mean 0.0728155339805815, median 0.09999999999999964.",
-                "values": {
-                  "rpmIndex": 1,
-                  "mapIndex": 2,
-                  "count": 206,
-                  "meanError": 0.0728155339805815,
-                  "medianError": 0.09999999999999964
-                },
-                "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-2",
-                "evidenceId": "evidence-2",
-                "artifact": {
-                  "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-                  "contextId": "april-single-live-smoke",
-                  "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-                  "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-                  "kind": "analysis",
-                  "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-                  "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-                  "candidateId": null
-                }
-              },
-              {
-                "key": "region-2-2",
-                "kind": "afr-error",
-                "statement": "Training VE neighborhood RPM 900-1000, MAP 45-50 kPa has 105 eligible observations; measured-minus-target AFR mean 0.07981904761904653, median 0.08699999999999974.",
-                "values": {
-                  "rpmIndex": 2,
-                  "mapIndex": 2,
-                  "count": 105,
-                  "meanError": 0.07981904761904653,
-                  "medianError": 0.08699999999999974
-                },
-                "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-2",
-                "evidenceId": "evidence-2",
-                "artifact": {
-                  "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-                  "contextId": "april-single-live-smoke",
-                  "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-                  "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-                  "kind": "analysis",
-                  "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-                  "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-                  "candidateId": null
-                }
-              },
-              {
-                "key": "region-3-2",
-                "kind": "afr-error",
-                "statement": "Training VE neighborhood RPM 1000-1200, MAP 45-50 kPa has 24 eligible observations; measured-minus-target AFR mean -0.2533333333333348, median -0.22350000000000136.",
-                "values": {
-                  "rpmIndex": 3,
-                  "mapIndex": 2,
-                  "count": 24,
-                  "meanError": -0.2533333333333348,
-                  "medianError": -0.22350000000000136
-                },
-                "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-3-2",
-                "evidenceId": "evidence-2",
-                "artifact": {
-                  "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-                  "contextId": "april-single-live-smoke",
-                  "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-                  "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-                  "kind": "analysis",
-                  "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-                  "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-                  "candidateId": null
-                }
-              },
-              {
-                "key": "region-2-3",
-                "kind": "afr-error",
-                "statement": "Training VE neighborhood RPM 900-1000, MAP 50-55 kPa has 16 eligible observations; measured-minus-target AFR mean 0.34975333333333225, median 0.3379199999999978.",
-                "values": {
-                  "rpmIndex": 2,
-                  "mapIndex": 3,
-                  "count": 16,
-                  "meanError": 0.34975333333333225,
-                  "medianError": 0.3379199999999978
-                },
-                "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-3",
-                "evidenceId": "evidence-2",
-                "artifact": {
-                  "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-                  "contextId": "april-single-live-smoke",
-                  "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-                  "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-                  "kind": "analysis",
-                  "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-                  "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-                  "candidateId": null
-                }
-              }
-            ]
-          }
-        }
-      },
-      {
-        "evidenceId": "evidence-3",
-        "tool": "evaluate_ve_candidate",
-        "arguments": {
-          "candidateRef": "877810f7-52a4-467a-b92a-d6f3c12ef303:candidate"
-        },
-        "result": {
-          "ok": true,
-          "data": {
-            "status": "complete",
-            "candidateRef": "877810f7-52a4-467a-b92a-d6f3c12ef303:candidate",
-            "basis": "conditional-model-prediction",
-            "paired": {
-              "status": "complete",
-              "rowCount": 183,
-              "failedPredictions": 0,
-              "baseline": {
-                "count": 183,
-                "mae": 0.15921599271402595,
-                "rmse": 0.19831132610939423,
-                "errors": {
-                  "count": 183,
-                  "mean": 0.016481056466301186,
-                  "median": -0.0013200000000015422,
-                  "populationStdDev": 0.19762529403146012,
-                  "q25": -0.1999999999999993,
-                  "q75": 0.19799999999999862,
-                  "iqr": 0.3979999999999979,
-                  "mad": 0.19867999999999952,
-                  "min": -0.3043199999999988,
-                  "max": 0.3749999999999982
-                }
-              },
-              "candidate": {
-                "count": 183,
-                "mae": 0.15921599271402595,
-                "rmse": 0.19831132610939423,
-                "errors": {
-                  "count": 183,
-                  "mean": 0.016481056466301186,
-                  "median": -0.0013200000000015422,
-                  "populationStdDev": 0.19762529403146012,
-                  "q25": -0.1999999999999993,
-                  "q75": 0.19799999999999862,
-                  "iqr": 0.3979999999999979,
-                  "mad": 0.19867999999999952,
-                  "min": -0.3043199999999988,
-                  "max": 0.3749999999999982
-                }
-              },
-              "predictedDeltaMae": 0,
-              "predictedDeltaRmse": 0
-            },
-            "affectedOnly": {
-              "status": "empty",
-              "rowCount": 0,
-              "failedPredictions": 0,
-              "baseline": {
-                "count": 0,
-                "mae": null,
-                "rmse": null,
-                "errors": {
-                  "count": 0,
-                  "mean": null,
-                  "median": null,
-                  "populationStdDev": null,
-                  "q25": null,
-                  "q75": null,
-                  "iqr": null,
-                  "mad": null,
-                  "min": null,
-                  "max": null
-                }
-              },
-              "candidate": {
-                "count": 0,
-                "mae": null,
-                "rmse": null,
-                "errors": {
-                  "count": 0,
-                  "mean": null,
-                  "median": null,
-                  "populationStdDev": null,
-                  "q25": null,
-                  "q75": null,
-                  "iqr": null,
-                  "mad": null,
-                  "min": null,
-                  "max": null
-                }
-              },
-              "predictedDeltaMae": null,
-              "predictedDeltaRmse": null
-            },
-            "coverage": {
-              "trainingRows": 607,
-              "holdoutRows": 183,
-              "supportedCells": 0,
-              "totalCells": 256,
-              "exclusionCounts": {
-                "OUTSIDE_EVALUATION_PARTITIONS": 236,
-                "NO_EPISODE": 922,
-                "CLASSIFIER_NOT_ELIGIBLE": 2044,
-                "PARTITION_SUPPORT_LEAKAGE": 31,
-                "VE_COORDINATES_UNAVAILABLE": 73,
-                "AFR_OBSERVATION_UNAVAILABLE": 27
-              }
-            },
-            "split": {
-              "status": "ready",
-              "training": {
-                "startRow": 18,
-                "endRowExclusive": 2144
-              },
-              "holdout": {
-                "startRow": 2362,
-                "endRowExclusive": 2859
-              },
-              "actualGapSec": 14.605000000000018
-            },
-            "neighborhoods": [
-              {
-                "rpmIndex": 2,
-                "mapIndex": 2,
-                "paired": {
-                  "status": "complete",
-                  "rowCount": 46,
-                  "failedPredictions": 0,
-                  "baseline": {
-                    "count": 46,
-                    "mae": 0.1604999999999997,
-                    "rmse": 0.19548195735712703,
-                    "errors": {
-                      "count": 46,
-                      "mean": 0.1374999999999988,
-                      "median": 0.1659999999999986,
-                      "populationStdDev": 0.1389494355950176,
-                      "q25": -0.0020000000000024443,
-                      "q75": 0.26224999999999987,
-                      "iqr": 0.2642500000000023,
-                      "mad": 0.11399999999999988,
-                      "min": -0.10599999999999987,
-                      "max": 0.3749999999999982
-                    }
-                  },
-                  "candidate": {
-                    "count": 46,
-                    "mae": 0.1604999999999997,
-                    "rmse": 0.19548195735712703,
-                    "errors": {
-                      "count": 46,
-                      "mean": 0.1374999999999988,
-                      "median": 0.1659999999999986,
-                      "populationStdDev": 0.1389494355950176,
-                      "q25": -0.0020000000000024443,
-                      "q75": 0.26224999999999987,
-                      "iqr": 0.2642500000000023,
-                      "mad": 0.11399999999999988,
-                      "min": -0.10599999999999987,
-                      "max": 0.3749999999999982
-                    }
-                  },
-                  "predictedDeltaMae": 0,
-                  "predictedDeltaRmse": 0
-                }
-              },
-              {
-                "rpmIndex": 1,
-                "mapIndex": 2,
-                "paired": {
-                  "status": "complete",
-                  "rowCount": 62,
-                  "failedPredictions": 0,
-                  "baseline": {
-                    "count": 62,
-                    "mae": 0.16451612903225882,
-                    "rmse": 0.1909230549284867,
-                    "errors": {
-                      "count": 62,
-                      "mean": -0.07096774193548491,
-                      "median": -0.10000000000000231,
-                      "populationStdDev": 0.17724331442343422,
-                      "q25": -0.20000000000000107,
-                      "q75": -4.440892098500626e-16,
-                      "iqr": 0.20000000000000062,
-                      "mad": 0.10000000000000052,
-                      "min": -0.3000000000000025,
-                      "max": 0.3000000000000007
-                    }
-                  },
-                  "candidate": {
-                    "count": 62,
-                    "mae": 0.16451612903225882,
-                    "rmse": 0.1909230549284867,
-                    "errors": {
-                      "count": 62,
-                      "mean": -0.07096774193548491,
-                      "median": -0.10000000000000231,
-                      "populationStdDev": 0.17724331442343422,
-                      "q25": -0.20000000000000107,
-                      "q75": -4.440892098500626e-16,
-                      "iqr": 0.20000000000000062,
-                      "mad": 0.10000000000000052,
-                      "min": -0.3000000000000025,
-                      "max": 0.3000000000000007
-                    }
-                  },
-                  "predictedDeltaMae": 0,
-                  "predictedDeltaRmse": 0
-                }
-              },
-              {
-                "rpmIndex": 1,
-                "mapIndex": 3,
-                "paired": {
-                  "status": "complete",
-                  "rowCount": 62,
-                  "failedPredictions": 0,
-                  "baseline": {
-                    "count": 62,
-                    "mae": 0.14642080645161396,
-                    "rmse": 0.19859235230784023,
-                    "errors": {
-                      "count": 62,
-                      "mean": -0.021874354838710936,
-                      "median": -0.002850000000003128,
-                      "populationStdDev": 0.1973839785685543,
-                      "q25": -0.20253500000000058,
-                      "q75": -0.00013500000000066237,
-                      "iqr": 0.2023999999999999,
-                      "mad": 0.15036000000000094,
-                      "min": -0.3043199999999988,
-                      "max": 0.3000000000000007
-                    }
-                  },
-                  "candidate": {
-                    "count": 62,
-                    "mae": 0.14642080645161396,
-                    "rmse": 0.19859235230784023,
-                    "errors": {
-                      "count": 62,
-                      "mean": -0.021874354838710936,
-                      "median": -0.002850000000003128,
-                      "populationStdDev": 0.1973839785685543,
-                      "q25": -0.20253500000000058,
-                      "q75": -0.00013500000000066237,
-                      "iqr": 0.2023999999999999,
-                      "mad": 0.15036000000000094,
-                      "min": -0.3043199999999988,
-                      "max": 0.3000000000000007
-                    }
-                  },
-                  "predictedDeltaMae": 0,
-                  "predictedDeltaRmse": 0
-                }
-              },
-              {
-                "rpmIndex": 2,
-                "mapIndex": 3,
-                "paired": {
-                  "status": "complete",
-                  "rowCount": 13,
-                  "failedPredictions": 0,
-                  "baseline": {
-                    "count": 13,
-                    "mae": 0.190418205128205,
-                    "rmse": 0.23759868056448158,
-                    "errors": {
-                      "count": 13,
-                      "mean": 0.18824948717948595,
-                      "median": 0.2749999999999986,
-                      "populationStdDev": 0.14496642225923606,
-                      "q25": -1.7763568394002505e-15,
-                      "q75": 0.29499999999999815,
-                      "iqr": 0.29499999999999993,
-                      "mad": 0.09799999999999898,
-                      "min": -0.007023333333336268,
-                      "max": 0.37299999999999933
-                    }
-                  },
-                  "candidate": {
-                    "count": 13,
-                    "mae": 0.190418205128205,
-                    "rmse": 0.23759868056448158,
-                    "errors": {
-                      "count": 13,
-                      "mean": 0.18824948717948595,
-                      "median": 0.2749999999999986,
-                      "populationStdDev": 0.14496642225923606,
-                      "q25": -1.7763568394002505e-15,
-                      "q75": 0.29499999999999815,
-                      "iqr": 0.29499999999999993,
-                      "mad": 0.09799999999999898,
-                      "min": -0.007023333333336268,
-                      "max": 0.37299999999999933
-                    }
-                  },
-                  "predictedDeltaMae": 0,
-                  "predictedDeltaRmse": 0
-                }
-              }
-            ],
-            "omittedNeighborhoods": 0,
-            "rows": [
-              {
-                "rowIndex": 2378,
-                "episodeId": 2,
-                "rpmIndex": 2,
-                "mapIndex": 2,
-                "affected": false,
-                "status": "predicted",
-                "baselineAfr": 13.4,
-                "targetAfr": 13.202000000000002,
-                "originalVe": 41.58376,
-                "candidateVe": 41.58376,
-                "predictedAfr": 13.4,
-                "baselineErrorAfr": 0.19799999999999862,
-                "predictedErrorAfr": 0.19799999999999862,
-                "timeSec": 158.456,
-                "rpm": 902,
-                "mapKpa": 49.4
-              },
-              {
-                "rowIndex": 2379,
-                "episodeId": 2,
-                "rpmIndex": 2,
-                "mapIndex": 2,
-                "affected": false,
-                "status": "predicted",
-                "baselineAfr": 13.5,
-                "targetAfr": 13.205000000000002,
-                "originalVe": 41.5354,
-                "candidateVe": 41.5354,
-                "predictedAfr": 13.5,
-                "baselineErrorAfr": 0.29499999999999815,
-                "predictedErrorAfr": 0.29499999999999815,
-                "timeSec": 158.523,
-                "rpm": 905,
-                "mapKpa": 49.4
-              },
-              {
-                "rowIndex": 2380,
-                "episodeId": 2,
-                "rpmIndex": 2,
-                "mapIndex": 2,
-                "affected": false,
-                "status": "predicted",
-                "baselineAfr": 13.5,
-                "targetAfr": 13.206000000000003,
-                "originalVe": 41.519279999999995,
-                "candidateVe": 41.519279999999995,
-                "predictedAfr": 13.5,
-                "baselineErrorAfr": 0.29399999999999693,
-                "predictedErrorAfr": 0.29399999999999693,
-                "timeSec": 158.59,
-                "rpm": 906,
-                "mapKpa": 49.4
-              }
-            ],
-            "changedNeighborhoods": [],
-            "delay": {
-              "status": "unimplemented-zero-placeholder",
-              "appliedMs": 0
-            },
-            "limitations": [
-              "Errors are measured AFR minus interpolated calibration target; they are not VE corrections or predicted improvements.",
-              "Calibration semantics must be explicitly bound by the caller; imported axis names alone do not prove MAP kPa or AFR units.",
-              "Only eligible rows with valid targets and in-bounds VE neighborhoods contribute. Diagnostic errors on other rows are not aggregate evidence.",
-              "AFR sensor/transport delay is unimplemented and fixed at zero; no telemetry is time shifted.",
-              "Statistics use equal sample weights, type-7 quantiles, population standard deviation and unscaled MAD. Samples/windows may be correlated; counts are not independent observations.",
-              "Empty statistics and unrepresentable numerical results are null. Coverage has explicit sample/grid denominators and is not a confidence estimate.",
-              "VE values are not interpolated or required for geometric neighborhood membership; missing target corners with positive weight block target lookup.",
-              "Eligibility indices, partitions and timestamps are validated. Existing classifier contracts lack session identity, so callers must supply results from the same unchanged session.",
-              "Phase A cell support measures training coverage only, not identifiability, correction accuracy, or confidence. No corrections are fitted.",
-              "Episodes group whole accepted runs without AFR-error selection; nearby runs may remain correlated. Temporal gaps and embargo do not establish independence.",
-              "Partitioning uses fixed full-log eligibility to define episodes, then audits V1 boundaries or recomputes V2 within each partition. Full-log time high-water integrity is retained.",
-              "Calibration association and active ECU table/fueling mode require caller confirmation. Source content hashes detect mismatched artifacts, not incorrect calibration association.",
-              "Fuel is assumed proportional to interpolated VE with other factors fixed. Closed-loop corrections, injector behavior, sensor bias and unimplemented AFR delay can invalidate predictions.",
-              "Effects in unobserved neighboring operating regions are unassessed. V1 categorical fuel-cut limitations remain unchanged.",
-              "Candidate AFR and paired metric differences are model-based predictions, not measured improvements. The baseline is observed AFR with the original table unchanged.",
-              "All ready rows in the declared evaluation partition are paired, including unchanged and worsened rows. Any failed prediction makes candidate aggregate metrics unavailable; failed rows are never silently dropped.",
-              "Episode metric variation is descriptive uncertainty only. No calibrated confidence interval, identifiability assessment, optimizer or automatic correction selection is implemented.",
-              "Repeated manual changes after viewing holdout results turn the holdout into development data; reserve a new untouched holdout for final evaluation."
-            ],
-            "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-            "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-            "fullEvidenceRef": {
-              "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-              "contextId": "april-single-live-smoke",
-              "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-              "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation",
-              "kind": "evaluation",
-              "sha256": "1f89dcc6f5cf1ed835c73c7cb5b3b310a5d6762a62a1a6d563ab6148d2055d74",
-              "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-              "candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
-            },
-            "facts": [
-              {
-                "key": "paired-prediction",
-                "kind": "paired-prediction",
-                "statement": "Conditional held-out model prediction on 183 identical baseline/candidate rows: MAE 0.15921599271402595 -> 0.15921599271402595, RMSE 0.19831132610939423 -> 0.19831132610939423. This is not measured improvement; worsened metrics remain included.",
-                "values": {
-                  "rowCount": 183,
-                  "baselineMae": 0.15921599271402595,
-                  "candidateMae": 0.15921599271402595,
-                  "baselineRmse": 0.19831132610939423,
-                  "candidateRmse": 0.19831132610939423
-                },
-                "id": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation:paired-prediction",
-                "evidenceId": "evidence-3",
-                "artifact": {
-                  "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-                  "contextId": "april-single-live-smoke",
-                  "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-                  "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation",
-                  "kind": "evaluation",
-                  "sha256": "1f89dcc6f5cf1ed835c73c7cb5b3b310a5d6762a62a1a6d563ab6148d2055d74",
-                  "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-                  "candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
-                }
-              }
-            ]
-          }
-        }
-      }
-    ],
-    "analytical": {
-      "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-      "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-      "evidenceRefs": [
-        {
-          "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-          "contextId": "april-single-live-smoke",
-          "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-          "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
-          "kind": "analysis",
-          "sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
-          "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-          "candidateId": null
-        },
-        {
-          "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-          "contextId": "april-single-live-smoke",
-          "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-          "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit",
-          "kind": "fit",
-          "sha256": "4e24fe5f947456197aaf2debbbd7bf1654813e9e41a1a03376f6971ab076fad3",
-          "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-          "candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
-        },
-        {
-          "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-          "contextId": "april-single-live-smoke",
-          "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-          "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:candidate",
-          "kind": "candidate",
-          "sha256": "bbe776f188901f4e6ed5cf186e9a8101c8b4992a5001713efa47d5a959dbaffc",
-          "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-          "candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
-        },
-        {
-          "runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
-          "contextId": "april-single-live-smoke",
-          "settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
-          "artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation",
-          "kind": "evaluation",
-          "sha256": "1f89dcc6f5cf1ed835c73c7cb5b3b310a5d6762a62a1a6d563ab6148d2055d74",
-          "datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
-          "candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
-        }
-      ],
-      "timings": [
-        {
-          "tool": "fit_ve_candidate",
-          "elapsedMs": 797.8247999999994
-        },
-        {
-          "tool": "analyze_afr_error",
-          "elapsedMs": 3.9615000000012515
-        },
-        {
-          "tool": "evaluate_ve_candidate",
-          "elapsedMs": 178.47299999999814
-        }
-      ]
-    }
-  },
-  "limitations": [
-    "One April V1 run tests integration, not tuning accuracy.",
-    "Tool results and server facts are deterministic calculations; provider messages and native calls are actual model outputs.",
-    "AFR delay is zero and predictions are conditional; no ECU write or measured improvement is authorized."
-  ]
+	"source": "LIVE Meta API; no mocks, replay, scripted model calls, or retries",
+	"startedAt": "2026-10-27T21:39:13.173Z",
+	"model": "muse-spark-1.3-contributor",
+	"outcome": "passed",
+	"limits": {
+		"maxToolCalls": 6,
+		"maxIterations": 7,
+		"timeoutMs": 120000,
+		"maxOutputTokensPerResponse": 4096,
+		"theoreticalMaxOutputTokens": 28672,
+		"automaticRetries": 0
+	},
+	"elapsedMs": 45954.333,
+	"setupBlocker": null,
+	"adapterError": null,
+	"evidenceError": null,
+	"usage": {
+		"inputTokens": 27569,
+		"outputTokens": 2732,
+		"totalTokens": 30301,
+		"estimatedCost": null,
+		"costLimitation": "No authoritative per-model pricing is configured; no cost estimate invented. Usage includes reasoning output when provider counts it."
+	},
+	"actualModelResponses": [
+		{
+			"turn": 1,
+			"httpStatus": 200,
+			"elapsedMs": 7390.3047,
+			"responseId": "resp_6ae11a086a6c998fd2e04735",
+			"status": "completed",
+			"output": [
+				{
+					"type": "message",
+					"role": "assistant",
+					"content": [
+						{
+							"type": "output_text",
+							"text": "Starting your bounded RX-7 review — finalizing the frozen candidate and checking coverage."
+						}
+					]
+				},
+				{
+					"type": "function_call",
+					"name": "fit_ve_candidate",
+					"call_id": "call_10c74a84-febf-42d0-9cd1-003b971516ef",
+					"arguments": "{}"
+				}
+			],
+			"usage": {
+				"input": 1818,
+				"output": 751,
+				"total": 2569,
+				"cachedInput": 0,
+				"reasoningOutput": 686
+			},
+			"observation": null
+		},
+		{
+			"turn": 2,
+			"httpStatus": 200,
+			"elapsedMs": 11869.824999999999,
+			"responseId": "resp_6ae11a10cc76882d11ec490d",
+			"status": "completed",
+			"output": [
+				{
+					"type": "message",
+					"role": "assistant",
+					"content": [
+						{
+							"type": "output_text",
+							"text": "No supported cells in the frozen fit — now gathering training and holdout evidence."
+						}
+					]
+				},
+				{
+					"type": "function_call",
+					"name": "analyze_afr_error",
+					"call_id": "call_55cf152d-fd88-475e-9a70-38db5e5e591e",
+					"arguments": "{}"
+				}
+			],
+			"usage": {
+				"input": 3306,
+				"output": 388,
+				"total": 3694,
+				"cachedInput": 0,
+				"reasoningOutput": 322
+			},
+			"observation": null
+		},
+		{
+			"turn": 3,
+			"httpStatus": 200,
+			"elapsedMs": 9704.038700000001,
+			"responseId": "resp_6ae11a19c49c9e49ed4c4236",
+			"status": "completed",
+			"output": [
+				{
+					"type": "message",
+					"role": "assistant",
+					"content": [
+						{
+							"type": "output_text",
+							"text": "Inspection shows limited training coverage — now evaluating paired holdout predictions."
+						}
+					]
+				},
+				{
+					"type": "function_call",
+					"name": "evaluate_ve_candidate",
+					"call_id": "call_31195f85-1c90-49dc-9e62-16af379eeed2",
+					"arguments": "{\"candidateRef\":\"877810f7-52a4-467a-b92a-d6f3c12ef303:candidate\"}"
+				}
+			],
+			"usage": {
+				"input": 9382,
+				"output": 221,
+				"total": 9603,
+				"cachedInput": 0,
+				"reasoningOutput": 122
+			},
+			"observation": null
+		},
+		{
+			"turn": 4,
+			"httpStatus": 200,
+			"elapsedMs": 15755.1715,
+			"responseId": "resp_6ae11a2bacec973b39d34a65",
+			"status": "completed",
+			"output": [
+				{
+					"type": "message",
+					"role": "assistant",
+					"content": [
+						{
+							"type": "output_text",
+							"text": "{\"kind\":\"final\",\"factIds\":[\"877810f7-52a4-467a-b92a-d6f3c12ef303:fit:fit-summary\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-3\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-2\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-2\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-3-2\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-3\",\"877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation:paired-prediction\"],\"commentary\":[{\"kind\":\"interpretation\",\"text\":\"Training-region AFR-error evidence is concentrated in low idle neighborhoods (800-900 RPM, 45-55 kPa) with 256 and 206 observations, tapering to 105, 24 and 16 rows at higher RPM/MAP; this describes only observed diagnostic errors, not VE corrections.\",\"evidenceIds\":[\"evidence-2\"]},{\"kind\":\"limitation\",\"text\":\"Frozen candidate finalized as no-supported-proposal with 0 accepted, 0 suppressed, 256 unsupported cells from 607 ready training rows in 2 episodes; minimum per-cell thresholds requiring 50 samples and 3 episodes were not met, so unchanged zero-correction is valid and no ECU write is authorized.\",\"evidenceIds\":[\"evidence-1\",\"evidence-2\"]},{\"kind\":\"hypothesis\",\"text\":\"Limited episode diversity (only 2 training episodes) may explain why even densely sampled neighborhoods failed support despite hundreds of rows, as samples within episodes may remain correlated.\",\"evidenceIds\":[\"evidence-1\",\"evidence-2\"]},{\"kind\":\"interpretation\",\"text\":\"Paired holdout predictions on 183 rows show identical baseline and candidate MAE/RMSE with zero delta because candidate VE equals original VE; these are conditional model predictions, not measured improvements, with no affected rows.\",\"evidenceIds\":[\"evidence-3\"]},{\"kind\":\"limitation\",\"text\":\"AFR delay fixed at zero, equal sample weighting, correlated windows, unassessed neighboring regions, and assumed proportional fuel-to-VE with fixed other factors limit causal inference; coverage denominators are not confidence estimates.\",\"evidenceIds\":[\"evidence-1\",\"evidence-2\",\"evidence-3\"]}]}"
+						}
+					]
+				}
+			],
+			"usage": {
+				"input": 13063,
+				"output": 1372,
+				"total": 14435,
+				"cachedInput": 0,
+				"reasoningOutput": 813
+			},
+			"observation": null
+		}
+	],
+	"deterministicValidationChecks": [
+		{
+			"name": "offline validation rejects analyze_afr_error negative control",
+			"passed": true
+		},
+		{
+			"name": "offline validation rejects fit_ve_candidate negative control",
+			"passed": true
+		},
+		{
+			"name": "offline validation rejects evaluate_ve_candidate negative control",
+			"passed": true
+		},
+		{
+			"name": "runner completed a final report",
+			"passed": true
+		},
+		{
+			"name": "model selected successful analyze_afr_error",
+			"passed": true
+		},
+		{
+			"name": "model selected successful fit_ve_candidate",
+			"passed": true
+		},
+		{
+			"name": "model selected successful evaluate_ve_candidate",
+			"passed": true
+		},
+		{
+			"name": "every executed call originates in an actual native provider call",
+			"passed": true
+		},
+		{
+			"name": "selected arguments validated: evidence-1",
+			"passed": true
+		},
+		{
+			"name": "selected arguments validated: evidence-2",
+			"passed": true
+		},
+		{
+			"name": "selected arguments validated: evidence-3",
+			"passed": true
+		},
+		{
+			"name": "no tool failures",
+			"passed": true
+		},
+		{
+			"name": "same-run provenance: analysis",
+			"passed": true
+		},
+		{
+			"name": "same-run provenance: fit",
+			"passed": true
+		},
+		{
+			"name": "same-run provenance: candidate",
+			"passed": true
+		},
+		{
+			"name": "same-run provenance: evaluation",
+			"passed": true
+		},
+		{
+			"name": "all returned full evidence references verified",
+			"passed": true
+		},
+		{
+			"name": "retained analysis evidence",
+			"passed": true
+		},
+		{
+			"name": "retained fit evidence",
+			"passed": true
+		},
+		{
+			"name": "retained candidate evidence",
+			"passed": true
+		},
+		{
+			"name": "retained evaluation evidence",
+			"passed": true
+		},
+		{
+			"name": "April V1 unsupported-cell outcome preserved",
+			"passed": true
+		},
+		{
+			"name": "candidate remains unchanged",
+			"passed": true
+		},
+		{
+			"name": "paired holdout uses canonical rows and unchanged metrics",
+			"passed": true
+		},
+		{
+			"name": "artifact identities link analysis fit candidate and evaluation",
+			"passed": true
+		},
+		{
+			"name": "evaluation follows finalization with the returned candidate reference",
+			"passed": true
+		},
+		{
+			"name": "server facts match authoritative findings",
+			"passed": true
+		},
+		{
+			"name": "model commentary is separate and evidence linked",
+			"passed": true
+		},
+		{
+			"name": "final report remains advisory",
+			"passed": true
+		}
+	],
+	"verifiedEvidenceReferences": [
+		"877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+		"877810f7-52a4-467a-b92a-d6f3c12ef303:fit",
+		"877810f7-52a4-467a-b92a-d6f3c12ef303:candidate",
+		"877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation"
+	],
+	"deterministicAnalysis": {
+		"coverage": {
+			"trainingRows": 607,
+			"holdoutRows": 183,
+			"supportedCells": 0,
+			"totalCells": 256,
+			"exclusionCounts": {
+				"OUTSIDE_EVALUATION_PARTITIONS": 236,
+				"NO_EPISODE": 922,
+				"CLASSIFIER_NOT_ELIGIBLE": 2044,
+				"PARTITION_SUPPORT_LEAKAGE": 31,
+				"VE_COORDINATES_UNAVAILABLE": 73,
+				"AFR_OBSERVATION_UNAVAILABLE": 27
+			}
+		},
+		"split": {
+			"status": "ready",
+			"training": {
+				"startRow": 18,
+				"endRowExclusive": 2144
+			},
+			"holdout": {
+				"startRow": 2362,
+				"endRowExclusive": 2859
+			},
+			"actualGapSec": 14.605000000000018
+		},
+		"episodes": 4,
+		"fitStatus": "no-supported-proposal",
+		"changedCells": 0,
+		"paired": {
+			"status": "complete",
+			"rowCount": 183,
+			"failedPredictions": 0,
+			"baseline": {
+				"count": 183,
+				"mae": 0.15921599271402595,
+				"rmse": 0.19831132610939423,
+				"errors": {
+					"count": 183,
+					"mean": 0.016481056466301186,
+					"median": -0.0013200000000015422,
+					"populationStdDev": 0.19762529403146012,
+					"q25": -0.1999999999999993,
+					"q75": 0.19799999999999862,
+					"iqr": 0.3979999999999979,
+					"mad": 0.19867999999999952,
+					"min": -0.3043199999999988,
+					"max": 0.3749999999999982
+				}
+			},
+			"candidate": {
+				"count": 183,
+				"mae": 0.15921599271402595,
+				"rmse": 0.19831132610939423,
+				"errors": {
+					"count": 183,
+					"mean": 0.016481056466301186,
+					"median": -0.0013200000000015422,
+					"populationStdDev": 0.19762529403146012,
+					"q25": -0.1999999999999993,
+					"q75": 0.19799999999999862,
+					"iqr": 0.3979999999999979,
+					"mad": 0.19867999999999952,
+					"min": -0.3043199999999988,
+					"max": 0.3749999999999982
+				}
+			},
+			"predictedDeltaMae": 0,
+			"predictedDeltaRmse": 0
+		},
+		"facts": [
+			{
+				"key": "fit-summary",
+				"kind": "fit-summary",
+				"statement": "Training-only fit no-supported-proposal: 0 accepted, 0 suppressed and 256 unsupported VE cells. These are advisory proposals, not measured improvements or ECU-write authorization.",
+				"values": {
+					"status": "no-supported-proposal",
+					"supported": 0,
+					"accepted": 0,
+					"suppressed": 0,
+					"unsupported": 256
+				},
+				"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit:fit-summary",
+				"evidenceId": "evidence-1",
+				"artifact": {
+					"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+					"contextId": "april-single-live-smoke",
+					"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+					"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit",
+					"kind": "fit",
+					"sha256": "4e24fe5f947456197aaf2debbbd7bf1654813e9e41a1a03376f6971ab076fad3",
+					"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+					"candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
+				}
+			},
+			{
+				"key": "region-1-3",
+				"kind": "afr-error",
+				"statement": "Training VE neighborhood RPM 800-900, MAP 50-55 kPa has 256 eligible observations; measured-minus-target AFR mean 0.056869804687498915, median -1.7763568394002505e-15.",
+				"values": {
+					"rpmIndex": 1,
+					"mapIndex": 3,
+					"count": 256,
+					"meanError": 0.056869804687498915,
+					"medianError": -1.7763568394002505e-15
+				},
+				"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-3",
+				"evidenceId": "evidence-2",
+				"artifact": {
+					"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+					"contextId": "april-single-live-smoke",
+					"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+					"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+					"kind": "analysis",
+					"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+					"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+					"candidateId": null
+				}
+			},
+			{
+				"key": "region-1-2",
+				"kind": "afr-error",
+				"statement": "Training VE neighborhood RPM 800-900, MAP 45-50 kPa has 206 eligible observations; measured-minus-target AFR mean 0.0728155339805815, median 0.09999999999999964.",
+				"values": {
+					"rpmIndex": 1,
+					"mapIndex": 2,
+					"count": 206,
+					"meanError": 0.0728155339805815,
+					"medianError": 0.09999999999999964
+				},
+				"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-2",
+				"evidenceId": "evidence-2",
+				"artifact": {
+					"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+					"contextId": "april-single-live-smoke",
+					"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+					"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+					"kind": "analysis",
+					"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+					"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+					"candidateId": null
+				}
+			},
+			{
+				"key": "region-2-2",
+				"kind": "afr-error",
+				"statement": "Training VE neighborhood RPM 900-1000, MAP 45-50 kPa has 105 eligible observations; measured-minus-target AFR mean 0.07981904761904653, median 0.08699999999999974.",
+				"values": {
+					"rpmIndex": 2,
+					"mapIndex": 2,
+					"count": 105,
+					"meanError": 0.07981904761904653,
+					"medianError": 0.08699999999999974
+				},
+				"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-2",
+				"evidenceId": "evidence-2",
+				"artifact": {
+					"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+					"contextId": "april-single-live-smoke",
+					"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+					"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+					"kind": "analysis",
+					"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+					"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+					"candidateId": null
+				}
+			},
+			{
+				"key": "region-3-2",
+				"kind": "afr-error",
+				"statement": "Training VE neighborhood RPM 1000-1200, MAP 45-50 kPa has 24 eligible observations; measured-minus-target AFR mean -0.2533333333333348, median -0.22350000000000136.",
+				"values": {
+					"rpmIndex": 3,
+					"mapIndex": 2,
+					"count": 24,
+					"meanError": -0.2533333333333348,
+					"medianError": -0.22350000000000136
+				},
+				"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-3-2",
+				"evidenceId": "evidence-2",
+				"artifact": {
+					"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+					"contextId": "april-single-live-smoke",
+					"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+					"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+					"kind": "analysis",
+					"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+					"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+					"candidateId": null
+				}
+			},
+			{
+				"key": "region-2-3",
+				"kind": "afr-error",
+				"statement": "Training VE neighborhood RPM 900-1000, MAP 50-55 kPa has 16 eligible observations; measured-minus-target AFR mean 0.34975333333333225, median 0.3379199999999978.",
+				"values": {
+					"rpmIndex": 2,
+					"mapIndex": 3,
+					"count": 16,
+					"meanError": 0.34975333333333225,
+					"medianError": 0.3379199999999978
+				},
+				"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-3",
+				"evidenceId": "evidence-2",
+				"artifact": {
+					"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+					"contextId": "april-single-live-smoke",
+					"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+					"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+					"kind": "analysis",
+					"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+					"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+					"candidateId": null
+				}
+			},
+			{
+				"key": "paired-prediction",
+				"kind": "paired-prediction",
+				"statement": "Conditional held-out model prediction on 183 identical baseline/candidate rows: MAE 0.15921599271402595 -> 0.15921599271402595, RMSE 0.19831132610939423 -> 0.19831132610939423. This is not measured improvement; worsened metrics remain included.",
+				"values": {
+					"rowCount": 183,
+					"baselineMae": 0.15921599271402595,
+					"candidateMae": 0.15921599271402595,
+					"baselineRmse": 0.19831132610939423,
+					"candidateRmse": 0.19831132610939423
+				},
+				"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation:paired-prediction",
+				"evidenceId": "evidence-3",
+				"artifact": {
+					"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+					"contextId": "april-single-live-smoke",
+					"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+					"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation",
+					"kind": "evaluation",
+					"sha256": "1f89dcc6f5cf1ed835c73c7cb5b3b310a5d6762a62a1a6d563ab6148d2055d74",
+					"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+					"candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
+				}
+			}
+		],
+		"settings": {
+			"profile": {
+				"version": "steady-afr-ve-v1",
+				"config": {
+					"minCoolantC": 70,
+					"maxWarmupCorrectionDeviationPct": 1,
+					"maxAbsTpsRatePctPerSec": 5,
+					"maxAbsMapRateKpaPerSec": 10,
+					"maxAbsRpmRatePerSec": 200,
+					"maxGapSec": 0.5,
+					"steadyWindowSec": 1,
+					"possibleFuelCutMaxPulseWidthMs": 0.1,
+					"possibleFuelCutMinRpm": 1200,
+					"possibleFuelCutMaxTpsPct": 2
+				}
+			},
+			"preparation": {
+				"trainingFraction": 0.7,
+				"episodeMergeGapSec": 10,
+				"embargoSec": 10,
+				"maxObservationGapSec": 0.5,
+				"maxCorrectionPct": 3,
+				"minTrainingSamplesPerCell": 50,
+				"minTrainingEpisodesPerCell": 3,
+				"minEpisodeSupportSec": 2,
+				"minRelativeInfluence": 0.1
+			},
+			"fitting": {
+				"maxCorrectionPct": 3,
+				"huberThreshold": 0.02,
+				"ridgePenalty": 0.01,
+				"maxConditionNumber": 1000,
+				"relativeRankTolerance": 0.000001,
+				"minCorrectionPct": 0.5,
+				"maxLooRangePct": 2,
+				"minLooRemainingEpisodes": 2,
+				"maxIterations": 5000,
+				"gradientTolerance": 1e-10
+			},
+			"limits": {
+				"maxLogBytes": 67108864,
+				"maxRows": 60000,
+				"maxChannels": 300,
+				"maxCells": 256,
+				"maxTrainingEpisodes": 64,
+				"maxSupportedCells": 32,
+				"maxArtifactBytes": 134217728,
+				"maxResponseBytes": 32000,
+				"jobTimeoutMs": 120000,
+				"retentionMs": 120000
+			}
+		}
+	},
+	"validatedInvestigation": {
+		"status": "completed",
+		"reason": null,
+		"report": {
+			"advisoryOnly": true,
+			"findings": [
+				{
+					"statement": "Training-only fit no-supported-proposal: 0 accepted, 0 suppressed and 256 unsupported VE cells. These are advisory proposals, not measured improvements or ECU-write authorization.",
+					"evidenceIds": ["evidence-1"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 800-900, MAP 50-55 kPa has 256 eligible observations; measured-minus-target AFR mean 0.056869804687498915, median -1.7763568394002505e-15.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 800-900, MAP 45-50 kPa has 206 eligible observations; measured-minus-target AFR mean 0.0728155339805815, median 0.09999999999999964.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 900-1000, MAP 45-50 kPa has 105 eligible observations; measured-minus-target AFR mean 0.07981904761904653, median 0.08699999999999974.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 1000-1200, MAP 45-50 kPa has 24 eligible observations; measured-minus-target AFR mean -0.2533333333333348, median -0.22350000000000136.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Training VE neighborhood RPM 900-1000, MAP 50-55 kPa has 16 eligible observations; measured-minus-target AFR mean 0.34975333333333225, median 0.3379199999999978.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "server-numerical"
+				},
+				{
+					"statement": "Conditional held-out model prediction on 183 identical baseline/candidate rows: MAE 0.15921599271402595 -> 0.15921599271402595, RMSE 0.19831132610939423 -> 0.19831132610939423. This is not measured improvement; worsened metrics remain included.",
+					"evidenceIds": ["evidence-3"],
+					"verification": "server-numerical"
+				}
+			],
+			"commentary": [
+				{
+					"kind": "interpretation",
+					"text": "Training-region AFR-error evidence is concentrated in low idle neighborhoods (800-900 RPM, 45-55 kPa) with 256 and 206 observations, tapering to 105, 24 and 16 rows at higher RPM/MAP; this describes only observed diagnostic errors, not VE corrections.",
+					"evidenceIds": ["evidence-2"],
+					"verification": "unverified-model-commentary"
+				},
+				{
+					"kind": "limitation",
+					"text": "Frozen candidate finalized as no-supported-proposal with 0 accepted, 0 suppressed, 256 unsupported cells from 607 ready training rows in 2 episodes; minimum per-cell thresholds requiring 50 samples and 3 episodes were not met, so unchanged zero-correction is valid and no ECU write is authorized.",
+					"evidenceIds": ["evidence-1", "evidence-2"],
+					"verification": "unverified-model-commentary"
+				},
+				{
+					"kind": "hypothesis",
+					"text": "Limited episode diversity (only 2 training episodes) may explain why even densely sampled neighborhoods failed support despite hundreds of rows, as samples within episodes may remain correlated.",
+					"evidenceIds": ["evidence-1", "evidence-2"],
+					"verification": "unverified-model-commentary"
+				},
+				{
+					"kind": "interpretation",
+					"text": "Paired holdout predictions on 183 rows show identical baseline and candidate MAE/RMSE with zero delta because candidate VE equals original VE; these are conditional model predictions, not measured improvements, with no affected rows.",
+					"evidenceIds": ["evidence-3"],
+					"verification": "unverified-model-commentary"
+				},
+				{
+					"kind": "limitation",
+					"text": "AFR delay fixed at zero, equal sample weighting, correlated windows, unassessed neighboring regions, and assumed proportional fuel-to-VE with fixed other factors limit causal inference; coverage denominators are not confidence estimates.",
+					"evidenceIds": ["evidence-1", "evidence-2", "evidence-3"],
+					"verification": "unverified-model-commentary"
+				}
+			],
+			"limitations": [
+				"Numerical statements are server-rendered; model commentary is unverified and does not establish engine causes.",
+				"Predicted AFR and metric changes assume proportional fueling and unchanged other factors. AFR delay compensation is unimplemented at 0 ms; improvements are not measured.",
+				"Unsupported, unidentifiable and unstable cells remain unchanged. Calibration association and active ECU table behavior require caller confirmation.",
+				"Only frozen training data determine fitting. Holdout results do not select parameters, masks, profiles or a winning candidate.",
+				"This advisory report cannot authorize ECU writes or automatic application of calibration changes.",
+				"Full evidence is retained in a private, expiring server run. It becomes unavailable after disposal, timeout or worker failure."
+			]
+		},
+		"trace": [
+			{
+				"evidenceId": "evidence-1",
+				"tool": "fit_ve_candidate",
+				"arguments": {},
+				"result": {
+					"ok": true,
+					"data": {
+						"status": "no-supported-proposal",
+						"analysisRef": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+						"candidateRef": "877810f7-52a4-467a-b92a-d6f3c12ef303:candidate",
+						"counts": {
+							"supported": 0,
+							"accepted": 0,
+							"suppressed": 0,
+							"unsupported": 256
+						},
+						"reasonCounts": {
+							"INSUFFICIENT_TRAINING_SAMPLES": 249,
+							"INSUFFICIENT_TRAINING_EPISODES": 256
+						},
+						"bounds": {
+							"requestedMaxPct": 3,
+							"datasetMaxPct": 3,
+							"effectiveMaxPct": 3
+						},
+						"config": {
+							"maxCorrectionPct": 3,
+							"huberThreshold": 0.02,
+							"ridgePenalty": 0.01,
+							"maxConditionNumber": 1000,
+							"relativeRankTolerance": 0.000001,
+							"minCorrectionPct": 0.5,
+							"maxLooRangePct": 2,
+							"minLooRemainingEpisodes": 2,
+							"maxIterations": 5000,
+							"gradientTolerance": 1e-10
+						},
+						"cells": [],
+						"nonUnsupportedCells": [],
+						"omittedCellDetails": 256,
+						"passes": [],
+						"trainingRows": 607,
+						"trainingEpisodes": 2,
+						"limitations": [
+							"Errors are measured AFR minus interpolated calibration target; they are not VE corrections or predicted improvements.",
+							"Calibration semantics must be explicitly bound by the caller; imported axis names alone do not prove MAP kPa or AFR units.",
+							"Only eligible rows with valid targets and in-bounds VE neighborhoods contribute. Diagnostic errors on other rows are not aggregate evidence.",
+							"AFR sensor/transport delay is unimplemented and fixed at zero; no telemetry is time shifted.",
+							"Statistics use equal sample weights, type-7 quantiles, population standard deviation and unscaled MAD. Samples/windows may be correlated; counts are not independent observations.",
+							"Empty statistics and unrepresentable numerical results are null. Coverage has explicit sample/grid denominators and is not a confidence estimate.",
+							"VE values are not interpolated or required for geometric neighborhood membership; missing target corners with positive weight block target lookup.",
+							"Eligibility indices, partitions and timestamps are validated. Existing classifier contracts lack session identity, so callers must supply results from the same unchanged session.",
+							"Phase A support measures training coverage; Phase B adds numerical conditioning and stability checks, not measured correction accuracy.",
+							"Episodes group whole accepted runs without AFR-error selection; nearby runs may remain correlated. Temporal gaps and embargo do not establish independence.",
+							"Partitioning uses fixed full-log eligibility to define episodes, then audits V1 boundaries or recomputes V2 within each partition. Full-log time high-water integrity is retained.",
+							"Calibration association and active ECU table/fueling mode require caller confirmation. Source content hashes detect mismatched artifacts, not incorrect calibration association.",
+							"Fuel is assumed proportional to interpolated VE with other factors fixed. Closed-loop corrections, injector behavior, sensor bias and unimplemented AFR delay can invalidate predictions.",
+							"Effects in unobserved neighboring operating regions are unassessed. V1 categorical fuel-cut limitations remain unchanged.",
+							"Phase B candidates are fitted from ready training rows only; holdout outcomes are not used in fitting, suppression, thresholds or model selection.",
+							"Conditioning uses episode-weighted, column-normalized unregularized influence matrices. Entire unidentifiable connected groups are suppressed; ridge does not establish identifiability.",
+							"Leave-one-training-episode-out ranges are stability diagnostics, not calibrated confidence intervals; episodes may remain correlated.",
+							"Huber loss fits relative fueling residuals rather than directly minimizing holdout AFR error. Phase A prediction assumptions and zero/unimplemented AFR delay remain unchanged.",
+							"Bounds are imposed inside the solver. Suppressed cells remain frozen at zero, with full refitting and repeated conditioning/stability checks; no completed vector is silently clipped."
+						],
+						"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+						"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+						"fullEvidenceRef": {
+							"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+							"contextId": "april-single-live-smoke",
+							"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+							"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit",
+							"kind": "fit",
+							"sha256": "4e24fe5f947456197aaf2debbbd7bf1654813e9e41a1a03376f6971ab076fad3",
+							"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+							"candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
+						},
+						"facts": [
+							{
+								"key": "fit-summary",
+								"kind": "fit-summary",
+								"statement": "Training-only fit no-supported-proposal: 0 accepted, 0 suppressed and 256 unsupported VE cells. These are advisory proposals, not measured improvements or ECU-write authorization.",
+								"values": {
+									"status": "no-supported-proposal",
+									"supported": 0,
+									"accepted": 0,
+									"suppressed": 0,
+									"unsupported": 256
+								},
+								"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit:fit-summary",
+								"evidenceId": "evidence-1",
+								"artifact": {
+									"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+									"contextId": "april-single-live-smoke",
+									"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+									"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit",
+									"kind": "fit",
+									"sha256": "4e24fe5f947456197aaf2debbbd7bf1654813e9e41a1a03376f6971ab076fad3",
+									"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+									"candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				"evidenceId": "evidence-2",
+				"tool": "analyze_afr_error",
+				"arguments": {},
+				"result": {
+					"ok": true,
+					"data": {
+						"status": "available",
+						"analysisRef": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+						"partition": "training",
+						"classifier": {
+							"version": "steady-afr-ve-v1",
+							"config": {
+								"minCoolantC": 70,
+								"maxWarmupCorrectionDeviationPct": 1,
+								"maxAbsTpsRatePctPerSec": 5,
+								"maxAbsMapRateKpaPerSec": 10,
+								"maxAbsRpmRatePerSec": 200,
+								"maxGapSec": 0.5,
+								"steadyWindowSec": 1,
+								"possibleFuelCutMaxPulseWidthMs": 0.1,
+								"possibleFuelCutMinRpm": 1200,
+								"possibleFuelCutMaxTpsPct": 2
+							},
+							"baseConfig": null
+						},
+						"preparationConfig": {
+							"trainingFraction": 0.7,
+							"episodeMergeGapSec": 10,
+							"embargoSec": 10,
+							"maxObservationGapSec": 0.5,
+							"maxCorrectionPct": 3,
+							"minTrainingSamplesPerCell": 50,
+							"minTrainingEpisodesPerCell": 3,
+							"minEpisodeSupportSec": 2,
+							"minRelativeInfluence": 0.1
+						},
+						"partitionCounts": {
+							"rawTrainingRows": 2126,
+							"classifierEligibleRows": 616,
+							"readyTrainingRows": 607
+						},
+						"coverage": {
+							"trainingRows": 607,
+							"holdoutRows": 183,
+							"supportedCells": 0,
+							"totalCells": 256,
+							"exclusionCounts": {
+								"OUTSIDE_EVALUATION_PARTITIONS": 236,
+								"NO_EPISODE": 922,
+								"CLASSIFIER_NOT_ELIGIBLE": 2044,
+								"PARTITION_SUPPORT_LEAKAGE": 31,
+								"VE_COORDINATES_UNAVAILABLE": 73,
+								"AFR_OBSERVATION_UNAVAILABLE": 27
+							}
+						},
+						"split": {
+							"status": "ready",
+							"training": {
+								"startRow": 18,
+								"endRowExclusive": 2144
+							},
+							"holdout": {
+								"startRow": 2362,
+								"endRowExclusive": 2859
+							},
+							"actualGapSec": 14.605000000000018
+						},
+						"regions": [
+							{
+								"rpmIndex": 1,
+								"mapIndex": 3,
+								"rpmBounds": [800, 900],
+								"mapBoundsKpa": [50, 55],
+								"summary": {
+									"counts": {
+										"considered": 256,
+										"eligible": 256,
+										"excluded": 0,
+										"validError": 256,
+										"eligibleValidError": 256,
+										"grouped": 256,
+										"targetStatusCounts": {
+											"available": 256
+										},
+										"veLocationStatusCounts": {
+											"ok": 256
+										},
+										"errorStatusCounts": {
+											"available": 256,
+											"invalid-measured-afr": 0,
+											"target-unavailable": 0,
+											"nonfinite-error": 0
+										}
+									},
+									"coverage": {
+										"eligibleFractionOfConsidered": 1,
+										"validErrorFractionOfEligible": 1,
+										"groupedFractionOfEligible": 1
+									},
+									"error": {
+										"count": 256,
+										"mean": 0.056869804687498915,
+										"median": -1.7763568394002505e-15,
+										"populationStdDev": 0.13774537905546527,
+										"q25": -0.030360000000002163,
+										"q75": 0.0992500000000005,
+										"iqr": 0.12961000000000267,
+										"mad": 0.0942700000000025,
+										"min": -0.1326400000000021,
+										"max": 0.3993999999999982
+									},
+									"supportingRows": {
+										"minimumErrorRow": 51,
+										"maximumErrorRow": 2076,
+										"nearestMedianRow": 692
+									}
+								}
+							},
+							{
+								"rpmIndex": 1,
+								"mapIndex": 2,
+								"rpmBounds": [800, 900],
+								"mapBoundsKpa": [45, 50],
+								"summary": {
+									"counts": {
+										"considered": 206,
+										"eligible": 206,
+										"excluded": 0,
+										"validError": 206,
+										"eligibleValidError": 206,
+										"grouped": 206,
+										"targetStatusCounts": {
+											"available": 206
+										},
+										"veLocationStatusCounts": {
+											"ok": 206
+										},
+										"errorStatusCounts": {
+											"available": 206,
+											"invalid-measured-afr": 0,
+											"target-unavailable": 0,
+											"nonfinite-error": 0
+										}
+									},
+									"coverage": {
+										"eligibleFractionOfConsidered": 1,
+										"validErrorFractionOfEligible": 1,
+										"groupedFractionOfEligible": 1
+									},
+									"error": {
+										"count": 206,
+										"mean": 0.0728155339805815,
+										"median": 0.09999999999999964,
+										"populationStdDev": 0.09970264017429344,
+										"q25": -1.7763568394002505e-15,
+										"q75": 0.10000000000000142,
+										"iqr": 0.1000000000000032,
+										"mad": 0.09999999999999785,
+										"min": -0.1000000000000032,
+										"max": 0.3000000000000007
+									},
+									"supportingRows": {
+										"minimumErrorRow": 234,
+										"maximumErrorRow": 630,
+										"nearestMedianRow": 558
+									}
+								}
+							},
+							{
+								"rpmIndex": 2,
+								"mapIndex": 2,
+								"rpmBounds": [900, 1000],
+								"mapBoundsKpa": [45, 50],
+								"summary": {
+									"counts": {
+										"considered": 105,
+										"eligible": 105,
+										"excluded": 0,
+										"validError": 105,
+										"eligibleValidError": 105,
+										"grouped": 105,
+										"targetStatusCounts": {
+											"available": 105
+										},
+										"veLocationStatusCounts": {
+											"ok": 105
+										},
+										"errorStatusCounts": {
+											"available": 105,
+											"invalid-measured-afr": 0,
+											"target-unavailable": 0,
+											"nonfinite-error": 0
+										}
+									},
+									"coverage": {
+										"eligibleFractionOfConsidered": 1,
+										"validErrorFractionOfEligible": 1,
+										"groupedFractionOfEligible": 1
+									},
+									"error": {
+										"count": 105,
+										"mean": 0.07981904761904653,
+										"median": 0.08699999999999974,
+										"populationStdDev": 0.20927688566892308,
+										"q25": -0.021000000000000796,
+										"q75": 0.18899999999999828,
+										"iqr": 0.20999999999999908,
+										"mad": 0.1070000000000011,
+										"min": -0.39400000000000013,
+										"max": 0.5209999999999972
+									},
+									"supportingRows": {
+										"minimumErrorRow": 1653,
+										"maximumErrorRow": 477,
+										"nearestMedianRow": 1726
+									}
+								}
+							},
+							{
+								"rpmIndex": 3,
+								"mapIndex": 2,
+								"rpmBounds": [1000, 1200],
+								"mapBoundsKpa": [45, 50],
+								"summary": {
+									"counts": {
+										"considered": 24,
+										"eligible": 24,
+										"excluded": 0,
+										"validError": 24,
+										"eligibleValidError": 24,
+										"grouped": 24,
+										"targetStatusCounts": {
+											"available": 24
+										},
+										"veLocationStatusCounts": {
+											"ok": 24
+										},
+										"errorStatusCounts": {
+											"available": 24,
+											"invalid-measured-afr": 0,
+											"target-unavailable": 0,
+											"nonfinite-error": 0
+										}
+									},
+									"coverage": {
+										"eligibleFractionOfConsidered": 1,
+										"validErrorFractionOfEligible": 1,
+										"groupedFractionOfEligible": 1
+									},
+									"error": {
+										"count": 24,
+										"mean": -0.2533333333333348,
+										"median": -0.22350000000000136,
+										"populationStdDev": 0.3261742462072822,
+										"q25": -0.5107499999999998,
+										"q75": -0.12800000000000145,
+										"iqr": 0.38274999999999837,
+										"mad": 0.18100000000000005,
+										"min": -0.8310000000000013,
+										"max": 0.3979999999999979
+									},
+									"supportingRows": {
+										"minimumErrorRow": 1644,
+										"maximumErrorRow": 484,
+										"nearestMedianRow": 1046
+									}
+								}
+							},
+							{
+								"rpmIndex": 2,
+								"mapIndex": 3,
+								"rpmBounds": [900, 1000],
+								"mapBoundsKpa": [50, 55],
+								"summary": {
+									"counts": {
+										"considered": 16,
+										"eligible": 16,
+										"excluded": 0,
+										"validError": 16,
+										"eligibleValidError": 16,
+										"grouped": 16,
+										"targetStatusCounts": {
+											"available": 16
+										},
+										"veLocationStatusCounts": {
+											"ok": 16
+										},
+										"errorStatusCounts": {
+											"available": 16,
+											"invalid-measured-afr": 0,
+											"target-unavailable": 0,
+											"nonfinite-error": 0
+										}
+									},
+									"coverage": {
+										"eligibleFractionOfConsidered": 1,
+										"validErrorFractionOfEligible": 1,
+										"groupedFractionOfEligible": 1
+									},
+									"error": {
+										"count": 16,
+										"mean": 0.34975333333333225,
+										"median": 0.3379199999999978,
+										"populationStdDev": 0.31798583386074164,
+										"q25": -0.0023450000000013738,
+										"q75": 0.758680833333333,
+										"iqr": 0.7610258333333344,
+										"mad": 0.350319999999999,
+										"min": -0.03333000000000297,
+										"max": 0.7742499999999986
+									},
+									"supportingRows": {
+										"minimumErrorRow": 411,
+										"maximumErrorRow": 2024,
+										"nearestMedianRow": 1119
+									}
+								}
+							}
+						],
+						"omittedPopulatedRegions": 0,
+						"supportingRows": [
+							{
+								"rowIndex": 51,
+								"episodeId": 0,
+								"partition": "training",
+								"status": "ready",
+								"reasons": [],
+								"afr": {
+									"rowIndex": 51,
+									"timeSec": 3.298,
+									"rpm": 836,
+									"mapKpa": 51.7,
+									"measuredAfr": 13.1,
+									"eligibilityStatus": "eligible",
+									"eligibilityReasonCodes": [],
+									"target": {
+										"rpm": 836,
+										"mapKpa": 51.7,
+										"status": "ok",
+										"neighborhood": {
+											"rpmIndex": 0,
+											"mapIndex": 2,
+											"rpmBounds": [500, 900],
+											"mapBoundsKpa": [50, 55],
+											"rpmFraction": 0.84,
+											"mapFraction": 0.3400000000000006
+										},
+										"value": 13.232640000000002,
+										"corners": [
+											{
+												"rpmIndex": 0,
+												"mapIndex": 2,
+												"weight": 0.10559999999999993,
+												"value": 13.200000000000001
+											},
+											{
+												"rpmIndex": 1,
+												"mapIndex": 2,
+												"weight": 0.5543999999999996,
+												"value": 13.200000000000001
+											},
+											{
+												"rpmIndex": 0,
+												"mapIndex": 3,
+												"weight": 0.0544000000000001,
+												"value": 13.8
+											},
+											{
+												"rpmIndex": 1,
+												"mapIndex": 3,
+												"weight": 0.28560000000000046,
+												"value": 13.200000000000001
+											}
+										],
+										"valueStatus": "available"
+									},
+									"veLocation": {
+										"rpm": 836,
+										"mapKpa": 51.7,
+										"status": "ok",
+										"neighborhood": {
+											"rpmIndex": 1,
+											"mapIndex": 3,
+											"rpmBounds": [800, 900],
+											"mapBoundsKpa": [50, 55],
+											"rpmFraction": 0.36,
+											"mapFraction": 0.3400000000000006
+										}
+									},
+									"errorStatus": "available",
+									"errorAfr": -0.1326400000000021,
+									"contributesToAggregate": true,
+									"delayMs": 0
+								},
+								"ve": {
+									"location": {
+										"rpm": 836,
+										"mapKpa": 51.7,
+										"status": "ok",
+										"neighborhood": {
+											"rpmIndex": 1,
+											"mapIndex": 3,
+											"rpmBounds": [800, 900],
+											"mapBoundsKpa": [50, 55],
+											"rpmFraction": 0.36,
+											"mapFraction": 0.3400000000000006
+										}
+									},
+									"status": "available",
+									"value": 45.435120000000005,
+									"corners": [
+										{
+											"rpmIndex": 1,
+											"mapIndex": 3,
+											"bilinearWeight": 0.42239999999999966,
+											"originalVe": 45.1,
+											"relativeInfluence": 0.4192844654091369
+										},
+										{
+											"rpmIndex": 2,
+											"mapIndex": 3,
+											"bilinearWeight": 0.2375999999999998,
+											"originalVe": 42,
+											"relativeInfluence": 0.21963626375367756
+										},
+										{
+											"rpmIndex": 1,
+											"mapIndex": 4,
+											"bilinearWeight": 0.21760000000000038,
+											"originalVe": 49.800000000000004,
+											"relativeInfluence": 0.2385044872776834
+										},
+										{
+											"rpmIndex": 2,
+											"mapIndex": 4,
+											"bilinearWeight": 0.1224000000000002,
+											"originalVe": 45.5,
+											"relativeInfluence": 0.12257478355950217
+										}
+									]
+								},
+								"supportRows": {
+									"startRow": 36,
+									"endRow": 51
+								}
+							},
+							{
+								"rowIndex": 2076,
+								"episodeId": 1,
+								"partition": "training",
+								"status": "ready",
+								"reasons": [],
+								"afr": {
+									"rowIndex": 2076,
+									"timeSec": 138.318,
+									"rpm": 890,
+									"mapKpa": 50.2,
+									"measuredAfr": 13.6,
+									"eligibilityStatus": "eligible",
+									"eligibilityReasonCodes": [],
+									"target": {
+										"rpm": 890,
+										"mapKpa": 50.2,
+										"status": "ok",
+										"neighborhood": {
+											"rpmIndex": 0,
+											"mapIndex": 2,
+											"rpmBounds": [500, 900],
+											"mapBoundsKpa": [50, 55],
+											"rpmFraction": 0.975,
+											"mapFraction": 0.04000000000000057
+										},
+										"value": 13.200600000000001,
+										"corners": [
+											{
+												"rpmIndex": 0,
+												"mapIndex": 2,
+												"weight": 0.024000000000000007,
+												"value": 13.200000000000001
+											},
+											{
+												"rpmIndex": 1,
+												"mapIndex": 2,
+												"weight": 0.9359999999999994,
+												"value": 13.200000000000001
+											},
+											{
+												"rpmIndex": 0,
+												"mapIndex": 3,
+												"weight": 0.0010000000000000152,
+												"value": 13.8
+											},
+											{
+												"rpmIndex": 1,
+												"mapIndex": 3,
+												"weight": 0.039000000000000555,
+												"value": 13.200000000000001
+											}
+										],
+										"valueStatus": "available"
+									},
+									"veLocation": {
+										"rpm": 890,
+										"mapKpa": 50.2,
+										"status": "ok",
+										"neighborhood": {
+											"rpmIndex": 1,
+											"mapIndex": 3,
+											"rpmBounds": [800, 900],
+											"mapBoundsKpa": [50, 55],
+											"rpmFraction": 0.9,
+											"mapFraction": 0.04000000000000057
+										}
+									},
+									"errorStatus": "available",
+									"errorAfr": 0.3993999999999982,
+									"contributesToAggregate": true,
+									"delayMs": 0
+								},
+								"ve": {
+									"location": {
+										"rpm": 890,
+										"mapKpa": 50.2,
+										"status": "ok",
+										"neighborhood": {
+											"rpmIndex": 1,
+											"mapIndex": 3,
+											"rpmBounds": [800, 900],
+											"mapBoundsKpa": [50, 55],
+											"rpmFraction": 0.9,
+											"mapFraction": 0.04000000000000057
+										}
+									},
+									"status": "available",
+									"value": 42.454800000000006,
+									"corners": [
+										{
+											"rpmIndex": 1,
+											"mapIndex": 3,
+											"bilinearWeight": 0.09599999999999992,
+											"originalVe": 45.1,
+											"relativeInfluence": 0.10198140139630844
+										},
+										{
+											"rpmIndex": 2,
+											"mapIndex": 3,
+											"bilinearWeight": 0.8639999999999994,
+											"originalVe": 42,
+											"relativeInfluence": 0.8547443398626297
+										},
+										{
+											"rpmIndex": 1,
+											"mapIndex": 4,
+											"bilinearWeight": 0.0040000000000000565,
+											"originalVe": 49.800000000000004,
+											"relativeInfluence": 0.004692048955595193
+										},
+										{
+											"rpmIndex": 2,
+											"mapIndex": 4,
+											"bilinearWeight": 0.03600000000000051,
+											"originalVe": 45.5,
+											"relativeInfluence": 0.0385822097854665
+										}
+									]
+								},
+								"supportRows": {
+									"startRow": 2060,
+									"endRow": 2076
+								}
+							},
+							{
+								"rowIndex": 692,
+								"episodeId": 0,
+								"partition": "training",
+								"status": "ready",
+								"reasons": [],
+								"afr": {
+									"rowIndex": 692,
+									"timeSec": 46.041,
+									"rpm": 877,
+									"mapKpa": 50,
+									"measuredAfr": 13.2,
+									"eligibilityStatus": "eligible",
+									"eligibilityReasonCodes": [],
+									"target": {
+										"rpm": 877,
+										"mapKpa": 50,
+										"status": "ok",
+										"neighborhood": {
+											"rpmIndex": 0,
+											"mapIndex": 2,
+											"rpmBounds": [500, 900],
+											"mapBoundsKpa": [50, 55],
+											"rpmFraction": 0.9425,
+											"mapFraction": 0
+										},
+										"value": 13.200000000000001,
+										"corners": [
+											{
+												"rpmIndex": 0,
+												"mapIndex": 2,
+												"weight": 0.057499999999999996,
+												"value": 13.200000000000001
+											},
+											{
+												"rpmIndex": 1,
+												"mapIndex": 2,
+												"weight": 0.9425,
+												"value": 13.200000000000001
+											},
+											{
+												"rpmIndex": 0,
+												"mapIndex": 3,
+												"weight": 0,
+												"value": 13.8
+											},
+											{
+												"rpmIndex": 1,
+												"mapIndex": 3,
+												"weight": 0,
+												"value": 13.200000000000001
+											}
+										],
+										"valueStatus": "available"
+									},
+									"veLocation": {
+										"rpm": 877,
+										"mapKpa": 50,
+										"status": "ok",
+										"neighborhood": {
+											"rpmIndex": 1,
+											"mapIndex": 3,
+											"rpmBounds": [800, 900],
+											"mapBoundsKpa": [50, 55],
+											"rpmFraction": 0.77,
+											"mapFraction": 0
+										}
+									},
+									"errorStatus": "available",
+									"errorAfr": -1.7763568394002505e-15,
+									"contributesToAggregate": true,
+									"delayMs": 0
+								},
+								"ve": {
+									"location": {
+										"rpm": 877,
+										"mapKpa": 50,
+										"status": "ok",
+										"neighborhood": {
+											"rpmIndex": 1,
+											"mapIndex": 3,
+											"rpmBounds": [800, 900],
+											"mapBoundsKpa": [50, 55],
+											"rpmFraction": 0.77,
+											"mapFraction": 0
+										}
+									},
+									"status": "available",
+									"value": 42.713,
+									"corners": [
+										{
+											"rpmIndex": 1,
+											"mapIndex": 3,
+											"bilinearWeight": 0.22999999999999998,
+											"originalVe": 45.1,
+											"relativeInfluence": 0.2428534638166366
+										},
+										{
+											"rpmIndex": 2,
+											"mapIndex": 3,
+											"bilinearWeight": 0.77,
+											"originalVe": 42,
+											"relativeInfluence": 0.7571465361833635
+										},
+										{
+											"rpmIndex": 1,
+											"mapIndex": 4,
+											"bilinearWeight": 0,
+											"originalVe": 49.800000000000004,
+											"relativeInfluence": 0
+										},
+										{
+											"rpmIndex": 2,
+											"mapIndex": 4,
+											"bilinearWeight": 0,
+											"originalVe": 45.5,
+											"relativeInfluence": 0
+										}
+									]
+								},
+								"supportRows": {
+									"startRow": 677,
+									"endRow": 692
+								}
+							}
+						],
+						"omittedSupportingRows": 12,
+						"limitations": [
+							"Errors are measured AFR minus interpolated calibration target; they are not VE corrections or predicted improvements.",
+							"Calibration semantics must be explicitly bound by the caller; imported axis names alone do not prove MAP kPa or AFR units.",
+							"Only eligible rows with valid targets and in-bounds VE neighborhoods contribute. Diagnostic errors on other rows are not aggregate evidence.",
+							"AFR sensor/transport delay is unimplemented and fixed at zero; no telemetry is time shifted.",
+							"Statistics use equal sample weights, type-7 quantiles, population standard deviation and unscaled MAD. Samples/windows may be correlated; counts are not independent observations.",
+							"Empty statistics and unrepresentable numerical results are null. Coverage has explicit sample/grid denominators and is not a confidence estimate.",
+							"VE values are not interpolated or required for geometric neighborhood membership; missing target corners with positive weight block target lookup.",
+							"Eligibility indices, partitions and timestamps are validated. Existing classifier contracts lack session identity, so callers must supply results from the same unchanged session.",
+							"Phase A cell support measures training coverage only, not identifiability, correction accuracy, or confidence. No corrections are fitted.",
+							"Episodes group whole accepted runs without AFR-error selection; nearby runs may remain correlated. Temporal gaps and embargo do not establish independence.",
+							"Partitioning uses fixed full-log eligibility to define episodes, then audits V1 boundaries or recomputes V2 within each partition. Full-log time high-water integrity is retained.",
+							"Calibration association and active ECU table/fueling mode require caller confirmation. Source content hashes detect mismatched artifacts, not incorrect calibration association.",
+							"Fuel is assumed proportional to interpolated VE with other factors fixed. Closed-loop corrections, injector behavior, sensor bias and unimplemented AFR delay can invalidate predictions.",
+							"Effects in unobserved neighboring operating regions are unassessed. V1 categorical fuel-cut limitations remain unchanged."
+						],
+						"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+						"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+						"fullEvidenceRef": {
+							"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+							"contextId": "april-single-live-smoke",
+							"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+							"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+							"kind": "analysis",
+							"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+							"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+							"candidateId": null
+						},
+						"facts": [
+							{
+								"key": "region-1-3",
+								"kind": "afr-error",
+								"statement": "Training VE neighborhood RPM 800-900, MAP 50-55 kPa has 256 eligible observations; measured-minus-target AFR mean 0.056869804687498915, median -1.7763568394002505e-15.",
+								"values": {
+									"rpmIndex": 1,
+									"mapIndex": 3,
+									"count": 256,
+									"meanError": 0.056869804687498915,
+									"medianError": -1.7763568394002505e-15
+								},
+								"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-3",
+								"evidenceId": "evidence-2",
+								"artifact": {
+									"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+									"contextId": "april-single-live-smoke",
+									"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+									"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+									"kind": "analysis",
+									"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+									"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+									"candidateId": null
+								}
+							},
+							{
+								"key": "region-1-2",
+								"kind": "afr-error",
+								"statement": "Training VE neighborhood RPM 800-900, MAP 45-50 kPa has 206 eligible observations; measured-minus-target AFR mean 0.0728155339805815, median 0.09999999999999964.",
+								"values": {
+									"rpmIndex": 1,
+									"mapIndex": 2,
+									"count": 206,
+									"meanError": 0.0728155339805815,
+									"medianError": 0.09999999999999964
+								},
+								"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-1-2",
+								"evidenceId": "evidence-2",
+								"artifact": {
+									"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+									"contextId": "april-single-live-smoke",
+									"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+									"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+									"kind": "analysis",
+									"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+									"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+									"candidateId": null
+								}
+							},
+							{
+								"key": "region-2-2",
+								"kind": "afr-error",
+								"statement": "Training VE neighborhood RPM 900-1000, MAP 45-50 kPa has 105 eligible observations; measured-minus-target AFR mean 0.07981904761904653, median 0.08699999999999974.",
+								"values": {
+									"rpmIndex": 2,
+									"mapIndex": 2,
+									"count": 105,
+									"meanError": 0.07981904761904653,
+									"medianError": 0.08699999999999974
+								},
+								"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-2",
+								"evidenceId": "evidence-2",
+								"artifact": {
+									"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+									"contextId": "april-single-live-smoke",
+									"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+									"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+									"kind": "analysis",
+									"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+									"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+									"candidateId": null
+								}
+							},
+							{
+								"key": "region-3-2",
+								"kind": "afr-error",
+								"statement": "Training VE neighborhood RPM 1000-1200, MAP 45-50 kPa has 24 eligible observations; measured-minus-target AFR mean -0.2533333333333348, median -0.22350000000000136.",
+								"values": {
+									"rpmIndex": 3,
+									"mapIndex": 2,
+									"count": 24,
+									"meanError": -0.2533333333333348,
+									"medianError": -0.22350000000000136
+								},
+								"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-3-2",
+								"evidenceId": "evidence-2",
+								"artifact": {
+									"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+									"contextId": "april-single-live-smoke",
+									"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+									"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+									"kind": "analysis",
+									"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+									"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+									"candidateId": null
+								}
+							},
+							{
+								"key": "region-2-3",
+								"kind": "afr-error",
+								"statement": "Training VE neighborhood RPM 900-1000, MAP 50-55 kPa has 16 eligible observations; measured-minus-target AFR mean 0.34975333333333225, median 0.3379199999999978.",
+								"values": {
+									"rpmIndex": 2,
+									"mapIndex": 3,
+									"count": 16,
+									"meanError": 0.34975333333333225,
+									"medianError": 0.3379199999999978
+								},
+								"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis:region-2-3",
+								"evidenceId": "evidence-2",
+								"artifact": {
+									"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+									"contextId": "april-single-live-smoke",
+									"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+									"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+									"kind": "analysis",
+									"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+									"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+									"candidateId": null
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				"evidenceId": "evidence-3",
+				"tool": "evaluate_ve_candidate",
+				"arguments": {
+					"candidateRef": "877810f7-52a4-467a-b92a-d6f3c12ef303:candidate"
+				},
+				"result": {
+					"ok": true,
+					"data": {
+						"status": "complete",
+						"candidateRef": "877810f7-52a4-467a-b92a-d6f3c12ef303:candidate",
+						"basis": "conditional-model-prediction",
+						"paired": {
+							"status": "complete",
+							"rowCount": 183,
+							"failedPredictions": 0,
+							"baseline": {
+								"count": 183,
+								"mae": 0.15921599271402595,
+								"rmse": 0.19831132610939423,
+								"errors": {
+									"count": 183,
+									"mean": 0.016481056466301186,
+									"median": -0.0013200000000015422,
+									"populationStdDev": 0.19762529403146012,
+									"q25": -0.1999999999999993,
+									"q75": 0.19799999999999862,
+									"iqr": 0.3979999999999979,
+									"mad": 0.19867999999999952,
+									"min": -0.3043199999999988,
+									"max": 0.3749999999999982
+								}
+							},
+							"candidate": {
+								"count": 183,
+								"mae": 0.15921599271402595,
+								"rmse": 0.19831132610939423,
+								"errors": {
+									"count": 183,
+									"mean": 0.016481056466301186,
+									"median": -0.0013200000000015422,
+									"populationStdDev": 0.19762529403146012,
+									"q25": -0.1999999999999993,
+									"q75": 0.19799999999999862,
+									"iqr": 0.3979999999999979,
+									"mad": 0.19867999999999952,
+									"min": -0.3043199999999988,
+									"max": 0.3749999999999982
+								}
+							},
+							"predictedDeltaMae": 0,
+							"predictedDeltaRmse": 0
+						},
+						"affectedOnly": {
+							"status": "empty",
+							"rowCount": 0,
+							"failedPredictions": 0,
+							"baseline": {
+								"count": 0,
+								"mae": null,
+								"rmse": null,
+								"errors": {
+									"count": 0,
+									"mean": null,
+									"median": null,
+									"populationStdDev": null,
+									"q25": null,
+									"q75": null,
+									"iqr": null,
+									"mad": null,
+									"min": null,
+									"max": null
+								}
+							},
+							"candidate": {
+								"count": 0,
+								"mae": null,
+								"rmse": null,
+								"errors": {
+									"count": 0,
+									"mean": null,
+									"median": null,
+									"populationStdDev": null,
+									"q25": null,
+									"q75": null,
+									"iqr": null,
+									"mad": null,
+									"min": null,
+									"max": null
+								}
+							},
+							"predictedDeltaMae": null,
+							"predictedDeltaRmse": null
+						},
+						"coverage": {
+							"trainingRows": 607,
+							"holdoutRows": 183,
+							"supportedCells": 0,
+							"totalCells": 256,
+							"exclusionCounts": {
+								"OUTSIDE_EVALUATION_PARTITIONS": 236,
+								"NO_EPISODE": 922,
+								"CLASSIFIER_NOT_ELIGIBLE": 2044,
+								"PARTITION_SUPPORT_LEAKAGE": 31,
+								"VE_COORDINATES_UNAVAILABLE": 73,
+								"AFR_OBSERVATION_UNAVAILABLE": 27
+							}
+						},
+						"split": {
+							"status": "ready",
+							"training": {
+								"startRow": 18,
+								"endRowExclusive": 2144
+							},
+							"holdout": {
+								"startRow": 2362,
+								"endRowExclusive": 2859
+							},
+							"actualGapSec": 14.605000000000018
+						},
+						"neighborhoods": [
+							{
+								"rpmIndex": 2,
+								"mapIndex": 2,
+								"paired": {
+									"status": "complete",
+									"rowCount": 46,
+									"failedPredictions": 0,
+									"baseline": {
+										"count": 46,
+										"mae": 0.1604999999999997,
+										"rmse": 0.19548195735712703,
+										"errors": {
+											"count": 46,
+											"mean": 0.1374999999999988,
+											"median": 0.1659999999999986,
+											"populationStdDev": 0.1389494355950176,
+											"q25": -0.0020000000000024443,
+											"q75": 0.26224999999999987,
+											"iqr": 0.2642500000000023,
+											"mad": 0.11399999999999988,
+											"min": -0.10599999999999987,
+											"max": 0.3749999999999982
+										}
+									},
+									"candidate": {
+										"count": 46,
+										"mae": 0.1604999999999997,
+										"rmse": 0.19548195735712703,
+										"errors": {
+											"count": 46,
+											"mean": 0.1374999999999988,
+											"median": 0.1659999999999986,
+											"populationStdDev": 0.1389494355950176,
+											"q25": -0.0020000000000024443,
+											"q75": 0.26224999999999987,
+											"iqr": 0.2642500000000023,
+											"mad": 0.11399999999999988,
+											"min": -0.10599999999999987,
+											"max": 0.3749999999999982
+										}
+									},
+									"predictedDeltaMae": 0,
+									"predictedDeltaRmse": 0
+								}
+							},
+							{
+								"rpmIndex": 1,
+								"mapIndex": 2,
+								"paired": {
+									"status": "complete",
+									"rowCount": 62,
+									"failedPredictions": 0,
+									"baseline": {
+										"count": 62,
+										"mae": 0.16451612903225882,
+										"rmse": 0.1909230549284867,
+										"errors": {
+											"count": 62,
+											"mean": -0.07096774193548491,
+											"median": -0.10000000000000231,
+											"populationStdDev": 0.17724331442343422,
+											"q25": -0.20000000000000107,
+											"q75": -4.440892098500626e-16,
+											"iqr": 0.20000000000000062,
+											"mad": 0.10000000000000052,
+											"min": -0.3000000000000025,
+											"max": 0.3000000000000007
+										}
+									},
+									"candidate": {
+										"count": 62,
+										"mae": 0.16451612903225882,
+										"rmse": 0.1909230549284867,
+										"errors": {
+											"count": 62,
+											"mean": -0.07096774193548491,
+											"median": -0.10000000000000231,
+											"populationStdDev": 0.17724331442343422,
+											"q25": -0.20000000000000107,
+											"q75": -4.440892098500626e-16,
+											"iqr": 0.20000000000000062,
+											"mad": 0.10000000000000052,
+											"min": -0.3000000000000025,
+											"max": 0.3000000000000007
+										}
+									},
+									"predictedDeltaMae": 0,
+									"predictedDeltaRmse": 0
+								}
+							},
+							{
+								"rpmIndex": 1,
+								"mapIndex": 3,
+								"paired": {
+									"status": "complete",
+									"rowCount": 62,
+									"failedPredictions": 0,
+									"baseline": {
+										"count": 62,
+										"mae": 0.14642080645161396,
+										"rmse": 0.19859235230784023,
+										"errors": {
+											"count": 62,
+											"mean": -0.021874354838710936,
+											"median": -0.002850000000003128,
+											"populationStdDev": 0.1973839785685543,
+											"q25": -0.20253500000000058,
+											"q75": -0.00013500000000066237,
+											"iqr": 0.2023999999999999,
+											"mad": 0.15036000000000094,
+											"min": -0.3043199999999988,
+											"max": 0.3000000000000007
+										}
+									},
+									"candidate": {
+										"count": 62,
+										"mae": 0.14642080645161396,
+										"rmse": 0.19859235230784023,
+										"errors": {
+											"count": 62,
+											"mean": -0.021874354838710936,
+											"median": -0.002850000000003128,
+											"populationStdDev": 0.1973839785685543,
+											"q25": -0.20253500000000058,
+											"q75": -0.00013500000000066237,
+											"iqr": 0.2023999999999999,
+											"mad": 0.15036000000000094,
+											"min": -0.3043199999999988,
+											"max": 0.3000000000000007
+										}
+									},
+									"predictedDeltaMae": 0,
+									"predictedDeltaRmse": 0
+								}
+							},
+							{
+								"rpmIndex": 2,
+								"mapIndex": 3,
+								"paired": {
+									"status": "complete",
+									"rowCount": 13,
+									"failedPredictions": 0,
+									"baseline": {
+										"count": 13,
+										"mae": 0.190418205128205,
+										"rmse": 0.23759868056448158,
+										"errors": {
+											"count": 13,
+											"mean": 0.18824948717948595,
+											"median": 0.2749999999999986,
+											"populationStdDev": 0.14496642225923606,
+											"q25": -1.7763568394002505e-15,
+											"q75": 0.29499999999999815,
+											"iqr": 0.29499999999999993,
+											"mad": 0.09799999999999898,
+											"min": -0.007023333333336268,
+											"max": 0.37299999999999933
+										}
+									},
+									"candidate": {
+										"count": 13,
+										"mae": 0.190418205128205,
+										"rmse": 0.23759868056448158,
+										"errors": {
+											"count": 13,
+											"mean": 0.18824948717948595,
+											"median": 0.2749999999999986,
+											"populationStdDev": 0.14496642225923606,
+											"q25": -1.7763568394002505e-15,
+											"q75": 0.29499999999999815,
+											"iqr": 0.29499999999999993,
+											"mad": 0.09799999999999898,
+											"min": -0.007023333333336268,
+											"max": 0.37299999999999933
+										}
+									},
+									"predictedDeltaMae": 0,
+									"predictedDeltaRmse": 0
+								}
+							}
+						],
+						"omittedNeighborhoods": 0,
+						"rows": [
+							{
+								"rowIndex": 2378,
+								"episodeId": 2,
+								"rpmIndex": 2,
+								"mapIndex": 2,
+								"affected": false,
+								"status": "predicted",
+								"baselineAfr": 13.4,
+								"targetAfr": 13.202000000000002,
+								"originalVe": 41.58376,
+								"candidateVe": 41.58376,
+								"predictedAfr": 13.4,
+								"baselineErrorAfr": 0.19799999999999862,
+								"predictedErrorAfr": 0.19799999999999862,
+								"timeSec": 158.456,
+								"rpm": 902,
+								"mapKpa": 49.4
+							},
+							{
+								"rowIndex": 2379,
+								"episodeId": 2,
+								"rpmIndex": 2,
+								"mapIndex": 2,
+								"affected": false,
+								"status": "predicted",
+								"baselineAfr": 13.5,
+								"targetAfr": 13.205000000000002,
+								"originalVe": 41.5354,
+								"candidateVe": 41.5354,
+								"predictedAfr": 13.5,
+								"baselineErrorAfr": 0.29499999999999815,
+								"predictedErrorAfr": 0.29499999999999815,
+								"timeSec": 158.523,
+								"rpm": 905,
+								"mapKpa": 49.4
+							},
+							{
+								"rowIndex": 2380,
+								"episodeId": 2,
+								"rpmIndex": 2,
+								"mapIndex": 2,
+								"affected": false,
+								"status": "predicted",
+								"baselineAfr": 13.5,
+								"targetAfr": 13.206000000000003,
+								"originalVe": 41.519279999999995,
+								"candidateVe": 41.519279999999995,
+								"predictedAfr": 13.5,
+								"baselineErrorAfr": 0.29399999999999693,
+								"predictedErrorAfr": 0.29399999999999693,
+								"timeSec": 158.59,
+								"rpm": 906,
+								"mapKpa": 49.4
+							}
+						],
+						"changedNeighborhoods": [],
+						"delay": {
+							"status": "unimplemented-zero-placeholder",
+							"appliedMs": 0
+						},
+						"limitations": [
+							"Errors are measured AFR minus interpolated calibration target; they are not VE corrections or predicted improvements.",
+							"Calibration semantics must be explicitly bound by the caller; imported axis names alone do not prove MAP kPa or AFR units.",
+							"Only eligible rows with valid targets and in-bounds VE neighborhoods contribute. Diagnostic errors on other rows are not aggregate evidence.",
+							"AFR sensor/transport delay is unimplemented and fixed at zero; no telemetry is time shifted.",
+							"Statistics use equal sample weights, type-7 quantiles, population standard deviation and unscaled MAD. Samples/windows may be correlated; counts are not independent observations.",
+							"Empty statistics and unrepresentable numerical results are null. Coverage has explicit sample/grid denominators and is not a confidence estimate.",
+							"VE values are not interpolated or required for geometric neighborhood membership; missing target corners with positive weight block target lookup.",
+							"Eligibility indices, partitions and timestamps are validated. Existing classifier contracts lack session identity, so callers must supply results from the same unchanged session.",
+							"Phase A cell support measures training coverage only, not identifiability, correction accuracy, or confidence. No corrections are fitted.",
+							"Episodes group whole accepted runs without AFR-error selection; nearby runs may remain correlated. Temporal gaps and embargo do not establish independence.",
+							"Partitioning uses fixed full-log eligibility to define episodes, then audits V1 boundaries or recomputes V2 within each partition. Full-log time high-water integrity is retained.",
+							"Calibration association and active ECU table/fueling mode require caller confirmation. Source content hashes detect mismatched artifacts, not incorrect calibration association.",
+							"Fuel is assumed proportional to interpolated VE with other factors fixed. Closed-loop corrections, injector behavior, sensor bias and unimplemented AFR delay can invalidate predictions.",
+							"Effects in unobserved neighboring operating regions are unassessed. V1 categorical fuel-cut limitations remain unchanged.",
+							"Candidate AFR and paired metric differences are model-based predictions, not measured improvements. The baseline is observed AFR with the original table unchanged.",
+							"All ready rows in the declared evaluation partition are paired, including unchanged and worsened rows. Any failed prediction makes candidate aggregate metrics unavailable; failed rows are never silently dropped.",
+							"Episode metric variation is descriptive uncertainty only. No calibrated confidence interval, identifiability assessment, optimizer or automatic correction selection is implemented.",
+							"Repeated manual changes after viewing holdout results turn the holdout into development data; reserve a new untouched holdout for final evaluation."
+						],
+						"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+						"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+						"fullEvidenceRef": {
+							"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+							"contextId": "april-single-live-smoke",
+							"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+							"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation",
+							"kind": "evaluation",
+							"sha256": "1f89dcc6f5cf1ed835c73c7cb5b3b310a5d6762a62a1a6d563ab6148d2055d74",
+							"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+							"candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
+						},
+						"facts": [
+							{
+								"key": "paired-prediction",
+								"kind": "paired-prediction",
+								"statement": "Conditional held-out model prediction on 183 identical baseline/candidate rows: MAE 0.15921599271402595 -> 0.15921599271402595, RMSE 0.19831132610939423 -> 0.19831132610939423. This is not measured improvement; worsened metrics remain included.",
+								"values": {
+									"rowCount": 183,
+									"baselineMae": 0.15921599271402595,
+									"candidateMae": 0.15921599271402595,
+									"baselineRmse": 0.19831132610939423,
+									"candidateRmse": 0.19831132610939423
+								},
+								"id": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation:paired-prediction",
+								"evidenceId": "evidence-3",
+								"artifact": {
+									"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+									"contextId": "april-single-live-smoke",
+									"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+									"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation",
+									"kind": "evaluation",
+									"sha256": "1f89dcc6f5cf1ed835c73c7cb5b3b310a5d6762a62a1a6d563ab6148d2055d74",
+									"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+									"candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
+								}
+							}
+						]
+					}
+				}
+			}
+		],
+		"analytical": {
+			"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+			"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+			"evidenceRefs": [
+				{
+					"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+					"contextId": "april-single-live-smoke",
+					"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+					"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:analysis",
+					"kind": "analysis",
+					"sha256": "9527be7458d9a87a4fd318f6847a1b396da62bbe34cea8002e391db62e9a3d05",
+					"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+					"candidateId": null
+				},
+				{
+					"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+					"contextId": "april-single-live-smoke",
+					"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+					"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:fit",
+					"kind": "fit",
+					"sha256": "4e24fe5f947456197aaf2debbbd7bf1654813e9e41a1a03376f6971ab076fad3",
+					"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+					"candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
+				},
+				{
+					"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+					"contextId": "april-single-live-smoke",
+					"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+					"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:candidate",
+					"kind": "candidate",
+					"sha256": "bbe776f188901f4e6ed5cf186e9a8101c8b4992a5001713efa47d5a959dbaffc",
+					"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+					"candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
+				},
+				{
+					"runId": "877810f7-52a4-467a-b92a-d6f3c12ef303",
+					"contextId": "april-single-live-smoke",
+					"settingsId": "308c38d20f782620d13138d34003ea1c3f26199e56232d6a7d6750aef2b7dbce",
+					"artifactId": "877810f7-52a4-467a-b92a-d6f3c12ef303:evaluation",
+					"kind": "evaluation",
+					"sha256": "1f89dcc6f5cf1ed835c73c7cb5b3b310a5d6762a62a1a6d563ab6148d2055d74",
+					"datasetId": "4de57f6145a7c97b75676a3a5bf0beed32a4e75608dbb6197f1f910b321c3003",
+					"candidateId": "7f7bae82a6acf0ecc20ec98848d38853f11dd3f87403abe6951a11e7d12ce223"
+				}
+			],
+			"timings": [
+				{
+					"tool": "fit_ve_candidate",
+					"elapsedMs": 797.8247999999994
+				},
+				{
+					"tool": "analyze_afr_error",
+					"elapsedMs": 3.9615000000012515
+				},
+				{
+					"tool": "evaluate_ve_candidate",
+					"elapsedMs": 178.47299999999814
+				}
+			]
+		}
+	},
+	"limitations": [
+		"One April V1 run tests integration, not tuning accuracy.",
+		"Tool results and server facts are deterministic calculations; provider messages and native calls are actual model outputs.",
+		"AFR delay is zero and predictions are conditional; no ECU write or measured improvement is authorized."
+	]
 }

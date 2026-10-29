@@ -1,0 +1,2 @@
+# Linux deployment scripts/templates must survive Windows Git checkouts.
+deploy/* text eol=lf

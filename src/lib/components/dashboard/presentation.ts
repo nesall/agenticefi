@@ -36,4 +36,7 @@ export const channelColors: Partial<Record<ChannelSlot, string>> = {
 export const number = (value: number | null | undefined, digits = 2) =>
 	value == null || !Number.isFinite(value)
 		? '—'
-		: new Intl.NumberFormat('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value);
+		: new Intl.NumberFormat('en-US', {
+				minimumFractionDigits: digits,
+				maximumFractionDigits: digits
+			}).format(value);

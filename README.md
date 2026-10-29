@@ -55,4 +55,6 @@ You can preview the production build with `npm run preview`.
 
 Production uses the Node adapter. Run `npm start` from the packaged application
 root after building. See [Node deployment and asset packaging](docs/deployment.md)
-and the inactive [proposed proxy configuration](docs/proposed-nginx.conf).
+and the inactive [HTTPS proxy template](deploy/nginx-https.conf).
+`npm run release:package -- <release-id>` creates an allowlisted, integrity-checked
+archive; `release:verify` and `release:smoke` validate it without live Meta calls.

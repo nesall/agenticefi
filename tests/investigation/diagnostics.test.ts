@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
@@ -37,10 +37,94 @@ const makeRun = (diagnostics?: InvestigationDiagnostics) => {
 afterEach(async () => {
 	vi.useRealTimers();
 	vi.restoreAllMocks();
+	vi.unstubAllEnvs();
 	await Promise.all(handles.splice(0).map((r) => r.dispose()));
 });
 
 describe('private structured investigation diagnostics', () => {
+	it.each([undefined, '', '   '])(
+		'retains the working-directory default when the environment is %j',
+		async (value) => {
+			const root = await mkdtemp(join(tmpdir(), 'agenticefi-diagnostics-'));
+			if (!root.startsWith(join(tmpdir(), 'agenticefi-diagnostics-')))
+				throw new Error('Unexpected temporary directory.');
+			try {
+				vi.stubEnv('AGENTICEFI_DIAGNOSTICS_DIR', value);
+				const cwd = vi.spyOn(process, 'cwd').mockReturnValue(root);
+				const d = new InvestigationDiagnostics();
+				cwd.mockRestore();
+				d.bind(jobId);
+				await d.flush();
+				const directory = join(root, '.investigation-diagnostics');
+				expect(JSON.parse(await readFile(join(directory, jobId + '.json'), 'utf8')).jobId).toBe(
+					jobId
+				);
+				if (process.platform !== 'win32') {
+					expect((await stat(directory)).mode & 0o777).toBe(0o700);
+					expect((await stat(join(directory, jobId + '.json'))).mode & 0o777).toBe(0o600);
+				}
+			} finally {
+				await rm(root, { recursive: true, force: true });
+			}
+		}
+	);
+	it('uses the configured environment directory and preserves explicit directory precedence', async () => {
+		const root = await mkdtemp(join(tmpdir(), 'agenticefi-diagnostics-'));
+		if (!root.startsWith(join(tmpdir(), 'agenticefi-diagnostics-')))
+			throw new Error('Unexpected temporary directory.');
+		try {
+			const configured = join(root, 'state', 'investigation-diagnostics');
+			vi.stubEnv('AGENTICEFI_DIAGNOSTICS_DIR', configured);
+			const d = new InvestigationDiagnostics();
+			d.bind(jobId);
+			await d.flush();
+			expect(JSON.parse(await readFile(join(configured, jobId + '.json'), 'utf8')).jobId).toBe(
+				jobId
+			);
+			const explicit = join(root, 'explicit');
+			const other = new InvestigationDiagnostics({ directory: explicit });
+			other.bind(jobId);
+			await other.flush();
+			expect(await readdir(explicit)).toEqual([jobId + '.json']);
+		} finally {
+			await rm(root, { recursive: true, force: true });
+		}
+	});
+	it('warns once without leaking storage errors and retains completed in-memory diagnostics', async () => {
+		const root = await mkdtemp(join(tmpdir(), 'agenticefi-diagnostics-'));
+		if (!root.startsWith(join(tmpdir(), 'agenticefi-diagnostics-')))
+			throw new Error('Unexpected temporary directory.');
+		try {
+			const blocked = join(root, 'private-path-secret-telemetry');
+			await writeFile(blocked, 'not a directory');
+			vi.stubEnv('AGENTICEFI_DIAGNOSTICS_DIR', join(blocked, 'child'));
+			const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			const d = new InvestigationDiagnostics();
+			d.bind(jobId);
+			for (let i = 0; i < 165; i++) d.event('model-start');
+			d.finish({ code: 'completed', phase: 'finished', modelTurn: 1, tool: null }, 'completed');
+			await expect(d.flush()).resolves.toBeUndefined();
+			expect(d.events).toHaveLength(160);
+			expect(d.events.at(-1)).toMatchObject({ event: 'job-end', category: 'completed' });
+			expect(warn).toHaveBeenCalledExactlyOnceWith(
+				'[AgenticEFI] Investigation diagnostics persistence failed; in-memory diagnostics retained.'
+			);
+			expect(JSON.stringify(warn.mock.calls)).not.toMatch(/private-path|secret|telemetry|ENOTDIR/);
+			// A failing warning sink also cannot reject the best-effort write queue.
+			warn.mockImplementation(() => {
+				throw new Error('private logging failure');
+			});
+			const other = new InvestigationDiagnostics();
+			other.bind(jobId);
+			await expect(other.flush()).resolves.toBeUndefined();
+			const disabled = new InvestigationDiagnostics({ persist: false });
+			disabled.bind(jobId);
+			await disabled.flush();
+			expect(warn).toHaveBeenCalledTimes(2);
+		} finally {
+			await rm(root, { recursive: true, force: true });
+		}
+	});
 	it('retains allowlisted rejection details and request ID without provider text or consuming the response', async () => {
 		const d = new InvestigationDiagnostics({ persist: false });
 		d.bind(jobId);
@@ -199,6 +283,7 @@ describe('private structured investigation diagnostics', () => {
 			const blocked = new InvestigationDiagnostics({
 				directory: join(directory, files[0], 'not-a-directory')
 			});
+			vi.spyOn(console, 'warn').mockImplementation(() => {});
 			blocked.bind(jobId);
 			await expect(blocked.flush()).resolves.toBeUndefined();
 		} finally {

@@ -149,7 +149,7 @@
 					strokeWidth={2}
 					class="shrink-0"
 					aria-hidden="true"
-					disabled={running || (starting || !job || job.state !== 'running')}
+					disabled={running || starting || !job || job.state !== 'running'}
 				/>Options</Popover.Trigger
 			><Popover.Positioner class="z-50!">
 				><Popover.Content

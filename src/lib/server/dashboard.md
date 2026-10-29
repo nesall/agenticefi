@@ -102,10 +102,13 @@ recomputes visible extrema. No chart dependency or API change is involved.
 ### Failure diagnostics
 
 Live analytical dashboard jobs write a private, best-effort record at
-`.investigation-diagnostics/<dashboard-job-id>.json`. The progress band displays
+`<AGENTICEFI_DIAGNOSTICS_DIR>/<dashboard-job-id>.json` when configured, otherwise
+`.investigation-diagnostics/<dashboard-job-id>.json` under the working directory.
+Production uses `/var/lib/agenticefi/investigation-diagnostics`. The progress band displays
 that job ID and a specific termination label. This directory is git-ignored,
 excluded from formatting, and has no public download API. It must be writable
-on the Node deployment; filesystem failure does not interrupt analysis. Existing
+on the Node deployment; filesystem failure does not interrupt analysis and emits
+at most one fixed sanitized server warning per recorder. Existing
 failed runs cannot be reconstructed retroactively from these new records.
 
 Records retain at most 160 metadata events each and 32 recent job files. They

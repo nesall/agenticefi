@@ -66,7 +66,9 @@
 				? ` · ${job.progress.tool.replaceAll('_', ' ')}`
 				: ''} · {completed.length} completed calls
 		</p>
-		{#if job.error}<p class="mt-2 wrap-break-word text-error-700-300" role="alert">{job.error}</p>{/if}
+		{#if job.error}<p class="mt-2 wrap-break-word text-error-700-300" role="alert">
+				{job.error}
+			</p>{/if}
 		<p class="mt-2 text-xs break-all text-surface-500">
 			Job ID: {job.id}{#if job.termination}
 				· {job.termination.code} · model turn {job.termination.modelTurn}{#if job.termination.tool}

@@ -33,6 +33,16 @@ function event(
 }
 afterEach(() => vi.unstubAllEnvs());
 describe('thin dashboard API contracts (no provider calls)', () => {
+	it('preserves adapter body-limit rejection as 413 without exposing its details', async () => {
+		const oversized = event('/api/demo', {});
+		vi.spyOn(oversized.request, 'text').mockRejectedValueOnce(
+			Object.assign(new Error('private adapter details'), { status: 413 })
+		);
+		const response = await demoPost(oversized);
+		expect(response.status).toBe(413);
+		expect(response.headers.get('cache-control')).toBe('no-store');
+		expect(await response.json()).toEqual({ error: 'Request is too large.' });
+	});
 	it('returns advisory downloads as private attachments rather than JSON-wrapped bodies', async () => {
 		const download = vi.spyOn(dashboardStore, 'downloadVe').mockReturnValue({
 			body: 'MAP_kPa / RPM,800\r\n20,42\r\n',
