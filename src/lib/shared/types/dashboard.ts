@@ -61,6 +61,7 @@ export type EligibilityPage = {
 	unlocatableTimeCount: number;
 };
 export type InvestigationJob = {
+	veExport?: { available: boolean; reason?: string };
 	termination?: import('./investigationDiagnostics').InvestigationTermination;
 	logName?: string;
 	calibrationId?: string;

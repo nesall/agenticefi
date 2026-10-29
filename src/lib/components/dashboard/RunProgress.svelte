@@ -1,6 +1,11 @@
 <script lang="ts">
 	import type { InvestigationJob } from '../../shared/types/dashboard';
 	import { investigationStatus } from './investigationStatus';
+	import Bot from '@lucide/svelte/icons/bot';
+	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
+	import CircleCheck from '@lucide/svelte/icons/circle-check';
+	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
+	import FileSearch from '@lucide/svelte/icons/file-search';
 	let { job, onTrace }: { job: InvestigationJob; onTrace: (evidenceId?: string) => void } =
 		$props();
 	const completed = $derived(job.result?.trace ?? job.progress?.completed ?? []);
@@ -14,9 +19,24 @@
 >
 	<div class="min-w-0">
 		<div class="flex items-center gap-2 font-medium">
-			{#if job.state === 'running'}<span
-					class="size-2 rounded-full bg-primary-500 motion-safe:animate-pulse"
-				></span>{/if}{job.source === 'recorded' ? 'Recorded demonstration' : 'Live Muse Spark'} · {job.state ===
+			{#if job.state === 'running'}<LoaderCircle
+					size={16}
+					strokeWidth={2}
+					class="shrink-0 text-primary-600-400 motion-safe:animate-spin"
+					aria-hidden="true"
+				/>{:else if job.error}<TriangleAlert
+					size={16}
+					strokeWidth={2}
+					class="shrink-0 text-warning-700-300"
+					aria-hidden="true"
+				/>{:else}<Bot
+					size={16}
+					strokeWidth={2}
+					class="shrink-0 text-primary-600-400"
+					aria-hidden="true"
+				/>{/if}{job.source === 'recorded'
+				? 'Recorded Muse Spark demonstration'
+				: 'Live Muse Spark'}{job.mode === 'legacy' ? ' · Legacy telemetry' : ''} · {job.state ===
 			'running'
 				? job.source === 'recorded'
 					? 'loading historical result'
@@ -39,9 +59,19 @@
 		{#each completed as entry (entry.evidenceId)}<button
 				class="btn preset-tonal-surface text-xs"
 				onclick={() => onTrace(entry.evidenceId)}
-				>{entry.result.ok ? '✓' : '!'} {entry.tool.replaceAll('_', ' ')}</button
+				>{#if entry.result.ok}<CircleCheck
+						size={16}
+						strokeWidth={2}
+						class="shrink-0"
+						aria-hidden="true"
+					/>{:else}<TriangleAlert
+						size={16}
+						strokeWidth={2}
+						class="shrink-0"
+						aria-hidden="true"
+					/>{/if}{entry.tool.replaceAll('_', ' ')}</button
 			>{/each}<button class="btn preset-outlined-surface-500 text-xs" onclick={() => onTrace()}
-			>Inspect trace ↗</button
+			><FileSearch size={16} strokeWidth={2} class="shrink-0" aria-hidden="true" />Inspect trace ↗</button
 		>
 	</div>
 </section>

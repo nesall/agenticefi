@@ -5,7 +5,7 @@ export default defineConfig({
 	test: {
 		environment: 'node',
 		include: ['tests/live/analyticalAgent.live.ts'],
-		testTimeout: 140000,
+		testTimeout: 200000,
 		retry: 0
 	}
 });

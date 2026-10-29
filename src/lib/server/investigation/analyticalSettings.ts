@@ -6,6 +6,8 @@ import { freezeVeArtifact } from '../analysis/veArtifacts';
 import type { VePreparationConfig, Immutable } from '../../shared/types/veEvaluation';
 import type { VeFitConfig } from '../../shared/types/veFitting';
 
+export const ANALYTICAL_INVESTIGATION_TIMEOUT_MS = 180000;
+
 export const ANALYTICAL_LIMITS = Object.freeze({
 	maxLogBytes: 64 * 1024 * 1024,
 	maxRows: 60000,
@@ -16,7 +18,7 @@ export const ANALYTICAL_LIMITS = Object.freeze({
 	maxArtifactBytes: 128 * 1024 * 1024,
 	maxResponseBytes: 32000,
 	jobTimeoutMs: 120000,
-	retentionMs: 120000
+	retentionMs: ANALYTICAL_INVESTIGATION_TIMEOUT_MS
 });
 export type AnalyticalLimits = { -readonly [K in keyof typeof ANALYTICAL_LIMITS]: number };
 export type AnalyticalInput = {

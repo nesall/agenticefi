@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { AnalyticalRun } from './investigation/analyticalRun';
+import { ANALYTICAL_INVESTIGATION_TIMEOUT_MS } from './investigation/analyticalSettings';
+import { veExportCsv, veExportProvenance, type VeExportSnapshot } from './investigation/veExport';
 import { curatedDemo } from './demo/catalog';
 import { recordedInvestigation, recordedProfiles } from './recordedInvestigation';
 import type { DemoId, AnalyticalProfile } from '../shared/types/analyticalDashboard';
@@ -37,6 +39,7 @@ type StoredSession = {
 	expiresAt: number;
 };
 type StoredRun = {
+	veExport?: VeExportSnapshot;
 	diagnostics?: InvestigationDiagnostics;
 	owner: string;
 	job: InvestigationJob;
@@ -418,6 +421,10 @@ export class DashboardStore {
 				job.result = snapshot.result;
 				job.presentation = snapshot.presentation;
 				job.recordedAt = snapshot.recordedAt;
+				job.veExport = {
+					available: false,
+					reason: 'Recorded results do not retain a complete verified candidate export snapshot.'
+				};
 			} else {
 				const demo = await curatedDemo(session.demoId!);
 				if (!model) throw new Error('Muse Spark is not configured.');
@@ -440,7 +447,7 @@ export class DashboardStore {
 					goal: `${input.goal}\nInvestigate the whole canonical log using analyze_afr_error, fit_ve_candidate, and evaluate_ve_candidate when supported. Do not change frozen settings or treat chart selection as a fitting mask. Report missing evidence, legitimate no-correction outcomes and worsened holdout predictions.`,
 					maxIterations: 7,
 					maxToolCalls: 6,
-					timeoutMs: 120000,
+					timeoutMs: ANALYTICAL_INVESTIGATION_TIMEOUT_MS,
 					diagnostics: run.diagnostics,
 					signal: run.abort.signal,
 					onProgress: (progress) => {
@@ -512,6 +519,17 @@ export class DashboardStore {
 				? 'Investigation cancelled.'
 				: 'The investigation or recording is unavailable. No replacement results were generated.';
 		} finally {
+			// Snapshot was atomically validated in the worker. Keep only its small private copy.
+			if (run.analytical?.exportCheckpoint) run.veExport = run.analytical.exportCheckpoint;
+			job.veExport ??= {
+				available: !!run.veExport,
+				...(!run.veExport
+					? {
+							reason:
+								'A complete verified original calibration and finalized candidate are unavailable.'
+						}
+					: {})
+			};
 			await run.analytical?.dispose();
 			run.analytical = undefined;
 			job.state = 'finished';
@@ -555,6 +573,32 @@ export class DashboardStore {
 		if (!run || run.owner !== owner)
 			throw new DashboardError(404, 'Investigation is unavailable or expired.');
 		return structuredClone(run.job);
+	}
+	downloadVe(owner: string, id: string, format: 'csv' | 'json') {
+		const job = this.job(owner, id); // Same authorization, session and expiry checks as polling.
+		const snapshot = this.#runs.get(id)?.veExport;
+		if (job.state !== 'finished' || !snapshot)
+			throw new DashboardError(
+				409,
+				job.veExport?.reason ?? 'Finalized advisory export is unavailable.'
+			);
+		const partial = job.outcome !== 'completed';
+		return {
+			body:
+				format === 'csv'
+					? veExportCsv(snapshot)
+					: JSON.stringify(
+							veExportProvenance(
+								snapshot,
+								partial,
+								!!job.presentation?.paired,
+								job.presentation?.paired?.status
+							),
+							null,
+							2
+						),
+			filename: `advisory-ve-${partial ? 'partial-' : ''}${id}.${format}`
+		};
 	}
 }
 export const dashboardStore = new DashboardStore();

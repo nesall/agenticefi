@@ -45,6 +45,43 @@ export function veGrid(cells: readonly DashboardVeCell[], axes?: VeAxes) {
 	};
 }
 
+/** Display-only crop. Context includes every original status and unavailable coordinate. */
+export function focusedVeGrid(cells: readonly DashboardVeCell[], axes?: VeAxes) {
+	const full = veGrid(cells, axes);
+	const proposed = full.rows
+		.flat()
+		.filter(
+			(p) =>
+				p.cell?.status === 'accepted' &&
+				Number.isFinite(p.cell.finalCorrectionPct) &&
+				p.cell.finalCorrectionPct !== 0
+		);
+	if (!proposed.length)
+		return {
+			...full,
+			x: [],
+			y: [],
+			rows: [],
+			hidden: full.x.length * full.y.length,
+			hasProposals: false
+		};
+	const xs = proposed.map((p) => full.x.findIndex((x) => x.index === p.rpmIndex));
+	const ys = proposed.map((p) => full.y.findIndex((y) => y.index === p.mapIndex));
+	const xStart = Math.max(0, Math.min(...xs) - 1),
+		xEnd = Math.min(full.x.length, Math.max(...xs) + 2);
+	const yStart = Math.max(0, Math.min(...ys) - 1),
+		yEnd = Math.min(full.y.length, Math.max(...ys) + 2);
+	const x = full.x.slice(xStart, xEnd),
+		y = full.y.slice(yStart, yEnd);
+	return {
+		x,
+		y,
+		rows: full.rows.slice(yStart, yEnd).map((row) => row.slice(xStart, xEnd)),
+		hidden: full.x.length * full.y.length - x.length * y.length,
+		hasProposals: true
+	};
+}
+
 /** Representative adjacent-region rows, not a claim about exact material cell influence. */
 export function neighboringSamples(
 	regions: readonly DashboardAfrRegion[],

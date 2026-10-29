@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Accordion } from '@skeletonlabs/skeleton-svelte';
+	import FileSearch from '@lucide/svelte/icons/file-search';
 	import type { EligibilityPage, SessionSummary } from '../../shared/types/dashboard';
 	import { number, statusColors, statusLabels } from './presentation';
 	let {
@@ -22,7 +23,7 @@
 			</p>
 		</div>
 		<button class="btn preset-outlined-surface-500 text-sm" onclick={onInspect}
-			>Inspect samples ↗</button
+			><FileSearch size={16} strokeWidth={2} class="shrink-0" aria-hidden="true" />Inspect samples ↗</button
 		>
 	</div>
 	<div class="grid grid-cols-2 gap-3 lg:grid-cols-4">

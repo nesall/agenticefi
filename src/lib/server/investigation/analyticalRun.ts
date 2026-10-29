@@ -18,6 +18,7 @@ import { analyticalArguments, analyticalTools } from './analyticalProtocol';
 import { freezeVeArtifact, veContentHash } from '../analysis/veArtifacts';
 import type { InvestigationDiagnostics } from './diagnostics';
 import type { TerminationCode } from '../../shared/types/investigationDiagnostics';
+import type { VeExportSnapshot } from './veExport';
 
 let liveWorkers = 0;
 const MAX_LIVE_WORKERS = 2;
@@ -47,6 +48,7 @@ export class AnalyticalRun {
 	#disposed = false;
 	#failure: TerminationCode | null = null;
 	#presentationFailed = false;
+	#exportSnapshot: VeExportSnapshot | null = null;
 
 	constructor(
 		input: AnalyticalInput,
@@ -79,6 +81,9 @@ export class AnalyticalRun {
 	}
 	get presentationCheckpoint(): AnalyticalPresentation | null {
 		return structuredClone(this.#presentation);
+	}
+	get exportCheckpoint(): VeExportSnapshot | null {
+		return this.#exportSnapshot;
 	}
 	get failureCategory() {
 		return this.#failure;
@@ -122,9 +127,25 @@ export class AnalyticalRun {
 				error?: string;
 				presentation?: AnalyticalPresentation;
 				presentationFailed?: boolean;
+				exportSnapshot?: VeExportSnapshot;
 			}) => {
 				const pending = this.#pending;
 				if (!pending || pending.id !== message.id) return;
+				const candidate = (message.value as AnalyticalWorkerReply | undefined)?.refs?.find(
+					(r) => r.kind === 'candidate'
+				);
+				const exported = message.exportSnapshot;
+				if (
+					exported &&
+					candidate &&
+					exported.candidateSha256 === candidate.sha256 &&
+					exported.datasetId === candidate.datasetId &&
+					exported.candidateId === candidate.candidateId &&
+					candidate.runId === this.runId &&
+					candidate.settingsId === this.settingsId &&
+					Buffer.byteLength(JSON.stringify(exported)) <= 65536
+				)
+					this.#exportSnapshot = freezeVeArtifact(exported);
 				if (
 					message.presentation &&
 					Buffer.byteLength(JSON.stringify(message.presentation)) <= 512 * 1024

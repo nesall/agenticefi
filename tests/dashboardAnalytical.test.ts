@@ -55,7 +55,14 @@ describe('analytical dashboard orchestration (scripted model, no API)', () => {
 		expect(demoCatalog().map((d) => d.id)).toEqual(['april', 'august8']);
 	});
 	it('runs fit-first with frozen V1, retains full cell details, and disposes the worker', async () => {
-		const store = new DashboardStore(),
+		let now = Date.now();
+		const store = new DashboardStore({
+				ttlMs: 30 * 60 * 1000,
+				maxSessions: 8,
+				maxRuns: 16,
+				maxActiveRuns: 2,
+				now: () => now
+			}),
 			demo = await curatedDemo('april');
 		const session = store.create('owner', demo.context, 'april');
 		const job = store.start(
@@ -80,6 +87,20 @@ describe('analytical dashboard orchestration (scripted model, no API)', () => {
 		});
 		const result = store.job('owner', job.id);
 		expect(result.error).toBeNull();
+		expect(result.veExport?.available).toBe(true);
+		const exported = store
+			.downloadVe('owner', job.id, 'csv')
+			.body.trim()
+			.split('\r\n')
+			.slice(1)
+			.map((row) => row.split(',').slice(1).map(Number));
+		for (const cell of result.presentation!.cells)
+			expect(exported[cell.mapIndex][cell.rpmIndex]).toBe(cell.proposedVe);
+		expect(() => store.downloadVe('other', job.id, 'csv')).toThrow('unavailable');
+		expect(JSON.parse(store.downloadVe('owner', job.id, 'json').body)).toMatchObject({
+			investigation: 'completed',
+			evaluation: 'held-out conditional model predictions available'
+		});
 		expect(result.result?.status).toBe('completed');
 		expect(result.presentation?.cells).toHaveLength(256);
 		expect(result.presentation?.veAxes?.rpm).toHaveLength(16);
@@ -117,6 +138,8 @@ describe('analytical dashboard orchestration (scripted model, no API)', () => {
 			timeout: 12000
 		});
 		expect(store.job('owner', next.id).error).toBeNull();
+		now += 30 * 60 * 1000 + 1;
+		expect(() => store.downloadVe('owner', job.id, 'csv')).toThrow('unavailable');
 	});
 	it('publishes completed calls while waiting for Muse, enforces capacity, and cancels by owner', async () => {
 		const store = new DashboardStore(),
@@ -212,13 +235,21 @@ describe('analytical dashboard orchestration (scripted model, no API)', () => {
 		try {
 			await waiting;
 			await vi.advanceTimersByTimeAsync(120001);
+			expect(store.job('owner', job.id).state).toBe('running');
+			await vi.advanceTimersByTimeAsync(60000);
 			vi.useRealTimers();
 			await vi.waitFor(() => expect(store.job('owner', job.id).state).toBe('finished'));
 			const result = store.job('owner', job.id);
 			expect(result.termination).toMatchObject({ code: 'deadline', phase: 'model', modelTurn: 2 });
 			expect(result.error).toContain('deadline exceeded');
+			expect(result.error).toContain('180 seconds');
 			expect(result.error).not.toContain('network');
 			expect(result.presentation?.cells).toHaveLength(256);
+			expect(result.veExport?.available).toBe(true);
+			expect(JSON.parse(store.downloadVe('owner', job.id, 'json').body)).toMatchObject({
+				investigation: 'partial',
+				evaluation: 'unavailable'
+			});
 			expect(result.result?.trace[0].result.ok).toBe(true);
 			expect(diagnostics.events.at(-1)).toMatchObject({
 				event: 'job-end',

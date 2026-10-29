@@ -21,7 +21,9 @@ export async function dashboardApi(
 			});
 		}
 		if (!owner) throw new DashboardError(404, 'Load the demo to start a session.');
-		return json(await action(owner), { headers: { 'Cache-Control': 'no-store' } });
+		const result = await action(owner);
+		if (result instanceof Response) return result;
+		return json(result, { headers: { 'Cache-Control': 'no-store' } });
 	} catch (error) {
 		return json(
 			{

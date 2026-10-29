@@ -19,7 +19,7 @@ const run = new AnalyticalRun({
 try {
 	const result = await runInvestigation(run, new MetaResponsesModel(), {
 		goal: 'Investigate supported AFR deviations and advisory VE candidates.',
-		timeoutMs: 120000
+		timeoutMs: 180000
 	});
 	// Server-side only, after authorizing the caller:
 	for (const ref of result.analytical?.evidenceRefs ?? []) {
@@ -127,19 +127,19 @@ The response budget must remain at least 1024 bytes so bounded validation errors
 can be returned. Error text and tool names are length-limited too; rejected calls
 beyond the call ceiling do not grow retained timing metadata.
 
-| Resource                                  |               Ceiling |
-| ----------------------------------------- | --------------------: |
-| Log / each XML bytes                      |       64 MiB / 64 KiB |
-| Parsed rows / channels                    |          60,000 / 300 |
-| Cells per table                           |                   256 |
-| Training episodes / supported cells       |               64 / 32 |
-| Fitting iterations                        |                 5,000 |
-| Retained serialized evidence per run      |               128 MiB |
-| Tool response / model turn or arguments   | 32,000 / 20,000 bytes |
-| Calls per run                             |                    20 |
-| Per-job timeout / idle evidence retention |     120 / 120 seconds |
-| Resident workers per process              |                     2 |
-| Worker old / young JS heap                |          512 / 32 MiB |
+| Resource                                          |               Ceiling |
+| ------------------------------------------------- | --------------------: |
+| Log / each XML bytes                              |       64 MiB / 64 KiB |
+| Parsed rows / channels                            |          60,000 / 300 |
+| Cells per table                                   |                   256 |
+| Training episodes / supported cells               |               64 / 32 |
+| Fitting iterations                                |                 5,000 |
+| Retained serialized evidence per run              |               128 MiB |
+| Tool response / model turn or arguments           | 32,000 / 20,000 bytes |
+| Calls per run                                     |                    20 |
+| Per-tool worker timeout / idle evidence retention |     120 / 180 seconds |
+| Resident workers per process                      |                     2 |
+| Worker old / young JS heap                        |          512 / 32 MiB |
 
 The old-generation worker heap defaults to 512 MiB. A caller can explicitly select
 the bounded 1024 MiB tier with `workerHeapMb: 1024` on `AnalyticalRun`; only 512 and
@@ -223,13 +223,13 @@ entering the known failing configuration. The same August command without a heap
 flag now selects the measured 1 GiB tier automatically.
 
 Numerical preparation/fitting and selected classifier defaults remain unchanged. Limits are six tool
-calls, seven model turns, 120 seconds overall, and the adapter's existing 4096
+calls, seven model turns, 180 seconds overall, and the adapter's existing 4096
 output tokens per response. The default diagnostic mode makes no retries: at most
 seven HTTP attempts and 28672 output tokens across responses.
 
 `--resilient` enables smoke-only retries for HTTP 429/500/502/503/504, at most two
 per model turn (21 HTTP attempts / 86016 maximum output tokens across responses).
-All attempts and waits share the original runner AbortSignal and 120-second
+All attempts and waits share the original runner AbortSignal and 180-second
 deadline; neither a model turn, tool call, nor whole investigation is restarted.
 Backoff uses exponential delays with jitter (250–500 ms, then 500–1000 ms).
 Valid `Retry-After` seconds or HTTP dates impose a minimum wait. If that minimum

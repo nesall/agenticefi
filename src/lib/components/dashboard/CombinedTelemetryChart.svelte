@@ -142,7 +142,7 @@
 		</div>
 		<button
 			type="button"
-			class="chart-surface block h-56 min-w-0 flex-1 rounded-sm focus-visible:outline-2 focus-visible:outline-primary-500 sm:h-64 [&_svg]:h-full [&_svg]:w-full"
+			class="chart-surface relative block h-56 min-w-0 flex-1 rounded-sm focus-visible:outline-2 focus-visible:outline-primary-500 sm:h-64 [&_svg]:h-full [&_svg]:w-full"
 			aria-label="Combined telemetry. Click a sample, drag to select a time window, or use arrow keys."
 			aria-describedby="combined-axis-note"
 			onpointermove={move}
@@ -170,12 +170,7 @@
 						vector-effect="non-scaling-stroke"
 					/>{/each}
 				{#each curves as curve (curve.slot)}{#if !hidden.includes(curve.slot)}
-						{#each curve.segments as segment, i (i)}{#if segment.length === 1}<circle
-									cx={x(segment[0].timeSec)}
-									cy={y(segment[0].percent)}
-									r="2"
-									fill={channelColors[curve.slot]}
-								/>{:else}<path
+						{#each curve.segments as segment, i (i)}{#if segment.length > 1}<path
 									d={segment
 										.map(
 											(p, i) =>
@@ -205,12 +200,29 @@
 						stroke-dasharray="3 4"
 						vector-effect="non-scaling-stroke"
 					/>
+				{/if}
+			</svg>
+			<!-- No viewBox: circle radii use CSS pixels, outside the nonuniform plot transform. -->
+			<svg
+				class="pointer-events-none absolute inset-0 overflow-visible"
+				aria-hidden="true"
+				data-testid="combined-marker-overlay"
+			>
+				{#each curves as curve (curve.slot)}{#if !hidden.includes(curve.slot)}
+						{#each curve.segments as segment, i (i)}{#if segment.length === 1}<circle
+									cx={`${x(segment[0].timeSec) / 10}%`}
+									cy={`${(y(segment[0].percent) / 120) * 100}%`}
+									r="2"
+									fill={channelColors[curve.slot]}
+								/>{/if}{/each}
+					{/if}{/each}
+				{#if cursor !== null && cursor >= data.startSec && cursor <= data.endSec}
 					{#each curves as curve (curve.slot)}{@const percent = normalizedValue(
 							readout.channels[curve.index].value,
 							curve.scale
 						)}{#if percent !== null && readout.point && !hidden.includes(curve.slot)}<circle
-								cx={x(readout.point.timeSec)}
-								cy={y(percent)}
+								cx={`${x(readout.point.timeSec) / 10}%`}
+								cy={`${(y(percent) / 120) * 100}%`}
 								r="3"
 								fill={channelColors[curve.slot]}
 							/>{/if}{/each}

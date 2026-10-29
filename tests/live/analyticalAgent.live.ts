@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { expect, it } from 'vitest';
 import { AnalyticalRun } from '../../src/lib/server/investigation/analyticalRun';
+import { ANALYTICAL_INVESTIGATION_TIMEOUT_MS } from '../../src/lib/server/investigation/analyticalSettings';
 import { analyticalArguments } from '../../src/lib/server/investigation/analyticalProtocol';
 import {
 	MetaResponsesModel,
@@ -64,7 +65,11 @@ const object = (value: unknown): Record<string, unknown> =>
 		? (value as Record<string, unknown>)
 		: {};
 const required = ['analyze_afr_error', 'fit_ve_candidate', 'evaluate_ve_candidate'];
-const limits = { maxToolCalls: 6, maxIterations: 7, timeoutMs: 120000 };
+const limits = {
+	maxToolCalls: 6,
+	maxIterations: 7,
+	timeoutMs: ANALYTICAL_INVESTIGATION_TIMEOUT_MS
+};
 const resilient = process.env.AGENTICEFI_SMOKE_RESILIENT === 'true';
 if (
 	process.env.AGENTICEFI_SMOKE_RESILIENT !== undefined &&

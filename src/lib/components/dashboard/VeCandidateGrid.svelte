@@ -1,28 +1,35 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import type { DashboardVeCell } from '../../shared/types/analyticalDashboard';
-	import { veGrid, type VeAxes, type GridCoordinate } from './workspace';
+	import { veGrid, focusedVeGrid, type VeAxes, type GridCoordinate } from './workspace';
 	import { number } from './presentation';
+	import { veCorrectionLabel, evaluatedUnchanged, veCellExplanation } from './veCellDisplay';
 	let {
 		cells,
 		axes,
 		omittedCells = 0,
+		initialView = 'focused',
 		onCell
 	}: {
 		cells: DashboardVeCell[];
 		axes?: VeAxes;
 		omittedCells?: number;
+		initialView?: 'focused' | 'full';
 		onCell: (cell: GridCoordinate) => void;
 	} = $props();
-	const grid = $derived(veGrid(cells, axes));
+	let view = $state<'focused' | 'full'>(untrack(() => initialView));
+	const focused = $derived(focusedVeGrid(cells, axes));
+	const grid = $derived(view === 'focused' ? focused : veGrid(cells, axes));
 	function cellTitle(cell: DashboardVeCell | null) {
 		return cell
-			? `Original VE ${number(cell.originalVe, 3)}; proposed VE ${number(cell.proposedVe, 3)}; ${cell.reasons.join(', ') || cell.status}${cell.atBound ? '; at bound' : ''}`
+			? `Original VE ${number(cell.originalVe, 3)}; proposed VE ${number(cell.proposedVe, 3)}; ${cell.status}. ${veCellExplanation(cell)} ${cell.reasons.join(', ')}${cell.atBound ? '; at bound' : ''}`
 			: 'This cell was not retained in the recording';
 	}
 </script>
 
 <section
-	class="min-w-0 space-y-4 rounded-container border border-surface-200-800 bg-surface-100-900 p-4 md:p-6"
+	id="ve-candidate-grid"
+	class="min-w-0 scroll-mt-40 space-y-4 rounded-container border border-surface-200-800 bg-surface-100-900 p-4 md:p-6"
 	aria-label="Advisory VE delta heatmap"
 >
 	<div class="flex flex-wrap items-start justify-between gap-3">
@@ -37,7 +44,28 @@
 	<div class="flex flex-wrap gap-4 text-xs">
 		<span class="badge preset-tonal-warning">+ Fuel added</span><span
 			class="badge preset-tonal-primary">− Fuel reduced</span
-		><span>○ Suppressed</span><span>— Unsupported</span><span>? Unavailable evidence</span>
+		><span>Suppressed · unchanged</span><span>— Unsupported</span><span>? Unavailable evidence</span
+		>
+		{#if cells.some(evaluatedUnchanged)}<span>0% Evaluated, unchanged.</span>{/if}
+	</div>
+	<div class="flex flex-wrap items-center gap-3">
+		<div
+			class="inline-flex gap-1 rounded-base bg-surface-200-800 p-1"
+			role="group"
+			aria-label="VE grid view"
+		>
+			{#each ['focused', 'full'] as value (value)}<button
+					class="btn text-xs {view === value
+						? 'preset-filled-primary-500'
+						: 'preset-tonal-surface'}"
+					aria-pressed={view === value}
+					onclick={() => (view = value as 'focused' | 'full')}
+					>{value === 'focused' ? 'Focused' : 'Full'}</button
+				>{/each}
+		</div>
+		{#if view === 'focused'}<p class="text-xs text-surface-500">
+				{focused.hidden} cells hidden. Accepted nonzero proposals plus one neighboring row and column.
+			</p>{/if}
 	</div>
 	{#if grid.x.length && grid.y.length}
 		<div
@@ -72,25 +100,20 @@
 									><button
 										class="relative min-h-8 w-full rounded-sm px-1 py-2 font-mono text-[11px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary-500 {cell?.status ===
 										'accepted'
-											? cell.finalCorrectionPct > 0
-												? 'preset-tonal-warning'
-												: 'preset-tonal-primary'
+											? evaluatedUnchanged(cell)
+												? 'bg-surface-200-800 text-surface-700-300'
+												: cell.finalCorrectionPct > 0
+													? 'preset-tonal-warning'
+													: 'preset-tonal-primary'
 											: cell?.status === 'suppressed'
 												? 'bg-surface-200-800 text-surface-700-300'
 												: 'text-surface-500 hover:bg-surface-200-800'}"
 										aria-label={`RPM ${number(point.rpm, 0)}, MAP ${number(point.mapKpa)} kPa: ${cell?.status ?? 'unavailable'}${cell?.status === 'accepted' ? `, ${number(cell.finalCorrectionPct, 3)} percent` : ''}${cell?.atBound ? ', at bound' : ''}`}
 										title={cellTitle(cell)}
 										onclick={() => onCell(point)}
-										>{#if cell?.status === 'accepted'}{cell.finalCorrectionPct > 0
-												? '+'
-												: ''}{number(
-												cell.finalCorrectionPct,
-												3
-											)}%{:else if cell?.status === 'suppressed'}{number(
-												cell.finalCorrectionPct,
-												1
-											)}%<span class="ml-0.5" aria-hidden="true">○</span
-											>{:else if cell?.status === 'unsupported'}<span class="opacity-40">—</span
+										>{#if cell?.status === 'accepted' || cell?.status === 'suppressed'}{veCorrectionLabel(
+												cell.finalCorrectionPct
+											)}{:else if cell?.status === 'unsupported'}<span class="opacity-40">—</span
 											>{:else}?{/if}{#if cell?.atBound}<span
 												class="absolute top-0 right-0 size-1.5 rounded-full bg-warning-500"
 												aria-hidden="true"
@@ -101,9 +124,16 @@
 				>
 			</table>
 		</div>
-	{:else}<p class="rounded-base bg-surface-200-800 p-4 text-sm">
-			No candidate cell evidence yet. Run an investigation to inspect a finalized candidate.
-		</p>{/if}
+	{:else}<div class="rounded-base bg-surface-200-800 p-4 text-sm">
+			<p>
+				{cells.length
+					? 'No accepted nonzero proposals are available. No correction is a valid outcome.'
+					: 'No candidate cell evidence yet. Missing values are unavailable, not inferred corrections.'}
+			</p>
+			<button class="mt-2 btn preset-tonal-surface text-xs" onclick={() => (view = 'full')}
+				>View full grid</button
+			>
+		</div>{/if}
 	{#if omittedCells}<p class="text-sm text-surface-600-400">
 			{omittedCells} cell decisions were not retained in this recording. Missing cells are unavailable,
 			not unsupported.{!axes ? ' Only retained axis coordinates can be displayed.' : ''}

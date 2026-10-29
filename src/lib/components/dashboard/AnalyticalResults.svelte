@@ -7,6 +7,10 @@
 	import type { JsonValue } from '../../shared/types/investigation';
 	import { number } from './presentation';
 	import { investigationStatus } from './investigationStatus';
+	import { resolve } from '$app/paths';
+	import Download from '@lucide/svelte/icons/download';
+	import FileSearch from '@lucide/svelte/icons/file-search';
+	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	type Section =
 		'Findings' | 'AFR neighborhoods' | 'VE candidate' | 'Holdout evaluation' | 'Tool trace';
 	// eslint-disable-next-line svelte/no-unused-props -- Retain the old initialSection input; the workspace now shows all main sections.
@@ -89,7 +93,12 @@
 		<p
 			class="rounded-base border-l-4 border-warning-500 bg-warning-500/10 p-4 text-sm leading-relaxed"
 		>
-			{advisoryNotice}
+			<TriangleAlert
+				size={16}
+				strokeWidth={2}
+				class="mr-1 inline-block align-text-bottom"
+				aria-hidden="true"
+			/>{advisoryNotice}
 		</p>
 		{#if job.source === 'recorded'}<p class="text-sm text-warning-700-300">
 				Historical result captured {job.recordedAt ?? 'at an unavailable time'}. {recordedNotice}
@@ -138,6 +147,43 @@
 		omittedCells={presentation?.omittedCells ?? 0}
 		{onCell}
 	/>
+	<section
+		class="space-y-2 rounded-container border border-surface-200-800 bg-surface-100-900 p-4"
+		aria-label="Advisory VE data export"
+	>
+		<div class="flex flex-wrap items-center gap-3">
+			{#if job.state === 'finished' && job.veExport?.available}
+				<a
+					class="btn preset-filled-primary-500"
+					href={resolve('/api/investigations/[id]/ve-export?format=csv', { id: job.id })}
+					download
+					><Download size={16} strokeWidth={2} class="shrink-0" aria-hidden="true" />Download
+					Proposed VE Table · CSV</a
+				>
+				<a
+					class="btn preset-tonal-surface text-sm"
+					href={resolve('/api/investigations/[id]/ve-export?format=json', { id: job.id })}
+					download>Advisory provenance · JSON</a
+				>
+			{:else}<button class="btn preset-tonal-surface" disabled
+					><Download size={16} strokeWidth={2} class="shrink-0" aria-hidden="true" />Download
+					Proposed VE Table · CSV</button
+				>{/if}
+		</div>
+		<p class="text-xs text-surface-500">
+			Advisory data export, not a directly importable ECU/TunerStudio calibration. Not validated on
+			an engine. No ECU writes.
+		</p>
+		{#if !job.veExport?.available}<p class="text-xs text-surface-500">
+				{job.veExport?.reason ??
+					'Available after a complete calibration and finalized candidate snapshot are verified.'}
+			</p>{:else if job.outcome !== 'completed'}<p class="text-sm text-warning-700-300">
+				Partial investigation: this candidate was finalized before interruption. {job.presentation
+					?.paired
+					? 'Conditional holdout predictions are available.'
+					: 'Held-out evaluation is unavailable.'}
+			</p>{/if}
+	</section>
 	<section
 		class="space-y-4 rounded-container border border-surface-200-800 bg-surface-100-900 p-4 md:p-6"
 		aria-label="Held-out prediction comparison"
@@ -188,7 +234,8 @@
 		<div class="flex flex-wrap justify-between gap-3">
 			<h2 class="text-lg font-semibold">Findings & interpretation</h2>
 			<button class="btn preset-outlined-surface-500 text-xs" onclick={() => onEvidence()}
-				>Inspect tool trace ·</button
+				><FileSearch size={16} strokeWidth={2} class="shrink-0" aria-hidden="true" />Inspect tool
+				trace ·</button
 			>
 		</div>
 		{#if !report}<p class="text-sm text-surface-500">
@@ -204,7 +251,7 @@
 						? 'Recorded server fact'
 						: 'Server-verified numerical fact'}</span
 				>
-				<p class="text-sm leading-relaxed break-words">{finding.statement}</p>
+				<p class="text-sm leading-relaxed wrap-break-word">{finding.statement}</p>
 				<div class="flex flex-wrap gap-2">
 					{#each finding.evidenceIds as id (id)}<button
 							class="btn preset-tonal-surface text-xs"
@@ -220,7 +267,7 @@
 				class="space-y-3 rounded-base border border-warning-500/30 p-4"
 			>
 				<span class="badge preset-tonal-warning text-xs">Unverified model {comment.kind}</span>
-				<p class="text-sm leading-relaxed break-words">{comment.text}</p>
+				<p class="text-sm leading-relaxed wrap-break-word">{comment.text}</p>
 				<div class="flex flex-wrap gap-2">
 					{#each comment.evidenceIds as id (id)}<button
 							class="btn preset-tonal-surface text-xs"

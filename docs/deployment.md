@@ -86,7 +86,9 @@ enriched retroactively. Retry policy and model requests are unchanged.
   ownership, sessions and these limits are process-local.
 - Sessions/jobs expire after 30 minutes and disappear on restart. The UI permits
   reloading after a permanent 404; it does not pretend to restore server artifacts.
-- The analytical deadline stays 120 seconds, including recovery and HTTP retries.
+- The analytical deadline is 180 seconds, including recovery and HTTP retries.
+  Idle analytical evidence retention is also 180 seconds so a late model response
+  does not outlive its candidate evidence. The per-tool worker timeout stays 120 seconds.
   The legacy path can run for 300 seconds. Cancellation aborts provider work and
   disposes the worker. Browser navigation stops polling but is not cancellation.
 - Drain active work before service restarts. HTTP connection draining alone does

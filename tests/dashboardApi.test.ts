@@ -4,6 +4,7 @@ import { POST as demoPost, GET as demoGet } from '../src/routes/api/demo/+server
 import { POST as investigatePost } from '../src/routes/api/investigations/+server';
 import { POST as cancelPost } from '../src/routes/api/investigations/[id]/cancel/+server';
 import { GET as jobGet } from '../src/routes/api/investigations/[id]/+server';
+import { GET as exportGet } from '../src/routes/api/investigations/[id]/ve-export/+server';
 import { dashboardStore } from '../src/lib/server/sessionStore';
 import { context } from './investigation/helpers';
 
@@ -32,6 +33,49 @@ function event(
 }
 afterEach(() => vi.unstubAllEnvs());
 describe('thin dashboard API contracts (no provider calls)', () => {
+	it('returns advisory downloads as private attachments rather than JSON-wrapped bodies', async () => {
+		const download = vi.spyOn(dashboardStore, 'downloadVe').mockReturnValue({
+			body: 'MAP_kPa / RPM,800\r\n20,42\r\n',
+			filename: 'advisory-ve-test.csv'
+		});
+		try {
+			const response = await exportGet(event('/api/investigations/test/ve-export'));
+			expect(download).toHaveBeenCalledWith('api-owner', 'test', 'csv');
+			expect(response.headers.get('content-type')).toBe('text/csv; charset=utf-8');
+			expect(response.headers.get('content-disposition')).toBe(
+				'attachment; filename="advisory-ve-test.csv"'
+			);
+			expect(response.headers.get('cache-control')).toBe('no-store');
+			expect(response.headers.get('x-content-type-options')).toBe('nosniff');
+			expect(await response.text()).toBe('MAP_kPa / RPM,800\r\n20,42\r\n');
+		} finally {
+			download.mockRestore();
+		}
+	});
+	it('protects export ownership and rejects absent candidates and unapproved formats', async () => {
+		const session = dashboardStore.create('export-owner', context());
+		const job = dashboardStore.start(
+			'export-owner',
+			session.id,
+			{ goal: 'inspect', startSec: session.startSec, endSec: session.endSec },
+			{ next: async () => ({ kind: 'final', findings: [], limitations: ['No candidate.'] }) }
+		);
+		expect(
+			(await exportGet(event(`/api/investigations/${job.id}/ve-export`, undefined, 'other-owner')))
+				.status
+		).toBe(404);
+		expect(
+			(await exportGet(event(`/api/investigations/${job.id}/ve-export`, undefined, 'export-owner')))
+				.status
+		).toBe(409);
+		expect(
+			(
+				await exportGet(
+					event(`/api/investigations/${job.id}/ve-export?format=xml`, undefined, 'export-owner')
+				)
+			).status
+		).toBe(400);
+	});
 	it('lists only allowlisted demos and preserves empty-request April loading', async () => {
 		const catalog = await (await demoGet(event('/api/demo'))).json();
 		expect(catalog.datasets.map((d: { id: string }) => d.id)).toEqual(['april', 'august8']);

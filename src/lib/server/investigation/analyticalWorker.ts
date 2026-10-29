@@ -1,5 +1,6 @@
 import { parentPort, workerData } from 'node:worker_threads';
 import { analyticalPresentation } from './analyticalPresentation';
+import { createVeExportSnapshot, type VeExportSnapshot } from './veExport';
 import { parseMslWithEligibilityEvidence } from '../msl/parseMslWithEligibilityEvidence';
 import { importTunerStudioXml } from '../msl/importTunerStudioXml';
 import { prepareVeEvaluationDataset } from '../analysis/prepareVeEvaluation';
@@ -60,6 +61,8 @@ let dataset: VeEvaluationDataset | undefined,
 	evaluation: ReturnType<typeof evaluateVeCorrectionCandidate> | undefined,
 	storedBytes = 0;
 const artifacts = new Map<string, { ref: AnalyticalEvidenceRef; value: unknown }>();
+let exportSnapshot: VeExportSnapshot | undefined;
+let exportAttempted = false;
 function store(
 	kind: AnalyticalArtifactKind,
 	value: unknown,
@@ -450,6 +453,22 @@ parentPort!.on(
 				let presentation,
 					presentationFailed = false;
 				if (message.capturePresentation) {
+					if (fit && dataset && ve && !exportAttempted) {
+						exportAttempted = true;
+						try {
+							exportSnapshot = createVeExportSnapshot({
+								calibrationId: snapshot.calibrationId,
+								profile: snapshot.settings.profile.version,
+								original: ve.table.toJSON(),
+								dataset,
+								fit,
+								fitSha256: artifacts.get('fit')!.ref.sha256,
+								candidateSha256: artifacts.get('candidate')!.ref.sha256
+							});
+						} catch {
+							/* Export is optional; never invalidate successful analysis. */
+						}
+					}
 					try {
 						presentation = analyticalPresentation(
 							snapshot.settings.profile.version,
@@ -466,7 +485,8 @@ parentPort!.on(
 					ok: true,
 					value,
 					presentation,
-					presentationFailed
+					presentationFailed,
+					exportSnapshot
 				});
 			}
 		} catch (error) {

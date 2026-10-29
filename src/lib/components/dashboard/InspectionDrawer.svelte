@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { veCorrectionLabel, veCellExplanation } from './veCellDisplay';
+	import FileSearch from '@lucide/svelte/icons/file-search';
 	import { Dialog, Tabs } from '@skeletonlabs/skeleton-svelte';
 	import type {
 		EligibilityPage,
@@ -93,7 +95,9 @@
 				class="flex shrink-0 items-start justify-between gap-4 border-b border-surface-200-800 p-4"
 			>
 				<div>
-					<Dialog.Title class="text-lg font-semibold">Inspection & evidence</Dialog.Title
+					<Dialog.Title class="flex items-center gap-2 text-lg font-semibold"
+						><FileSearch size={16} strokeWidth={2} class="shrink-0" aria-hidden="true" />Inspection
+						& evidence</Dialog.Title
 					><Dialog.Description class="mt-1 text-xs text-surface-500"
 						>{session.logName} · {job?.source === 'recorded'
 							? 'Historical recorded evidence'
@@ -144,13 +148,15 @@
 										<dd class="font-mono">{number(cell.proposedVe, 3)}</dd>
 										<dt class="text-surface-500">Suggested correction</dt>
 										<dd class="font-mono">
-											{cell.finalCorrectionPct > 0 ? '+' : ''}{number(cell.finalCorrectionPct, 3)}% {#if cell.atBound}<span
-													class="badge preset-tonal-warning text-xs">at bound</span
+											{veCorrectionLabel(cell.finalCorrectionPct)}
+											{#if cell.atBound}<span class="badge preset-tonal-warning text-xs"
+													>at bound</span
 												>{/if}
 										</dd>
 										<dt class="text-surface-500">Material training samples</dt>
 										<dd class="font-mono">{number(cell.materialTrainingSamples, 0)}</dd>
 									</dl>
+									<p class="text-xs text-surface-500">{veCellExplanation(cell)}</p>
 									<ul class="list-inside list-disc space-y-1 text-xs">
 										{#each cell.reasons as code (code)}<li title={code}>
 												{code.replaceAll('_', ' ').toLowerCase()}

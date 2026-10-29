@@ -75,6 +75,123 @@ function job(): InvestigationJob {
 	};
 }
 describe('dashboard server rendering (no browser or API)', () => {
+	it('renders exact zero without a trailing circular glyph, while retaining status distinctions and near-zero precision', () => {
+		const base = {
+			rpmIndex: 0,
+			mapIndex: 0,
+			rpm: 1000,
+			mapKpa: 50,
+			status: 'accepted' as const,
+			reasons: [],
+			finalCorrectionPct: 0,
+			atBound: false,
+			materialTrainingSamples: 100,
+			originalVe: 40,
+			proposedVe: 40
+		};
+		const cells = [
+			base,
+			{ ...base, rpmIndex: 1, rpm: 1200, finalCorrectionPct: -0 },
+			{
+				...base,
+				rpmIndex: 2,
+				rpm: 1500,
+				status: 'suppressed' as const,
+				reasons: ['LOO_EXCESSIVE_RANGE']
+			},
+			{ ...base, rpmIndex: 3, rpm: 2000, finalCorrectionPct: 0.00001 },
+			{ ...base, rpmIndex: 4, rpm: 2500, status: 'unsupported' as const }
+		];
+		const html = render(VeCandidateGrid, {
+			props: {
+				cells,
+				axes: { rpm: [1000, 1200, 1500, 2000, 2500, 3000], mapKpa: [50] },
+				initialView: 'full',
+				onCell: () => {}
+			}
+		}).body;
+		const labels = [
+			...html.matchAll(/<button\b[^>]*aria-label="RPM [^>]*>([\s\S]*?)<\/button>/g)
+		].map((m) => m[1].replace(/<[^>]*>/g, '').trim());
+		expect(labels).toEqual(['0%', '0%', '0%', '+0.000%', '—', '?']);
+		expect(html).toContain('0% Evaluated, unchanged.');
+		expect(html).toContain('LOO_EXCESSIVE_RANGE');
+		expect(html).toContain('Suppressed: proposal withheld');
+		expect(html).toContain('not an exact-zero decision');
+		expect(html).not.toContain('0.0%0');
+		expect(html).not.toContain('○');
+		const suppressed = render(VeCandidateGrid, {
+			props: { cells: [cells[2]], initialView: 'full', onCell: () => {} }
+		}).body;
+		expect(suppressed).not.toContain('0% Evaluated, unchanged.');
+	});
+	it('renders a centered attributed action area with one real runtime progress display and results access', () => {
+		const value = job();
+		value.state = 'running';
+		value.mode = 'legacy';
+		const props = {
+			available: true,
+			job: value,
+			starting: false,
+			startSec: 0,
+			endSec: 60,
+			onRun: () => {},
+			onCancel: () => {},
+			onWindow: () => {},
+			onSelect: () => {}
+		};
+		const html = render(InvestigationPanel, { props }).body;
+		expect(html).toContain('Powered by Meta Muse Spark');
+		expect(html).toContain('AI investigation action bar');
+		expect(html).toContain('Legacy telemetry investigation');
+		expect(html.match(/aria-label="Investigation execution"/g)).toHaveLength(1);
+		expect(html).toContain('Cancel investigation');
+		expect(html).not.toContain('View Results');
+		value.state = 'finished';
+		value.source = 'recorded';
+		value.mode = 'analytical';
+		const finished = render(InvestigationPanel, { props }).body;
+		expect(finished).toContain('View Results');
+		expect(finished).toContain('Recorded Muse Spark demonstration');
+	});
+	it('keeps downloads in Results with advisory and partial-investigation labels', () => {
+		const value = job();
+		value.veExport = { available: true };
+		value.outcome = 'failed';
+		const html = render(AnalyticalResults, { props: { job: value, onSample: () => {} } }).body;
+		expect(html).toContain('/api/investigations/j/ve-export?format=csv');
+		expect(html).toContain('Partial investigation');
+		expect(html).toContain('not a directly importable ECU/TunerStudio calibration');
+		expect(html).toContain('Held-out evaluation is unavailable');
+		const panel = render(InvestigationPanel, {
+			props: {
+				available: true,
+				job: value,
+				starting: false,
+				startSec: 0,
+				endSec: 60,
+				onRun: () => {},
+				onCancel: () => {},
+				onWindow: () => {},
+				onSelect: () => {}
+			}
+		}).body;
+		expect(panel).not.toContain('Download Proposed VE');
+		value.veExport = { available: false, reason: 'Recording lacks full candidate data.' };
+		const unavailable = render(AnalyticalResults, {
+			props: { job: value, onSample: () => {} }
+		}).body;
+		expect(unavailable).toContain('Recording lacks full candidate data.');
+		expect(unavailable).not.toContain('ve-export?format=csv');
+	});
+	it('defaults to focused with a no-correction state and full-grid access', () => {
+		const html = render(VeCandidateGrid, {
+			props: { cells: [], axes: { rpm: [800, 1300], mapKpa: [20, 45] }, onCell: () => {} }
+		}).body;
+		expect(html).toContain('4 cells hidden');
+		expect(html).toContain('View full grid');
+		expect(html).not.toContain('kPa: unavailable');
+	});
 	it('renders a deadline and run identity rather than an ambiguous generic failure', () => {
 		const value = job();
 		value.error =
@@ -135,6 +252,42 @@ describe('dashboard server rendering (no browser or API)', () => {
 		// AFR has two isolated finite points, represented as dots rather than a connecting path.
 		expect(html.match(/r="2"/g)).toHaveLength(2);
 	});
+	it('places Combined markers in an unscaled pixel-radius overlay across window changes', () => {
+		const data = telemetryFixture();
+		for (const [start, end] of [
+			[0, 2],
+			[0.5, 1.5]
+		]) {
+			data.startSec = start;
+			data.endSec = end;
+			const html = render(CombinedTelemetryChart, {
+				props: {
+					data,
+					cursor: 1,
+					hidden: [],
+					onCursor: () => {},
+					onToggle: () => {},
+					onWindow: () => {},
+					onSelect: () => {}
+				}
+			}).body;
+			const svgs = [...html.matchAll(/<svg\b([^>]*)>([\s\S]*?)<\/svg>/g)];
+			expect(svgs).toHaveLength(2);
+			expect(svgs[0][1]).toContain('viewBox="0 0 1000 120"');
+			expect(svgs[0][2]).not.toContain('<circle');
+			expect(svgs[1][1]).toContain('data-testid="combined-marker-overlay"');
+			expect(svgs[1][1]).toContain('pointer-events-none');
+			expect(svgs[1][1]).not.toMatch(/viewBox|transform=/);
+			const markers = [
+				...svgs[1][2].matchAll(/<circle\b[^>]*cx="([^"]+)%"[^>]*cy="([^"]+)%"[^>]*r="3"/g)
+			];
+			expect(markers).toHaveLength(4);
+			for (const marker of markers) {
+				expect(Number(marker[1])).toBeCloseTo(50, 10);
+				expect(Number(marker[2])).toBeCloseTo(50, 10);
+			}
+		}
+	});
 	it('preserves the existing stacked physical scaling and interaction affordances', () => {
 		const data = telemetryFixture();
 		const html = render(TelemetryChart, {
@@ -165,6 +318,7 @@ describe('dashboard server rendering (no browser or API)', () => {
 				cells: value.cells,
 				axes: value.veAxes,
 				omittedCells: value.omittedCells,
+				initialView: 'full',
 				onCell: () => {}
 			}
 		}).body;
@@ -312,7 +466,7 @@ describe('dashboard server rendering (no browser or API)', () => {
 		const html = render(InvestigationPanel, { props }).body;
 		expect(html).toContain('Load the selected demo before starting');
 		expect(html).toContain('2025-04-12_16.16.28.msl');
-		expect(html).toMatch(/<button[^>]*disabled[^>]*>Run investigation/);
+		expect(html).toMatch(/<button[^>]*disabled[^>]*>(?:(?!<\/button>)[\s\S])*Run investigation/);
 	});
 	it('distinguishes authoritative numerical findings from escaped unverified commentary', () => {
 		const html = render(AnalyticalResults, { props: { job: job(), onSample: () => {} } }).body;

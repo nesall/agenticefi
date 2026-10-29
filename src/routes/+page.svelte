@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { Tabs } from '@skeletonlabs/skeleton-svelte';
+	import Activity from '@lucide/svelte/icons/activity';
+	import ChartNoAxesCombined from '@lucide/svelte/icons/chart-no-axes-combined';
+	import FileSearch from '@lucide/svelte/icons/file-search';
+	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	import {
 		DashboardRequestError,
 		initialTelemetryWindow,
@@ -13,7 +17,6 @@
 	import TelemetryPanel from '#lib/components/dashboard/TelemetryPanel.svelte';
 	import ScreeningSummary from '#lib/components/dashboard/ScreeningSummary.svelte';
 	import InspectionDrawer from '#lib/components/dashboard/InspectionDrawer.svelte';
-	import RunProgress from '#lib/components/dashboard/RunProgress.svelte';
 	import { shouldRevealResults, type GridCoordinate } from '#lib/components/dashboard/workspace.ts';
 	import InvestigationPanel from '#lib/components/dashboard/InvestigationPanel.svelte';
 	import AnalyticalResults from '#lib/components/dashboard/AnalyticalResults.svelte';
@@ -388,9 +391,15 @@
 			class="mx-auto flex max-w-[1920px] flex-wrap items-center justify-between gap-3 px-4 py-3 lg:px-6"
 		>
 			<a
-				class="shrink-0 text-lg font-bold tracking-tight"
+				class="inline-flex shrink-0 items-center gap-2 text-lg font-bold tracking-tight"
 				href={resolve('/')}
-				aria-label="AgenticEFI home">Agentic<span class="text-primary-600-400">EFI</span></a
+				aria-label="AgenticEFI home"
+				><Activity
+					size={24}
+					strokeWidth={2}
+					class="shrink-0 text-primary-600-400"
+					aria-hidden="true"
+				/><span>Agentic<span class="text-primary-600-400">EFI</span></span></a
 			>
 			<DemoLoader
 				{session}
@@ -423,25 +432,7 @@
 						</dd>
 					</div>
 				</dl>
-				<InvestigationPanel
-					available={session.museAvailable}
-					{job}
-					{starting}
-					{startSec}
-					{endSec}
-					onRun={(goal, options) => void investigate(goal, options)}
-					onCancel={() => void cancelInvestigation()}
-					recordings={session.recordings ?? []}
-					pendingDemo={pendingDemo || demoLoading}
-					loadedLogName={session.logName}
-					onWindow={(start, end) => void windowSelection(start, end)}
-					onSelect={selectRow}
-				/>
-			{:else}<button
-					class="btn preset-filled-primary-500"
-					disabled
-					title="Load a dataset to enable investigation">Run investigation</button
-				>{/if}
+			{/if}
 		</div>
 	</header>
 	<main class="mx-auto w-full max-w-[1920px] space-y-4 p-4 lg:p-6">
@@ -449,7 +440,14 @@
 				class="flex flex-wrap items-center justify-between gap-3 rounded-base border border-error-500/40 bg-error-500/10 p-3 text-sm"
 				role="alert"
 			>
-				<span>{error}</span>
+				<span class="inline-flex items-start gap-2"
+					><TriangleAlert
+						size={16}
+						strokeWidth={2}
+						class="mt-0.5 shrink-0"
+						aria-hidden="true"
+					/>{error}</span
+				>
 				<div class="flex gap-2">
 					{#if pollError && job}<button
 							class="btn preset-tonal-error text-xs"
@@ -471,7 +469,41 @@
 					)} s</span
 				>
 			</p>{/if}
-		{#if job}<RunProgress {job} onTrace={openTrace} />{/if}
+		{#if session}<InvestigationPanel
+				available={session.museAvailable}
+				{job}
+				{starting}
+				{startSec}
+				{endSec}
+				onRun={(goal, options) => void investigate(goal, options)}
+				onCancel={() => void cancelInvestigation()}
+				recordings={session.recordings ?? []}
+				pendingDemo={pendingDemo || demoLoading}
+				loadedLogName={session.logName}
+				onWindow={(start, end) => void windowSelection(start, end)}
+				onSelect={selectRow}
+				onTrace={openTrace}
+				onResults={() => {
+					switchWorkspace('results');
+					void tick().then(() =>
+						document
+							.getElementById('ve-candidate-grid')
+							?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+					);
+				}}
+			/>{:else}<section
+				class="space-y-2 rounded-container border border-surface-200-800 bg-surface-100-900 p-4 text-center"
+				aria-label="AI investigation action bar"
+			>
+				<div class="flex items-center justify-center gap-2">
+					<p class="text-sm font-bold">AI-Powered EFI Investigation</p>
+					<p>|</p>
+					<p class="font text-sm font-semibold text-primary-700-300">Powered by Meta Muse Spark</p>
+				</div>
+				<p class="text-sm text-surface-500">
+					Load a dataset to investigate telemetry evidence and advisory fueling proposals.
+				</p>
+			</section>{/if}
 		<Tabs value={activeTab} onValueChange={(details) => switchWorkspace(details.value)}>
 			<Tabs.List
 				class="mb-5 flex gap-2 border-b border-surface-200-800 pb-3"
@@ -479,11 +511,13 @@
 				><Tabs.Trigger
 					value="telemetry"
 					class="btn preset-tonal-surface text-xs data-selected:preset-tonal sm:text-sm"
-					>1. Telemetry & Screening</Tabs.Trigger
+					><Activity size={16} strokeWidth={2} class="shrink-0" aria-hidden="true" />1. Telemetry &
+					Screening</Tabs.Trigger
 				><Tabs.Trigger
 					value="results"
 					class="btn preset-tonal-surface text-xs data-selected:preset-tonal sm:text-sm"
-					>2. Advisory VE Results</Tabs.Trigger
+					><ChartNoAxesCombined size={16} strokeWidth={2} class="shrink-0" aria-hidden="true" />2.
+					Advisory VE Results</Tabs.Trigger
 				>
 				<Tabs.Indicator />
 			</Tabs.List>
@@ -544,7 +578,8 @@
 								drawerOpen = true;
 							}}>Inspect findings</button
 						><button class="btn preset-outlined-surface-500" onclick={() => openTrace()}
-							>Inspect trace</button
+							><FileSearch size={16} strokeWidth={2} class="shrink-0" aria-hidden="true" />Inspect
+							trace</button
 						>
 					</section>
 				{:else}<section
