@@ -137,7 +137,7 @@
 			</button>
 		{/if}
 		{#if !running && job?.state === 'finished'}
-			<button class="btn min-h-10 preset-tonal-primary font-semibold" onclick={onResults}>
+			<button class="btn min-h-10 preset-filled-secondary-500 font-bold" onclick={onResults}>
 				<ChartNoAxesCombined size={16} strokeWidth={2} class="shrink-0" aria-hidden="true" />
 				<span>View Results</span>
 			</button>

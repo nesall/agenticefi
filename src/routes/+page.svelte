@@ -541,7 +541,7 @@
 				{:else}<section
 						class="mx-auto max-w-3xl space-y-5 rounded-container border border-surface-200-800 bg-surface-100-900 p-8 md:my-12 md:p-12"
 					>
-						<span class="badge preset-tonal-primary">RX-7 investigation workspace</span>
+						<span class="badge preset-tonal-primary">EFI log investigation workspace</span>
 						<h1 class="text-3xl font-semibold tracking-tight">
 							Observe the drive.<br />Qualify the evidence.
 						</h1>
