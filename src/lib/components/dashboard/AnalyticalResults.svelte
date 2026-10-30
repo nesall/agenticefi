@@ -28,7 +28,7 @@
 	} = $props();
 	const advisoryNotice =
 		'Advisory analysis only. Whole-log training and time-separated holdout. Predicted changes are conditional model predictions under proportional-fueling assumptions, not measured improvements. No ECU writes.';
-	const recordedNotice = 'No live model request was made for this display.';
+	const recordedNotice = 'This is a previously captured investigation powered by Meta Muse Spark. To run a live investigation, configure META_HACKATHON_API_KEY and restart the server. See the README for setup instructions.';
 	const presentation = $derived(job.presentation);
 	const trace = $derived(job.result?.trace ?? job.progress?.completed ?? []);
 	const report = $derived(job.result?.report);
