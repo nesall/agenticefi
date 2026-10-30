@@ -3,6 +3,7 @@ import { resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseEnv } from 'node:util';
 import { execFileSync } from 'node:child_process';
+import { gunzipSync } from 'node:zlib';
 import {
 	augustFiles,
 	deploymentFiles,
@@ -42,7 +43,10 @@ try {
 		});
 	};
 	for (const name of augustFiles) {
-		const original = readFileSync(resolve(project, 'data/logs/block2', name));
+		const source = readFileSync(
+			resolve(project, 'src/lib/server/demo/august8', name + (name.endsWith('.msl') ? '.gz' : ''))
+		);
+		const original = name.endsWith('.msl') ? gunzipSync(source) : source;
 		const staged = readFileSync(resolve(project, '.demo-assets/august8', name));
 		if (sha256(original) !== sha256(staged))
 			throw new Error('August assets differ from their confirmed source; rebuild first.');

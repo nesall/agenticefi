@@ -1,4 +1,6 @@
 import { createHash } from 'node:crypto';
+import { basename } from 'node:path';
+import { realLogBytes } from './realLogFixtures';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { expect, it } from 'vitest';
 import { decodeMsl } from '../src/lib/server/msl/decodeMsl';
@@ -11,14 +13,10 @@ import type { ExperimentalSample } from '../src/lib/shared/types/sampleEligibili
 const datasets = [
 	['block1/2025-04-12_16.16.28.msl', 'src/lib/server/demo/ve.table', [0, 2043, 1, 815]],
 	['block1/2026-07-25_17.56.47.msl', 'src/lib/server/demo/ve.table', [2, 12944, 2, 6042]],
-	[
-		'block3/2026-08-01_09.45.13.msl',
-		'data/logs/block3/veTable1Tbl_2026-08-02_00.24.28.table',
-		[345, 22494, 6, 6805]
-	],
+	['block3/2026-08-01_09.45.13.msl', 'tests/fixtures/xml/august1-ve.table', [345, 22494, 6, 6805]],
 	[
 		'block2/2026-08-08_11.19.56.msl',
-		'data/logs/block2/veTable1_2026-08-08_23.57.53.table',
+		'src/lib/server/demo/august8/veTable1_2026-08-08_23.57.53.table',
 		[8, 38528, 3, 17745]
 	]
 ] as const;
@@ -27,7 +25,7 @@ const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(valu
 it('compares the fixed 2×2 controls on all four real logs and preserves complete V1 outputs', () => {
 	const reports = [];
 	for (const [file, tablePath, expected] of datasets) {
-		const bytes = readFileSync(`data/logs/${file}`);
+		const bytes = realLogBytes(basename(file));
 		const { session, categorical } = parseMslWithEligibilityEvidence(
 			decodeMsl(bytes).content,
 			file

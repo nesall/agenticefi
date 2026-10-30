@@ -50,7 +50,7 @@ export function projectRecording(
 		selection.profile !== (profile === 'v1' ? 'v1' : 'v2') ||
 		sources.calibrationId !== context.calibrationId ||
 		typeof sources.log !== 'string' ||
-		(id === 'august8' && !sources.log.endsWith(context.logName)) ||
+		(id === 'august8' && !sources.log.replace(/\.gz$/, '').endsWith(context.logName)) ||
 		!result ||
 		result.status !== 'completed' ||
 		!Array.isArray(result.trace) ||

@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { gunzipSync } from 'node:zlib';
 import { basename } from 'node:path';
 import { decodeMsl } from '../../src/lib/server/msl/decodeMsl';
 import type { AnalyticalInput } from '../../src/lib/server/investigation/analyticalSettings';
@@ -12,20 +13,20 @@ const datasets = {
 		calibrationId: 'block1-calibration'
 	},
 	july: {
-		log: 'data/logs/block1/2026-07-25_17.56.47.msl',
+		log: 'tests/fixtures/msl/2026-07-25_17.56.47.msl',
 		ve: 'src/lib/server/demo/ve.table',
 		afr: 'src/lib/server/demo/afr.table',
 		calibrationId: 'block1-calibration'
 	},
 	august: {
-		log: 'data/logs/block2/2026-08-08_11.19.56.msl',
-		ve: 'data/logs/block2/veTable1_2026-08-08_23.57.53.table',
-		afr: 'data/logs/block2/AFR_2026-07-30_19.40.54.table',
+		log: 'src/lib/server/demo/august8/2026-08-08_11.19.56.msl.gz',
+		ve: 'src/lib/server/demo/august8/veTable1_2026-08-08_23.57.53.table',
+		afr: 'src/lib/server/demo/august8/AFR_2026-07-30_19.40.54.table',
 		calibrationId: 'block2-calibration'
 	},
 	august1: {
-		log: 'data/logs/block3/2026-08-01_09.45.13.msl',
-		ve: 'data/logs/block3/veTable1Tbl_2026-08-02_00.24.28.table',
+		log: 'tests/fixtures/msl/2026-08-01_09.45.13.msl',
+		ve: 'tests/fixtures/xml/august1-ve.table',
 		afr: null,
 		calibrationId: 'block3-calibration'
 	}
@@ -73,8 +74,12 @@ export function loadSmokeDataset(selection: SmokeSelection): AnalyticalInput {
 	}
 	return {
 		contextId: `${selection.dataset}-${selection.profile}-single-live-smoke`,
-		logName: 'logName' in sources ? sources.logName : basename(sources.log),
-		logContent: decodeMsl(readFileSync(sources.log)).content,
+		logName: 'logName' in sources ? sources.logName : basename(sources.log).replace(/\.gz$/, ''),
+		logContent: decodeMsl(
+			sources.log.endsWith('.gz')
+				? gunzipSync(readFileSync(sources.log))
+				: readFileSync(sources.log)
+		).content,
 		calibrationId: sources.calibrationId,
 		calibrationSemantics: 'rpm-map-kpa-afr',
 		veXml: readFileSync(sources.ve, 'utf8'),

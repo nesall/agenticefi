@@ -1,14 +1,23 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync } from 'node:fs';
+import {
+	copyFileSync,
+	existsSync,
+	mkdirSync,
+	readFileSync,
+	statSync,
+	writeFileSync
+} from 'node:fs';
+import { gunzipSync } from 'node:zlib';
 const files = [
 	'2026-08-08_11.19.56.msl',
 	'veTable1_2026-08-08_23.57.53.table',
 	'AFR_2026-07-30_19.40.54.table'
 ];
-if (files.every((file) => existsSync(`data/logs/block2/${file}`))) {
-	mkdirSync('.demo-assets/august8', { recursive: true });
-	for (const file of files)
-		copyFileSync(`data/logs/block2/${file}`, `.demo-assets/august8/${file}`);
-} else console.info('August source assets unavailable; April remains available.');
+mkdirSync('.demo-assets/august8', { recursive: true });
+for (const file of files) {
+	const compressed = file.endsWith('.msl');
+	const bytes = readFileSync(`src/lib/server/demo/august8/${file}${compressed ? '.gz' : ''}`);
+	writeFileSync(`.demo-assets/august8/${file}`, compressed ? gunzipSync(bytes) : bytes);
+}
 for (const dataset of ['april', 'august'])
 	for (const profile of ['v1', 'v2']) {
 		const file = `${dataset}-${profile}-live-smoke.json`,

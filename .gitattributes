@@ -1,2 +1,6 @@
 # Linux deployment scripts/templates must survive Windows Git checkouts.
 deploy/* text eol=lf
+# Preserve calibration and log fingerprints across Windows/Linux checkouts.
+src/lib/server/demo/august8/*.table -text
+src/lib/server/demo/august8/*.gz -text
+tests/fixtures/xml/august1-ve.table -text

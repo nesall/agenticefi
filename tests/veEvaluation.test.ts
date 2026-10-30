@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { realLogBytes } from './realLogFixtures';
 import { describe, expect, it } from 'vitest';
 import { Table2D } from '../src/lib/server/core/Table2D';
 import { parseMslWithEligibilityEvidence } from '../src/lib/server/msl/parseMslWithEligibilityEvidence';
@@ -548,7 +549,7 @@ describe('manual VE vector prediction and paired baseline', () => {
 
 it('prepares representative real telemetry with associated calibration without forcing cell support', () => {
 	const { session, categorical } = parseMslWithEligibilityEvidence(
-		decodeMsl(readFileSync('data/logs/block1/2025-04-12_16.16.28.msl')).content
+		decodeMsl(realLogBytes('2025-04-12_16.16.28.msl')).content
 	);
 	const afr = importTunerStudioXml(readFileSync('tests/fixtures/xml/afr.table', 'utf8'));
 	const ve = importTunerStudioXml(readFileSync('tests/fixtures/xml/ve.table', 'utf8'));

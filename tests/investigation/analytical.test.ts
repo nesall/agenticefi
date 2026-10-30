@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { realLogBytes } from '../realLogFixtures';
 import { decodeMsl } from '../../src/lib/server/msl/decodeMsl';
 import { AnalyticalRun } from '../../src/lib/server/investigation/analyticalRun';
 import { runInvestigation } from '../../src/lib/server/investigation/runner';
@@ -417,7 +418,7 @@ it('benchmarks isolated real-log execution and retains full provenance', async (
 		const state = run({
 			contextId: file,
 			logName: file,
-			logContent: decodeMsl(readFileSync(`data/logs/block1/${file}`)).content,
+			logContent: decodeMsl(realLogBytes(file)).content,
 			calibrationId: 'confirmed-block1',
 			calibrationSemantics: 'rpm-map-kpa-afr',
 			veXml: readFileSync('src/lib/server/demo/ve.table', 'utf8'),

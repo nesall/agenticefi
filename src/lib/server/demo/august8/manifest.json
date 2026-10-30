@@ -1,0 +1,20 @@
+{
+	"calibrationId": "block2-calibration",
+	"files": {
+		"2026-08-08_11.19.56.msl": {
+			"storage": "2026-08-08_11.19.56.msl.gz",
+			"bytes": 66429662,
+			"sha256": "61d19a747cefbf33f1389142100c3fa5ee5bf94709b48db2de1544a5c3352366"
+		},
+		"veTable1_2026-08-08_23.57.53.table": {
+			"storage": "veTable1_2026-08-08_23.57.53.table",
+			"bytes": 3725,
+			"sha256": "109466db2824ae61d712818f92ce43d4ac0245106e084f09f20d608f2271b3d5"
+		},
+		"AFR_2026-07-30_19.40.54.table": {
+			"storage": "AFR_2026-07-30_19.40.54.table",
+			"bytes": 2254,
+			"sha256": "b6cacdb5bfd644d58b2cce0b799638f841c6ff48f47019d4a445b2e0f8da3eb1"
+		}
+	}
+}

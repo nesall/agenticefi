@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { realLogBytes } from './realLogFixtures';
 import { describe, expect, it } from 'vitest';
 import { Table2D } from '../src/lib/server/core/Table2D';
 import { prepareVeEvaluationDataset } from '../src/lib/server/analysis/prepareVeEvaluation';
@@ -339,7 +340,7 @@ it.each([
 	'real-log fitting smoke test: %s, %s',
 	(file, version) => {
 		const { session, categorical } = parseMslWithEligibilityEvidence(
-			decodeMsl(readFileSync(`data/logs/block1/${file}`)).content,
+			decodeMsl(realLogBytes(file)).content,
 			file
 		);
 		const afr = importTunerStudioXml(readFileSync('tests/fixtures/xml/afr.table', 'utf8')),

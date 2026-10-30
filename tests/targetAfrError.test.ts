@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { realLogBytes } from './realLogFixtures';
 import { describe, expect, it } from 'vitest';
 import { Table2D } from '../src/lib/server/core/Table2D';
 import { classifySampleEligibility } from '../src/lib/server/analysis/sampleEligibility';
@@ -381,7 +382,7 @@ describe('imported calibration integration', () => {
 	});
 	it('analyzes representative real telemetry using the associated block1 calibration', () => {
 		const input = parseMslWithEligibilityEvidence(
-			decodeMsl(readFileSync('data/logs/block1/2025-04-12_16.16.28.msl')).content
+			decodeMsl(realLogBytes('2025-04-12_16.16.28.msl')).content
 		);
 		const afr = importTunerStudioXml(readFileSync('tests/fixtures/xml/afr.table', 'utf8'));
 		const ve = importTunerStudioXml(readFileSync('tests/fixtures/xml/ve.table', 'utf8'));

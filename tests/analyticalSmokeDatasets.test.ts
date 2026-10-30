@@ -27,7 +27,7 @@ describe('analytical live dataset selection (offline)', () => {
 	});
 	it.each(['aug', 'august8'])('resolves %s to August 8 block2, never August 1', (alias) => {
 		expect(smokeSelection(alias)).toEqual(smokeSelection('august'));
-		expect(smokeSelection(alias).sources.log).toContain('block2/2026-08-08');
+		expect(smokeSelection(alias).sources.log).toContain('august8/2026-08-08');
 	});
 	it.each([
 		['../july', 'v1'],
@@ -54,8 +54,8 @@ describe('analytical live dataset selection (offline)', () => {
 		expect(sources.calibrationId).toBe('block2-calibration');
 		for (const path of [sources.log, sources.ve, sources.afr])
 			expect(path && existsSync(path)).toBe(true);
-		expect(sources.ve).toContain('block2/veTable1_2026-08-08');
-		expect(sources.afr).toContain('block2/AFR_2026-07-30');
+		expect(sources.ve).toContain('august8/veTable1_2026-08-08');
+		expect(sources.afr).toContain('august8/AFR_2026-07-30');
 		expect(sources.afr).not.toBe(smokeSelection().sources.afr);
 	});
 	it('blocks missing August 1 AFR before loading telemetry or starting the model', () => {

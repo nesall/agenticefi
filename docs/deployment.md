@@ -8,7 +8,7 @@ sessions, ownership, jobs and admission limits are process-local.
 
 ## Build and package
 
-Use a trusted checkout with the confirmed private August files and validated
+Use a trusted checkout with the bundled compressed August inputs and validated
 August V1 recording. Keep credentials out of the build process. PowerShell:
 
 ```powershell
@@ -40,8 +40,9 @@ mandatory), and these exact private `.demo-assets/august8/` inputs:
 - `veTable1_2026-08-08_23.57.53.table`
 - `AFR_2026-07-30_19.40.54.table`
 
-April is bundled in the server. August staged files must match original-source
-hashes. A clone without private inputs cannot produce this release. No unrelated
+April is bundled in the server. August is expanded automatically from versioned
+`src/lib/server/demo/august8/` inputs; staged files must match those exact bytes.
+No private `data/logs/` checkout or existing cache is required. No unrelated
 source, reports, diagnostics or `.env` is packaged. Known local Meta key bytes are
 also checked without printing them; this complements the allowlist and secret review.
 
