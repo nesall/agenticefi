@@ -302,3 +302,15 @@ Full evidence retrieval copies/checksums large objects on the main thread and is
 intended for controlled server review, not model payloads or unrestricted public
 downloads. The proportional-fueling model, calibration association, sensor/ECU
 behavior, zero AFR delay and correlated-episode limitations remain unchanged.
+
+Live calls use Standard `muse-spark-1.3` through the existing Meta Responses adapter.
+The request includes `text.format: { type: 'json_object' }` on initial and continuation
+turns. This requests JSON syntax without changing the existing analytical/legacy
+report schemas; runner validation still enforces shape, evidence and fact provenance.
+Markdown fences, malformed/non-object JSON, refusals and incomplete responses remain
+failures with retained partial evidence, never synthesized successful reports.
+Private `report-parse` diagnostics retain only an allowlisted classification, byte
+count and validated provider request ID, not provider text or refusal content.
+Historical recorded demonstrations retain their actual contributor-model identity.
+References: https://dev.meta.ai/docs/protocols/responses and
+https://dev.meta.ai/docs/api-reference/responses/schemas.

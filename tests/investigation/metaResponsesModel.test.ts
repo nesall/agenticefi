@@ -60,6 +60,8 @@ describe('Meta Responses protocol adapter', () => {
 			await model.next({ ...input(), tools: analyticalTools, reportMode: 'analytical' }, signal())
 		).toEqual({ kind: 'tool', name: 'fit_ve_candidate', arguments: {} });
 		const body = JSON.parse(String(fetch.mock.calls[0][1]!.body));
+		expect(body.text).toEqual({ format: { type: 'json_object' } });
+		expect(body.response_format).toBeUndefined();
 		expect(body.tools.map((t: { name: string }) => t.name)).toEqual(
 			analyticalTools.map((t) => t.name)
 		);
@@ -85,6 +87,8 @@ describe('Meta Responses protocol adapter', () => {
 			headers: { Authorization: 'Bearer test-secret' }
 		});
 		const body = JSON.parse(String(request!.body));
+		expect(META_MODEL).toBe('muse-spark-1.3');
+		expect(body.text).toEqual({ format: { type: 'json_object' } });
 		expect(body).toMatchObject({
 			model: META_MODEL,
 			input: 'Inspect data quality.',
@@ -114,6 +118,7 @@ describe('Meta Responses protocol adapter', () => {
 		await model.next(input(), signal());
 		expect(await model.next(input([traceEntry()]), signal())).toEqual(final());
 		const body = JSON.parse(String(fetch.mock.calls[1][1]!.body));
+		expect(body.text).toEqual({ format: { type: 'json_object' } });
 		expect(diagnostics.events.filter((e) => e.event === 'model-request')).toMatchObject([
 			{
 				continuation: false,
@@ -241,6 +246,136 @@ describe('Meta Responses protocol adapter', () => {
 		});
 		await expect(model.next(input(), signal())).rejects.toThrow();
 		expect(model.lastError).not.toContain('secret');
+	});
+
+	it.each([
+		['{"kind":"final","private telemetry":"test-secret"', 'invalid-json'],
+		['```json\n{"kind":"final","private telemetry":"test-secret"}\n```', 'fenced-json'],
+		['["test-secret"]', 'non-object-json'],
+		['"test-secret"', 'non-object-json'],
+		['null', 'non-object-json'],
+		['{"kind":"tool","text":"test-secret"}', 'invalid-report-kind'],
+		['', 'empty-report'],
+		['test-secret'.repeat(2000), 'oversized-report']
+	])('strictly rejects and classifies final text %#: %s', async (text, decision) => {
+		const diagnostics = new InvestigationDiagnostics({ persist: false });
+		diagnostics.bind('11111111-1111-4111-8111-111111111111');
+		const reply = response([message(text)]);
+		reply.headers.set('x-request-id', 'req_1234567890abcdef');
+		const model = new MetaResponsesModel({
+			apiKey: 'test-secret',
+			diagnostics,
+			transport: transport().mockResolvedValue(reply)
+		});
+		await expect(model.next(input(), signal())).rejects.toMatchObject({
+			code: 'provider-protocol'
+		});
+		expect(diagnostics.events.at(-1)).toMatchObject({
+			event: 'report-parse',
+			decision,
+			payloadBytes: Buffer.byteLength(text),
+			providerRequestId: 'req_1234567890abcdef'
+		});
+		expect(JSON.stringify(diagnostics.events)).not.toMatch(
+			/test-secret|private telemetry|output_text/
+		);
+		expect(model.lastError).not.toContain('test-secret');
+	});
+
+	it.each([
+		[{ type: 'refusal', refusal: 'test-secret private telemetry' }, 'refusal'],
+		[{ type: 'unexpected', text: 'test-secret private telemetry' }, 'invalid-output']
+	])(
+		'classifies unusable content without retaining refusal or provider text %#',
+		async (part, decision) => {
+			const diagnostics = new InvestigationDiagnostics({ persist: false });
+			diagnostics.bind('11111111-1111-4111-8111-111111111111');
+			const reply = response([{ ...message(), content: [part] }]);
+			reply.headers.set('x-request-id', 'test-secret');
+			const model = new MetaResponsesModel({
+				apiKey: 'test-secret',
+				diagnostics,
+				transport: transport().mockResolvedValue(reply)
+			});
+			await expect(model.next(input(), signal())).rejects.toMatchObject({
+				code: 'provider-protocol'
+			});
+			expect(diagnostics.events.at(-1)).toMatchObject({ event: 'report-parse', decision });
+			expect(JSON.stringify(diagnostics.events)).not.toMatch(/test-secret|private telemetry/);
+		}
+	);
+
+	it('rejects explicit token truncation before trying to parse a partial final report', async () => {
+		const diagnostics = new InvestigationDiagnostics({ persist: false });
+		diagnostics.bind('11111111-1111-4111-8111-111111111111');
+		const model = new MetaResponsesModel({
+			apiKey: 'test-secret',
+			diagnostics,
+			transport: transport().mockResolvedValue(
+				response([message('{"kind":"final"')], {
+					status: 'incomplete',
+					incomplete_details: { reason: 'max_output_tokens' }
+				})
+			)
+		});
+		await expect(model.next(input(), signal())).rejects.toMatchObject({
+			code: 'provider-incomplete'
+		});
+		expect(diagnostics.events.at(-1)).toMatchObject({
+			event: 'report-parse',
+			decision: 'incomplete-response'
+		});
+	});
+
+	it('accepts split output_text JSON without relaxing report validation', async () => {
+		const text = JSON.stringify(final());
+		const reply = response([
+			{
+				...message(),
+				content: [
+					{ type: 'output_text', text: text.slice(0, 12) },
+					{ type: 'output_text', text: text.slice(12) }
+				]
+			}
+		]);
+		const model = new MetaResponsesModel({
+			apiKey: 'test-secret',
+			transport: transport().mockResolvedValue(reply)
+		});
+		expect(await model.next(input(), signal())).toEqual(final());
+	});
+
+	it('retains successful analytical evidence when final text is malformed instead of inventing a report', async () => {
+		const { AnalyticalRun } = await import('../../src/lib/server/investigation/analyticalRun');
+		const { veXml, afrXml } = await import('./helpers');
+		const run = new AnalyticalRun({
+			contextId: 'parse-regression',
+			logName: 'synthetic.msl',
+			logContent: 'Time\tRPM\tMAP\tAFR\ns\trpm\tkPa\tAFR\n0\t1000\t50\t14',
+			veXml,
+			afrXml,
+			calibrationId: 'confirmed',
+			calibrationSemantics: 'rpm-map-kpa-afr'
+		});
+		const fetch = transport()
+			.mockResolvedValueOnce(response([call()]))
+			.mockResolvedValueOnce(response([message('not-json test-secret')]));
+		try {
+			const result = await runInvestigation(
+				run,
+				new MetaResponsesModel({ apiKey: 'test-secret', transport: fetch }),
+				{ goal: 'Inspect', timeoutMs: 5000 }
+			);
+			expect(result.status).toBe('model_error');
+			expect(result.termination?.code).toBe('provider-protocol');
+			expect(result.trace).toHaveLength(1);
+			expect(result.trace[0].result.ok).toBe(true);
+			expect(result.report).toBeNull();
+			expect(result.reason).not.toContain('test-secret');
+			expect(fetch).toHaveBeenCalledTimes(2);
+		} finally {
+			await run.dispose();
+		}
 	});
 
 	it('rejects invalid response JSON', async () => {

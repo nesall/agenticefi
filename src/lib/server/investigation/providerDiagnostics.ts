@@ -29,7 +29,11 @@ export const providerValues = {
 		'max_output_tokens',
 		'instructions',
 		'parallel_tool_calls',
-		'store'
+		'store',
+		'text',
+		'text.format',
+		'text.format.type',
+		'text.format.schema'
 	]),
 	providerErrorHint: new Set([
 		'context-limit',

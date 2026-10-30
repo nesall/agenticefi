@@ -44,7 +44,7 @@ The test reads the process environment, not a `.env` file. Missing credentials
 produce a clear failure.
 
 This explicit command makes real API requests to `https://api.meta.ai/v1/responses`
-using `muse-spark-1.3-contributor`, with at most six tool calls, nine model turns,
+using Standard `muse-spark-1.3`, with at most six tool calls, nine model turns,
 4096 output tokens per response, and a five-minute runner timeout. No retries are
 performed. Tool outputs, channel metadata, and the goal are sent to Meta; raw log
 samples are not uploaded. Responses are stored by Meta to support

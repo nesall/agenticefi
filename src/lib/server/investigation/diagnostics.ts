@@ -28,6 +28,7 @@ type EventName =
 	| 'model-start'
 	| 'model-end'
 	| 'model-request'
+	| 'report-parse'
 	| 'http-start'
 	| 'http-end'
 	| 'retry'
@@ -103,6 +104,15 @@ const outcomes = new Set([
 	'cancelled'
 ]);
 const decisions = new Set([
+	'incomplete-response',
+	'invalid-output',
+	'refusal',
+	'empty-report',
+	'oversized-report',
+	'fenced-json',
+	'invalid-json',
+	'non-object-json',
+	'invalid-report-kind',
 	'offered',
 	'completed',
 	'failed',

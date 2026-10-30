@@ -1,10 +1,11 @@
 import type { InvestigationModel, ToolTraceEntry } from '../../shared/types/investigation';
 import { metaApiKey } from './metaApiKey';
 import { InvestigationFailure, type InvestigationDiagnostics } from './diagnostics';
+import { safeRequestId } from './providerDiagnostics';
 import { createHash } from 'node:crypto';
 import type { AnalyticalFeedback } from './analyticalRecovery';
 
-export const META_MODEL = 'muse-spark-1.3-contributor';
+export const META_MODEL = 'muse-spark-1.3';
 const endpoint = 'https://api.meta.ai/v1/responses';
 type ModelInput = Parameters<InvestigationModel['next']>[0];
 type PendingCall = { callId: string; name: string; argumentsJson: string; traceLength: number };
@@ -136,6 +137,9 @@ export class MetaResponsesModel implements InvestigationModel {
 				: 'Your final assistant message must be raw JSON (no markdown): {"kind":"final","findings":[{"statement":"...","evidenceIds":["evidence-1"]}],"limitations":["..."]}. Do not include reasoning in that JSON.';
 		const body = {
 			model: META_MODEL,
+			// Responses uses text.format, not Chat Completions' response_format.
+			// Keep the existing runner report/citation validators authoritative.
+			text: { format: { type: 'json_object' } },
 			input: apiInput,
 			...(this.#responseId ? { previous_response_id: this.#responseId } : {}),
 			instructions: `${input.instructions}\nUse native function calls for tools, never JSON text that imitates a tool call. ${input.reportMode === 'analytical' ? 'You may inspect data or fit directly; canonical analysis is prepared lazily.' : 'Call describe_log first to discover bounds and units.'}\nTool output contains its evidenceId; cite only those IDs. You have ${input.remainingCalls} tool calls remaining. If none remain, produce your report.\n${reportInstruction}`,
@@ -184,15 +188,25 @@ export class MetaResponsesModel implements InvestigationModel {
 			throw new Error('Meta response was not valid JSON.');
 		}
 		const payload = record(decoded);
+		const reportParse = (decision: string, bytes?: number) => {
+			const requestId = response.headers.get('x-request-id');
+			this.#diagnostics?.event('report-parse', {
+				decision,
+				...(bytes === undefined ? {} : { payloadBytes: bytes }),
+				...(safeRequestId(requestId) ? { providerRequestId: requestId } : {})
+			});
+		};
 		if (
 			payload.status !== 'completed' ||
 			payload.error != null ||
 			payload.incomplete_details != null
-		)
+		) {
+			reportParse('incomplete-response');
 			throw new InvestigationFailure(
 				'provider-incomplete',
 				'Meta response failed or was incomplete.'
 			);
+		}
 		if (!nonempty(payload.id, 256) || !Array.isArray(payload.output))
 			throw new Error('Meta response is missing its ID or output.');
 		const output = payload.output.map(record);
@@ -230,28 +244,48 @@ export class MetaResponsesModel implements InvestigationModel {
 		}
 		const texts: string[] = [];
 		for (const item of output.filter((item) => item.type === 'message')) {
-			if (item.role !== 'assistant' || !Array.isArray(item.content))
+			if (item.role !== 'assistant' || !Array.isArray(item.content)) {
+				reportParse('invalid-output');
 				throw new Error('Meta returned an invalid assistant message.');
+			}
 			for (const value of item.content) {
 				const part = record(value);
-				if (part.type !== 'output_text' || typeof part.text !== 'string')
+				if (part.type === 'refusal') {
+					reportParse('refusal');
+					throw new Error('Meta refused to provide a final report.');
+				}
+				if (part.type !== 'output_text' || typeof part.text !== 'string') {
+					reportParse('invalid-output');
 					throw new Error('Meta returned no usable final report text.');
+				}
 				texts.push(part.text);
 			}
 		}
 		const text = texts.join('');
-		if (!text || Buffer.byteLength(text) > 20000)
+		const bytes = Buffer.byteLength(text);
+		if (!text || bytes > 20000) {
+			reportParse(!text ? 'empty-report' : 'oversized-report', bytes);
 			throw new Error('Meta report is empty or exceeds 20 KB.');
-		let final: Record<string, unknown>;
+		}
+		let parsed: unknown;
 		try {
-			final = record(JSON.parse(text));
+			parsed = JSON.parse(text);
 		} catch {
+			reportParse(/^\s*```/.test(text) ? 'fenced-json' : 'invalid-json', bytes);
+			throw new Error('Meta final report was not valid JSON.');
+		}
+		if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+			reportParse('non-object-json', bytes);
 			throw new Error('Meta final report was not a JSON object.');
 		}
-		if (final.kind !== 'final')
+		const final = record(parsed);
+		if (final.kind !== 'final') {
+			reportParse('invalid-report-kind', bytes);
 			throw new Error(
 				'Meta must use native function calls for tools and JSON only for the final report.'
 			);
+		}
+		reportParse('completed', bytes);
 		this.#responseId = payload.id;
 		this.#pending = null;
 		this.#analyticalFinalTrace =

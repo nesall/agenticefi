@@ -10,7 +10,7 @@ AgenticEFI is an AI-powered MegaSquirt (generally, any csv/tsv style data) EFI d
 - Svelte 5, Skeleton UI v5, Tailwind CSS v4.
 - Node.js runtime; npm package manager.
 - Development environment: Windows, MSYS2 UCRT64.
-- Meta Model API using `muse-spark-1.3-contributor`.
+- Meta Model API using Standard `muse-spark-1.3`.
 
 ## Architecture
 

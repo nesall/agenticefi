@@ -223,20 +223,18 @@
 				</Popover.Content></Popover.Positioner
 			></Popover
 		>
-		{#if pendingDemo}<p class="w-full text-xs text-warning-700-300" role="status">
-				Load the selected demo before starting an investigation. The previous log remains active
-				until loading succeeds.
-			</p>{/if}
 		{#if !available}<p class="w-full text-xs text-surface-500">
 				Muse Spark is not configured on this server.{recordings.includes(profile)
 					? ' A labeled recorded fallback is available.'
 					: ' Telemetry inspection remains available.'}
-			</p>{/if}
+			</p>
+		{/if}
 		{#if running && job?.progress?.completed.length}<span class="sr-only"
 				>Completed calls: {job.progress.completed
 					.map((entry) => entry.tool.replaceAll('_', ' '))
 					.join(', ')}</span
-			>{/if}
+			>
+		{/if}
 	</div>
 	{#if job}<RunProgress {job} {onTrace} />{:else if starting}<p
 			class="text-center text-sm text-primary-700-300"
